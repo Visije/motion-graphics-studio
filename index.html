@@ -1,11 +1,56 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <title>My Chrome HTML Document</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Motion Graphics Studio</title>
+
+    <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-    <h1>Hello, World!</h1>
-    <p>This is my first HTML page opened in Google Chrome.</p>
+
+    <main id="stage">
+
+        <canvas id="canvas"></canvas>
+
+        <div class="top-left">STUDIO / 001</div>
+        <div class="top-right">VISUAL SYSTEMS</div>
+
+        <div class="title-container">
+
+            <h1 id="title">MOTION</h1>
+
+            <div class="underline"></div>
+
+            <p>DESIGN IN MOTION / IDEAS WITHOUT LIMITS</p>
+
+        </div>
+
+        <div class="bottom-left">15 SEC MOTION STUDY</div>
+
+        <div class="bottom-right" id="percentage">
+            00%
+        </div>
+
+        <div class="progress-container">
+            <div id="progress"></div>
+        </div>
+
+        <div class="controls">
+
+            <button id="playBtn">PLAY</button>
+            <button id="restartBtn">RESTART</button>
+
+        </div>
+
+    </main>
+
+    <script src="script.js"></script>
+
 </body>
 </html>
+```
