@@ -1,24 +1,16 @@
 "use strict";
 
-// ==========================================
-// 1. CANVAS INITIALIZATION
-// ==========================================
+/* =====================================
+   CANVAS INITIALIZATION
+===================================== */
 
 const canvas = document.getElementById("danceCanvas");
 
-if (!canvas) {
-    throw new Error('Canvas element "#danceCanvas" was not found in HTML.');
-}
-
 const ctx = canvas.getContext("2d");
-
-if (!ctx) {
-    throw new Error("Canvas 2D context is not supported.");
-}
 
 let W = 0;
 let H = 0;
-let dpr = 1;
+let DPR = 1;
 
 function resizeCanvas() {
 
@@ -27,14 +19,12 @@ function resizeCanvas() {
     W = rect.width;
     H = rect.height;
 
-    if (W === 0 || H === 0) return;
+    DPR = Math.min(window.devicePixelRatio || 1, 2);
 
-    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    canvas.width = Math.round(W * DPR);
+    canvas.height = Math.round(H * DPR);
 
-    canvas.width = Math.round(W * dpr);
-    canvas.height = Math.round(H * dpr);
-
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
 
 }
 
@@ -43,9 +33,36 @@ window.addEventListener("resize", resizeCanvas);
 resizeCanvas();
 
 
-// ==========================================
-// 2. ANIMATION UTILITIES
-// ==========================================
+/* =====================================
+   COLORS
+===================================== */
+
+const COLORS = {
+
+    skin: "#E9AD86",
+
+    skinDark: "#BD7958",
+
+    hair: "#25202A",
+
+    shirt: "#526DFF",
+
+    shirtLight: "#8295FF",
+
+    pants: "#26314E",
+
+    shoes: "#F5F5FA",
+
+    outline: "#171B2B",
+
+    eyes: "#29202A"
+
+};
+
+
+/* =====================================
+   EASING FUNCTIONS
+===================================== */
 
 function clamp(value, min, max) {
 
@@ -61,18 +78,19 @@ function easeInOut(t) {
 
 }
 
-function oscillate(time, frequency, phase = 0) {
 
-    return Math.sin(time * frequency + phase);
+/* =====================================
+   DRAWING UTILITIES
+===================================== */
 
-}
-
-
-// ==========================================
-// 3. DRAWING UTILITIES
-// ==========================================
-
-function drawLimb(x1, y1, x2, y2, thickness, color) {
+function drawLimb(
+    x1,
+    y1,
+    x2,
+    y2,
+    thickness,
+    color
+) {
 
     ctx.beginPath();
 
@@ -80,13 +98,25 @@ function drawLimb(x1, y1, x2, y2, thickness, color) {
 
     ctx.lineTo(x2, y2);
 
-    ctx.strokeStyle = color;
-
     ctx.lineWidth = thickness;
 
     ctx.lineCap = "round";
 
-    ctx.lineJoin = "round";
+    ctx.strokeStyle = COLORS.outline;
+
+    ctx.stroke();
+
+    ctx.beginPath();
+
+    ctx.moveTo(x1, y1);
+
+    ctx.lineTo(x2, y2);
+
+    ctx.lineWidth = thickness - 4;
+
+    ctx.lineCap = "round";
+
+    ctx.strokeStyle = color;
 
     ctx.stroke();
 
@@ -99,18 +129,13 @@ function drawJoint(x, y, radius, color) {
 
     ctx.arc(x, y, radius, 0, Math.PI * 2);
 
-    ctx.fillStyle = color;
+    ctx.fillStyle = COLORS.outline;
 
     ctx.fill();
-
-}
-
-
-function drawEllipse(x, y, rx, ry, color) {
 
     ctx.beginPath();
 
-    ctx.ellipse(x, y, rx, ry, 0, 0, Math.PI * 2);
+    ctx.arc(x, y, radius - 2, 0, Math.PI * 2);
 
     ctx.fillStyle = color;
 
@@ -119,392 +144,529 @@ function drawEllipse(x, y, rx, ry, color) {
 }
 
 
-// ==========================================
-// 4. CHARACTER HEAD
-// ==========================================
+/* =====================================
+   CHARACTER HEAD
+===================================== */
 
 function drawHead(t) {
 
     ctx.save();
 
-    const headTilt = oscillate(t, 3) * 0.12;
+    const headTilt = Math.sin(t * 3) * 0.12;
 
-    ctx.translate(0, -130);
+    ctx.translate(0, -125);
 
     ctx.rotate(headTilt);
 
-    // Neck
 
-    drawEllipse(0, 37, 13, 25, "#bd7958");
+    // Ears
+
+    ctx.fillStyle = COLORS.skin;
+
+    ctx.beginPath();
+
+    ctx.arc(-43, 5, 10, 0, Math.PI * 2);
+
+    ctx.arc(43, 5, 10, 0, Math.PI * 2);
+
+    ctx.fill();
+
 
     // Face
 
-    drawEllipse(0, 0, 45, 55, "#e9ad86");
-
-    // Hair cap
-
     ctx.beginPath();
 
-    ctx.arc(0, -15, 46, Math.PI, Math.PI * 2);
+    ctx.ellipse(0, 0, 43, 54, 0, 0, Math.PI * 2);
 
-    ctx.fillStyle = "#25202a";
+    ctx.fillStyle = COLORS.skin;
 
     ctx.fill();
 
-    // Left hair
+
+    // Hair
+
+    ctx.fillStyle = COLORS.hair;
 
     ctx.beginPath();
 
-    ctx.ellipse(-35, -10, 15, 30, -0.2, 0, Math.PI * 2);
+    ctx.arc(0, -19, 45, Math.PI, Math.PI * 2);
 
     ctx.fill();
 
-    // Right hair
 
     ctx.beginPath();
 
-    ctx.ellipse(35, -10, 15, 30, 0.2, 0, Math.PI * 2);
+    ctx.ellipse(-34, -12, 13, 28, -0.2, 0, Math.PI * 2);
+
+    ctx.ellipse(34, -12, 13, 28, 0.2, 0, Math.PI * 2);
 
     ctx.fill();
 
-    // Eyebrows
 
-    drawLimb(-25, -14, -9, -16, 3, "#38252a");
+    // Hair fringe
 
-    drawLimb(9, -16, 25, -14, 3, "#38252a");
+    ctx.beginPath();
+
+    ctx.moveTo(-35, -32);
+
+    ctx.quadraticCurveTo(-12, -65, 5, -40);
+
+    ctx.quadraticCurveTo(20, -65, 37, -30);
+
+    ctx.quadraticCurveTo(0, -20, -35, -32);
+
+    ctx.fill();
+
+
+    // Blinking
+
+    const blink = Math.pow(
+        Math.max(0, Math.sin(t * 2.2 - 1.5)),
+        30
+    );
+
+    const eyeHeight = Math.max(0.8, 5 - blink * 4.5);
+
 
     // Eyes
 
-    drawJoint(-16, -2, 4, "#29202a");
+    ctx.fillStyle = COLORS.eyes;
 
-    drawJoint(16, -2, 4, "#29202a");
+    ctx.beginPath();
+
+    ctx.ellipse(-15, -3, 3.5, eyeHeight, 0, 0, Math.PI * 2);
+
+    ctx.ellipse(15, -3, 3.5, eyeHeight, 0, 0, Math.PI * 2);
+
+    ctx.fill();
+
+
+    // Eyebrows
+
+    ctx.strokeStyle = COLORS.hair;
+
+    ctx.lineWidth = 2.5;
+
+    ctx.beginPath();
+
+    ctx.moveTo(-22, -14);
+
+    ctx.lineTo(-10, -16);
+
+    ctx.moveTo(10, -16);
+
+    ctx.lineTo(22, -14);
+
+    ctx.stroke();
+
+
+    // Nose
+
+    ctx.beginPath();
+
+    ctx.moveTo(0, 2);
+
+    ctx.lineTo(-3, 9);
+
+    ctx.lineTo(3, 9);
+
+    ctx.strokeStyle = COLORS.skinDark;
+
+    ctx.lineWidth = 2;
+
+    ctx.stroke();
+
 
     // Smile
 
     ctx.beginPath();
 
-    ctx.arc(0, 10, 12, 0.1, Math.PI - 0.1);
+    ctx.arc(0, 12, 11, 0.15, Math.PI - 0.15);
 
-    ctx.strokeStyle = "#874b43";
+    ctx.strokeStyle = "#874B43";
 
-    ctx.lineWidth = 3;
+    ctx.lineWidth = 2.5;
 
     ctx.stroke();
 
+
     // Cheeks
 
-    drawJoint(-29, 13, 7, "rgba(255,100,120,0.3)");
+    ctx.fillStyle = "rgba(255,100,120,0.25)";
 
-    drawJoint(29, 13, 7, "rgba(255,100,120,0.3)");
+    ctx.beginPath();
+
+    ctx.arc(-29, 12, 7, 0, Math.PI * 2);
+
+    ctx.arc(29, 12, 7, 0, Math.PI * 2);
+
+    ctx.fill();
+
 
     ctx.restore();
 
 }
 
 
-// ==========================================
-// 5. CHARACTER BODY
-// ==========================================
+/* =====================================
+   BODY
+===================================== */
 
 function drawBody(t) {
 
     ctx.save();
 
-    const bodyBounce = oscillate(t, 5) * 5;
+    const bodyTilt = Math.sin(t * 4) * 0.04;
 
-    ctx.translate(0, bodyBounce);
+    ctx.rotate(bodyTilt);
 
-    // Shirt
+
+    // Neck
+
+    ctx.fillStyle = COLORS.skinDark;
+
+    ctx.fillRect(-11, -78, 22, 30);
+
+
+    // Shirt shape
 
     ctx.beginPath();
 
-    ctx.moveTo(-38, -65);
+    ctx.moveTo(-35, -65);
 
-    ctx.lineTo(38, -65);
+    ctx.lineTo(35, -65);
 
-    ctx.lineTo(48, 65);
+    ctx.lineTo(48, 58);
 
-    ctx.lineTo(-48, 65);
+    ctx.lineTo(-48, 58);
 
     ctx.closePath();
 
-    ctx.fillStyle = "#526dff";
+    ctx.fillStyle = COLORS.outline;
 
     ctx.fill();
 
-    // Shirt collar
 
     ctx.beginPath();
 
-    ctx.moveTo(-15, -65);
+    ctx.moveTo(-33, -63);
 
-    ctx.lineTo(0, -43);
+    ctx.lineTo(33, -63);
 
-    ctx.lineTo(15, -65);
+    ctx.lineTo(44, 55);
 
-    ctx.strokeStyle = "#ffffff";
+    ctx.lineTo(-44, 55);
 
-    ctx.lineWidth = 4;
+    ctx.closePath();
+
+    ctx.fillStyle = COLORS.shirt;
+
+    ctx.fill();
+
+
+    // Shirt details
+
+    ctx.strokeStyle = COLORS.shirtLight;
+
+    ctx.lineWidth = 3;
+
+    ctx.beginPath();
+
+    ctx.moveTo(0, -48);
+
+    ctx.lineTo(0, 45);
 
     ctx.stroke();
 
-    // Shirt buttons
+
+    // Collar
+
+    ctx.beginPath();
+
+    ctx.moveTo(-14, -65);
+
+    ctx.lineTo(0, -45);
+
+    ctx.lineTo(14, -65);
+
+    ctx.strokeStyle = "#FFFFFF";
+
+    ctx.lineWidth = 3;
+
+    ctx.stroke();
+
+
+    // Buttons
+
+    ctx.fillStyle = "#FFFFFF";
 
     for (let i = 0; i < 3; i++) {
 
-        drawJoint(0, -20 + i * 25, 3, "#ffffff");
+        ctx.beginPath();
+
+        ctx.arc(0, -20 + i * 23, 2.5, 0, Math.PI * 2);
+
+        ctx.fill();
 
     }
 
+
     // Belt
 
-    ctx.fillStyle = "#202943";
+    ctx.fillStyle = "#1D263E";
 
-    ctx.fillRect(-43, 55, 86, 13);
+    ctx.fillRect(-44, 53, 88, 12);
+
 
     ctx.restore();
 
 }
 
 
-// ==========================================
-// 6. CHARACTER ARMS
-// ==========================================
+/* =====================================
+   ARMS
+===================================== */
 
 function drawArms(t) {
 
-    const swing = oscillate(t, 4);
+    const rhythm = t * 4;
 
-    const shoulderY = -45;
+    const swing = Math.sin(rhythm);
+
+    const lift = Math.cos(rhythm);
+
 
     // LEFT ARM
 
-    const leftElbowX = -55 - swing * 18;
+    const leftElbowX = -62 - swing * 12;
 
-    const leftElbowY = -75 - oscillate(t, 4) * 35;
+    const leftElbowY = -65 - lift * 18;
 
-    const leftHandX = leftElbowX - 30;
+    const leftHandX = leftElbowX - 20;
 
-    const leftHandY = leftElbowY - 35 + swing * 10;
+    const leftHandY = leftElbowY - 35 - lift * 10;
 
-    // Upper arm
 
     drawLimb(
-        -35,
-        shoulderY,
-        leftElbowX,
-        leftElbowY,
+        -35, -48,
+        leftElbowX, leftElbowY,
         20,
-        "#526dff"
+        COLORS.shirt
     );
 
-    // Elbow
-
-    drawJoint(leftElbowX, leftElbowY, 10, "#e9ad86");
-
-    // Forearm
+    drawJoint(
+        leftElbowX,
+        leftElbowY,
+        10,
+        COLORS.skin
+    );
 
     drawLimb(
         leftElbowX,
         leftElbowY,
         leftHandX,
         leftHandY,
-        14,
-        "#e9ad86"
+        15,
+        COLORS.skin
     );
 
-    // Hand
-
-    drawJoint(leftHandX, leftHandY, 10, "#e9ad86");
+    drawJoint(
+        leftHandX,
+        leftHandY,
+        10,
+        COLORS.skin
+    );
 
 
     // RIGHT ARM
 
-    const rightElbowX = 55 + swing * 18;
+    const rightElbowX = 62 + swing * 12;
 
-    const rightElbowY = -75 + oscillate(t, 4) * 35;
+    const rightElbowY = -65 + lift * 18;
 
-    const rightHandX = rightElbowX + 30;
+    const rightHandX = rightElbowX + 20;
 
-    const rightHandY = rightElbowY - 35 - swing * 10;
+    const rightHandY = rightElbowY - 35 + lift * 10;
 
-    // Upper arm
 
     drawLimb(
-        35,
-        shoulderY,
-        rightElbowX,
-        rightElbowY,
+        35, -48,
+        rightElbowX, rightElbowY,
         20,
-        "#526dff"
+        COLORS.shirt
     );
 
-    // Elbow
-
-    drawJoint(rightElbowX, rightElbowY, 10, "#e9ad86");
-
-    // Forearm
+    drawJoint(
+        rightElbowX,
+        rightElbowY,
+        10,
+        COLORS.skin
+    );
 
     drawLimb(
         rightElbowX,
         rightElbowY,
         rightHandX,
         rightHandY,
-        14,
-        "#e9ad86"
+        15,
+        COLORS.skin
     );
 
-    // Hand
-
-    drawJoint(rightHandX, rightHandY, 10, "#e9ad86");
+    drawJoint(
+        rightHandX,
+        rightHandY,
+        10,
+        COLORS.skin
+    );
 
 }
 
 
-// ==========================================
-// 7. CHARACTER LEGS
-// ==========================================
+/* =====================================
+   LEGS
+===================================== */
 
 function drawLegs(t) {
 
-    const step = oscillate(t, 4);
+    const rhythm = t * 4;
+
+    const step = Math.sin(rhythm);
+
+    const opposite = Math.sin(rhythm + Math.PI);
+
 
     // LEFT LEG
 
-    const leftKneeX = -25 + step * 25;
+    const leftKneeX = -27 + step * 22;
 
-    const leftKneeY = 140 - Math.max(0, step) * 25;
+    const leftKneeY = 125 - Math.max(0, step) * 20;
 
-    const leftFootX = -35 + step * 35;
+    const leftFootX = -30 + step * 38;
 
-    const leftFootY = 210 - Math.max(0, step) * 30;
+    const leftFootY = 205 - Math.max(0, step) * 30;
 
-    // Upper leg
 
     drawLimb(
-        -22,
-        65,
-        leftKneeX,
-        leftKneeY,
-        23,
-        "#26314e"
+        -22, 60,
+        leftKneeX, leftKneeY,
+        25,
+        COLORS.pants
     );
 
-    drawJoint(leftKneeX, leftKneeY, 10, "#e9ad86");
-
-    // Lower leg
+    drawJoint(
+        leftKneeX,
+        leftKneeY,
+        11,
+        COLORS.skin
+    );
 
     drawLimb(
         leftKneeX,
         leftKneeY,
         leftFootX,
         leftFootY,
-        19,
-        "#26314e"
+        20,
+        COLORS.pants
     );
 
-    // Shoe
+
+    // LEFT SHOE
 
     drawLimb(
-        leftFootX - 10,
+        leftFootX - 5,
         leftFootY,
         leftFootX + 25,
         leftFootY,
-        13,
-        "#ffffff"
+        15,
+        COLORS.shoes
     );
 
 
     // RIGHT LEG
 
-    const rightKneeX = 25 - step * 25;
+    const rightKneeX = 27 + opposite * 22;
 
-    const rightKneeY = 140 + Math.max(0, step) * 20;
+    const rightKneeY = 125 - Math.max(0, opposite) * 20;
 
-    const rightFootX = 35 - step * 35;
+    const rightFootX = 30 + opposite * 38;
 
-    const rightFootY = 210 + Math.max(0, step) * 15;
+    const rightFootY = 205 - Math.max(0, opposite) * 30;
 
-    // Upper leg
 
     drawLimb(
-        22,
-        65,
-        rightKneeX,
-        rightKneeY,
-        23,
-        "#26314e"
+        22, 60,
+        rightKneeX, rightKneeY,
+        25,
+        COLORS.pants
     );
 
-    drawJoint(rightKneeX, rightKneeY, 10, "#e9ad86");
-
-    // Lower leg
+    drawJoint(
+        rightKneeX,
+        rightKneeY,
+        11,
+        COLORS.skin
+    );
 
     drawLimb(
         rightKneeX,
         rightKneeY,
         rightFootX,
         rightFootY,
-        19,
-        "#26314e"
+        20,
+        COLORS.pants
     );
 
-    // Shoe
+
+    // RIGHT SHOE
 
     drawLimb(
-        rightFootX - 10,
+        rightFootX - 5,
         rightFootY,
         rightFootX + 25,
         rightFootY,
-        13,
-        "#ffffff"
+        15,
+        COLORS.shoes
     );
 
 }
 
 
-// ==========================================
-// 8. CHARACTER SHADOW
-// ==========================================
+/* =====================================
+   CHARACTER SHADOW
+===================================== */
 
 function drawShadow(t) {
 
-    const pulse = oscillate(t, 4) * 7;
-
-    const radius = 90 + pulse;
-
-    ctx.save();
-
-    ctx.globalAlpha = 0.3;
+    const pulse = Math.sin(t * 4) * 8;
 
     ctx.beginPath();
 
     ctx.ellipse(
         0,
-        245,
-        radius,
+        240,
+        85 + pulse,
         15,
         0,
         0,
         Math.PI * 2
     );
 
-    ctx.fillStyle = "#000000";
+    ctx.fillStyle = "rgba(0,0,0,0.3)";
 
     ctx.fill();
-
-    ctx.restore();
 
 }
 
 
-// ==========================================
-// 9. BACKGROUND PARTICLES
-// ==========================================
+/* =====================================
+   BACKGROUND PARTICLES
+===================================== */
 
-const particles = Array.from(
-    { length: 45 },
-    () => ({
+const particles = [];
+
+for (let i = 0; i < 45; i++) {
+
+    particles.push({
 
         x: Math.random(),
 
@@ -512,49 +674,117 @@ const particles = Array.from(
 
         size: Math.random() * 2.5 + 1,
 
-        speed: Math.random() * 20 + 10,
+        speed: Math.random() * 20 + 8,
 
         alpha: Math.random() * 0.5 + 0.2
-
-    })
-);
-
-
-function drawParticles(t) {
-
-    particles.forEach(p => {
-
-        const x = p.x * W;
-
-        const y = (
-            p.y * H - t * p.speed + H * 10
-        ) % H;
-
-        ctx.beginPath();
-
-        ctx.arc(x, y, p.size, 0, Math.PI * 2);
-
-        ctx.fillStyle =
-            `rgba(120,210,255,${p.alpha})`;
-
-        ctx.fill();
 
     });
 
 }
 
 
-// ==========================================
-// 10. BACKGROUND LIGHT
-// ==========================================
+function drawParticles(t) {
+
+    for (const p of particles) {
+
+        const x = p.x * W;
+
+        const y = ((p.y * H - t * p.speed) % H + H) % H;
+
+        ctx.beginPath();
+
+        ctx.arc(x, y, p.size, 0, Math.PI * 2);
+
+        ctx.fillStyle = `rgba(130,210,255,${p.alpha})`;
+
+        ctx.fill();
+
+    }
+
+}
+
+
+/* =====================================
+   CHARACTER ANIMATION
+===================================== */
+
+function drawCharacter(t) {
+
+    ctx.save();
+
+
+    // Responsive scaling
+
+    const scale = Math.min(
+
+        W / 500,
+
+        H / 570,
+
+        1.1
+
+    );
+
+
+    // Body bounce
+
+    const bounce = Math.abs(Math.sin(t * 4)) * 20;
+
+
+    // Body horizontal movement
+
+    const sway = Math.sin(t * 2) * 12;
+
+
+    ctx.translate(
+
+        W / 2 + sway,
+
+        H / 2 - bounce
+
+    );
+
+
+    ctx.scale(scale, scale);
+
+
+    // Character shadow
+
+    drawShadow(t);
+
+
+    // Body rotation
+
+    ctx.rotate(Math.sin(t * 2) * 0.06);
+
+
+    // Draw body parts
+
+    drawLegs(t);
+
+    drawArms(t);
+
+    drawBody(t);
+
+    drawHead(t);
+
+
+    ctx.restore();
+
+}
+
+
+/* =====================================
+   BACKGROUND
+===================================== */
 
 function drawBackground(t) {
 
     const gradient = ctx.createRadialGradient(
 
-        W * (0.5 + oscillate(t, 0.3) * 0.08),
+        W * (0.5 + Math.sin(t * 0.3) * 0.08),
 
-        H * 0.45,
+        H * 0.5,
 
         10,
 
@@ -562,14 +792,16 @@ function drawBackground(t) {
 
         H * 0.5,
 
-        Math.max(W, H) * 0.8
+        Math.max(W, H)
 
     );
 
-    gradient.addColorStop(0, "rgba(40,100,170,0.12)");
 
-    gradient.addColorStop(1, "rgba(0,0,0,0)");
+    gradient.addColorStop(0, "rgba(40,70,110,0.12)");
 
+    gradient.addColorStop(1, "rgba(5,10,25,0)");
+
+    
     ctx.fillStyle = gradient;
 
     ctx.fillRect(0, 0, W, H);
@@ -577,113 +809,46 @@ function drawBackground(t) {
 }
 
 
-// ==========================================
-// 11. COMPLETE CHARACTER
-// ==========================================
+/* =====================================
+   MAIN ANIMATION ENGINE
+===================================== */
 
-function drawCharacter(t) {
+const startTime = performance.now();
 
-    const bounce =
-        Math.abs(Math.sin(t * 4)) * 20;
+function animate(now) {
 
-    const sway =
-        Math.sin(t * 2) * 12;
-
-    const scale = Math.min(
-        W / 500,
-        H / 550,
-        1.1
-    );
-
-    ctx.save();
-
-    // Character position
-
-    ctx.translate(
-        W / 2 + sway,
-        H / 2 - bounce + 5
-    );
-
-    ctx.scale(scale, scale);
-
-    // Body rotation
-
-    ctx.rotate(
-        Math.sin(t * 2) * 0.07
-    );
-
-    // Draw character parts
-
-    drawShadow(t);
-
-    drawLegs(t);
-
-    drawBody(t);
-
-    drawArms(t);
-
-    drawHead(t);
-
-    ctx.restore();
-
-}
+    const t = (now - startTime) / 1000;
 
 
-// ==========================================
-// 12. MAIN RENDER ENGINE
-// ==========================================
-
-function render(t) {
-
-    if (W <= 0 || H <= 0) return;
+    // Clear canvas
 
     ctx.clearRect(0, 0, W, H);
 
+
+    // Render background
+
     drawBackground(t);
+
+
+    // Render particles
 
     drawParticles(t);
 
+
+    // Render dancing character
+
     drawCharacter(t);
 
-}
 
-
-// ==========================================
-// 13. ANIMATION LOOP
-// ==========================================
-
-let startTime = null;
-
-let previousTime = 0;
-
-function animate(timestamp) {
-
-    if (startTime === null) {
-
-        startTime = timestamp;
-
-    }
-
-    const elapsed =
-        (timestamp - startTime) / 1000;
-
-    // Continuous looping animation
-
-    render(elapsed);
-
-    previousTime = timestamp;
+    // Next frame
 
     requestAnimationFrame(animate);
 
 }
 
 
-// ==========================================
-// 14. START ANIMATION
-// ==========================================
-
-render(0);
+/* =====================================
+   START ANIMATION
+===================================== */
 
 requestAnimationFrame(animate);
-
-console.log("Dancing character animation started successfully.");
