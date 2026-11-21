@@ -1,102 +1,85 @@
-```javascript
 const canvas = document.getElementById("danceCanvas");
 const ctx = canvas.getContext("2d");
 
-let W, H;
+const BASE_W = 600;
+const BASE_H = 800;
 
-function resize() {
+let time = 0;
+
+function resizeCanvas() {
 
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
 
-    W = canvas.clientWidth;
-    H = canvas.clientHeight;
+    const rect = canvas.getBoundingClientRect();
 
-    canvas.width = W * dpr;
-    canvas.height = H * dpr;
+    canvas.width = Math.round(rect.width * dpr);
+    canvas.height = Math.round(rect.height * dpr);
 
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-
+    ctx.setTransform(
+        canvas.width / BASE_W,
+        0,
+        0,
+        canvas.height / BASE_H,
+        0,
+        0
+    );
 }
 
-window.addEventListener("resize", resize);
-resize();
+window.addEventListener("resize", resizeCanvas);
+resizeCanvas();
 
 
-// ------------------------------
-// DRAWING UTILITIES
-// ------------------------------
+// DRAW LIMBS
 
-function roundedRect(x, y, w, h, r, color) {
-
-    ctx.fillStyle = color;
-
-    ctx.beginPath();
-
-    ctx.roundRect(x, y, w, h, r);
-
-    ctx.fill();
-
-}
-
-
-function drawLimb(x1, y1, x2, y2, thickness, color) {
-
-    ctx.strokeStyle = color;
-
-    ctx.lineWidth = thickness;
-
-    ctx.lineCap = "round";
+function limb(x1, y1, x2, y2, width, color) {
 
     ctx.beginPath();
 
     ctx.moveTo(x1, y1);
-
     ctx.lineTo(x2, y2);
 
-    ctx.stroke();
+    ctx.strokeStyle = color;
+    ctx.lineWidth = width;
+    ctx.lineCap = "round";
 
+    ctx.stroke();
 }
 
 
-function drawJoint(x, y, radius, color) {
+// JOINTS
 
-    ctx.fillStyle = color;
+function joint(x, y, radius, color) {
 
     ctx.beginPath();
 
     ctx.arc(x, y, radius, 0, Math.PI * 2);
 
+    ctx.fillStyle = color;
     ctx.fill();
 
 }
 
 
-// ------------------------------
-// CHARACTER HEAD
-// ------------------------------
+// HEAD
 
 function drawHead(t) {
 
     ctx.save();
 
-    const headTilt = Math.sin(t * 3) * 0.12;
-
-    ctx.translate(0, -105);
-
-    ctx.rotate(headTilt);
+    ctx.translate(0, -120);
+    ctx.rotate(Math.sin(t * 3) * 0.12);
 
     // Neck
 
-    roundedRect(-13, 25, 26, 35, 10, "#b86e4d");
+    ctx.fillStyle = "#b86e4d";
+    ctx.fillRect(-12, 30, 24, 35);
 
-    // Head
+    // Face
 
     ctx.fillStyle = "#e5a078";
 
     ctx.beginPath();
-
     ctx.ellipse(0, 0, 48, 58, 0, 0, Math.PI * 2);
-
     ctx.fill();
 
     // Hair
@@ -104,75 +87,41 @@ function drawHead(t) {
     ctx.fillStyle = "#25212b";
 
     ctx.beginPath();
-
     ctx.arc(0, -23, 49, Math.PI, Math.PI * 2);
-
     ctx.fill();
 
     ctx.beginPath();
-
-    ctx.ellipse(-32, -17, 17, 34, -0.4, 0, Math.PI * 2);
-
-    ctx.fill();
-
-    ctx.beginPath();
-
-    ctx.ellipse(32, -17, 17, 34, 0.4, 0, Math.PI * 2);
-
+    ctx.ellipse(-32, -15, 17, 34, -0.4, 0, Math.PI * 2);
+    ctx.ellipse(32, -15, 17, 34, 0.4, 0, Math.PI * 2);
     ctx.fill();
 
     // Eyes
 
     ctx.fillStyle = "#29232a";
 
-    ctx.beginPath();
-
-    ctx.arc(-17, -3, 4, 0, Math.PI * 2);
-
-    ctx.arc(17, -3, 4, 0, Math.PI * 2);
-
-    ctx.fill();
+    joint(-17, -3, 4, "#29232a");
+    joint(17, -3, 4, "#29232a");
 
     // Smile
 
-    ctx.strokeStyle = "#783d39";
-
-    ctx.lineWidth = 3;
-
     ctx.beginPath();
-
     ctx.arc(0, 12, 12, 0.15, Math.PI - 0.15);
 
+    ctx.strokeStyle = "#783d39";
+    ctx.lineWidth = 3;
     ctx.stroke();
 
-    // Cheeks
-
-    ctx.fillStyle = "rgba(255,100,120,0.3)";
-
-    ctx.beginPath();
-
-    ctx.arc(-30, 13, 8, 0, Math.PI * 2);
-
-    ctx.arc(30, 13, 8, 0, Math.PI * 2);
-
-    ctx.fill();
-
     ctx.restore();
-
 }
 
 
-// ------------------------------
 // BODY
-// ------------------------------
 
 function drawBody(t) {
 
     ctx.save();
 
-    const bounce = Math.sin(t * 4) * 5;
-
-    ctx.translate(0, bounce);
+    ctx.translate(0, Math.sin(t * 4) * 5);
 
     // Shirt
 
@@ -181,212 +130,195 @@ function drawBody(t) {
     ctx.beginPath();
 
     ctx.moveTo(-38, -55);
-
     ctx.lineTo(38, -55);
-
     ctx.lineTo(48, 65);
-
     ctx.lineTo(-48, 65);
 
     ctx.closePath();
-
     ctx.fill();
 
-    // Shirt details
+    // Shirt detail
 
-    ctx.strokeStyle = "#a9b6ff";
+    limb(0, -45, 0, 50, 3, "#a9b6ff");
 
-    ctx.lineWidth = 3;
+    // Collar
 
-    ctx.beginPath();
-
-    ctx.moveTo(0, -45);
-
-    ctx.lineTo(0, 50);
-
-    ctx.stroke();
-
-    // Shirt collar
-
-    ctx.strokeStyle = "#e8eeff";
-
-    ctx.lineWidth = 4;
-
-    ctx.beginPath();
-
-    ctx.moveTo(-15, -55);
-
-    ctx.lineTo(0, -38);
-
-    ctx.lineTo(15, -55);
-
-    ctx.stroke();
+    limb(-15, -55, 0, -38, 4, "#ffffff");
+    limb(0, -38, 15, -55, 4, "#ffffff");
 
     // Belt
 
-    roundedRect(-43, 57, 86, 13, 4, "#242c43");
+    ctx.fillStyle = "#242c43";
+    ctx.fillRect(-43, 57, 86, 13);
 
     ctx.restore();
-
 }
 
 
-// ------------------------------
 // ARMS
-// ------------------------------
 
 function drawArms(t) {
 
     const swing = Math.sin(t * 4);
 
-    const shoulderY = -40;
+    const leftElbowX = -65;
+    const leftElbowY = -65 + swing * 35;
+
+    const leftHandX = -100;
+    const leftHandY = -120 + swing * 45;
+
+    const rightElbowX = 65;
+    const rightElbowY = -65 - swing * 35;
+
+    const rightHandX = 100;
+    const rightHandY = -120 - swing * 45;
 
     // Left arm
 
-    const leftAngle = -1.0 + swing * 0.8;
+    limb(-35, -40, leftElbowX, leftElbowY, 19, "#5c75ff");
 
-    const leftElbowX = -55 + Math.cos(leftAngle) * 45;
-    const leftElbowY = shoulderY + Math.sin(leftAngle) * 45;
+    joint(leftElbowX, leftElbowY, 10, "#e5a078");
 
-    const leftHandX = leftElbowX - 25;
-    const leftHandY = leftElbowY - 40 + swing * 12;
+    limb(
+        leftElbowX,
+        leftElbowY,
+        leftHandX,
+        leftHandY,
+        13,
+        "#e5a078"
+    );
 
-    drawLimb(-35, shoulderY, leftElbowX, leftElbowY, 19, "#5c75ff");
-
-    drawJoint(leftElbowX, leftElbowY, 10, "#e5a078");
-
-    drawLimb(leftElbowX, leftElbowY, leftHandX, leftHandY, 13, "#e5a078");
-
-    drawJoint(leftHandX, leftHandY, 11, "#e5a078");
+    joint(leftHandX, leftHandY, 11, "#e5a078");
 
 
     // Right arm
 
-    const rightAngle = -2.1 - swing * 0.8;
+    limb(35, -40, rightElbowX, rightElbowY, 19, "#5c75ff");
 
-    const rightElbowX = 55 + Math.cos(rightAngle) * 45;
-    const rightElbowY = shoulderY + Math.sin(rightAngle) * 45;
+    joint(rightElbowX, rightElbowY, 10, "#e5a078");
 
-    const rightHandX = rightElbowX + 25;
-    const rightHandY = rightElbowY - 35 - swing * 12;
+    limb(
+        rightElbowX,
+        rightElbowY,
+        rightHandX,
+        rightHandY,
+        13,
+        "#e5a078"
+    );
 
-    drawLimb(35, shoulderY, rightElbowX, rightElbowY, 19, "#5c75ff");
-
-    drawJoint(rightElbowX, rightElbowY, 10, "#e5a078");
-
-    drawLimb(rightElbowX, rightElbowY, rightHandX, rightHandY, 13, "#e5a078");
-
-    drawJoint(rightHandX, rightHandY, 11, "#e5a078");
+    joint(rightHandX, rightHandY, 11, "#e5a078");
 
 }
 
 
-// ------------------------------
 // LEGS
-// ------------------------------
 
 function drawLegs(t) {
 
     const step = Math.sin(t * 4);
 
-    const hipY = 70;
+    const leftKneeX = -30 + step * 22;
+    const rightKneeX = 30 - step * 22;
+
+    const leftFootX = -35 + step * 40;
+    const rightFootX = 35 - step * 40;
 
     // Left leg
 
-    const leftKneeX = -25 + step * 20;
-    const leftKneeY = 135 - Math.max(0, step) * 25;
+    limb(-22, 70, leftKneeX, 140, 23, "#242e4b");
 
-    const leftFootX = -35 + step * 40;
-    const leftFootY = 210 - Math.max(0, step) * 35;
+    joint(leftKneeX, 140, 11, "#d99570");
 
-    drawLimb(-22, hipY, leftKneeX, leftKneeY, 23, "#242e4b");
+    limb(
+        leftKneeX,
+        140,
+        leftFootX,
+        220 - Math.max(0, step) * 35,
+        19,
+        "#242e4b"
+    );
 
-    drawJoint(leftKneeX, leftKneeY, 11, "#d99570");
+    // Left shoe
 
-    drawLimb(leftKneeX, leftKneeY, leftFootX, leftFootY, 19, "#242e4b");
-
-    drawLimb(leftFootX - 10, leftFootY, leftFootX + 23, leftFootY, 13, "#f2f3f8");
+    limb(
+        leftFootX - 10,
+        220 - Math.max(0, step) * 35,
+        leftFootX + 25,
+        220 - Math.max(0, step) * 35,
+        13,
+        "#ffffff"
+    );
 
 
     // Right leg
 
-    const rightKneeX = 25 - step * 20;
-    const rightKneeY = 135 + Math.max(0, step) * 25;
+    limb(22, 70, rightKneeX, 140, 23, "#242e4b");
 
-    const rightFootX = 35 - step * 40;
-    const rightFootY = 210 + Math.max(0, step) * 20;
+    joint(rightKneeX, 140, 11, "#d99570");
 
-    drawLimb(22, hipY, rightKneeX, rightKneeY, 23, "#242e4b");
-
-    drawJoint(rightKneeX, rightKneeY, 11, "#d99570");
-
-    drawLimb(rightKneeX, rightKneeY, rightFootX, rightFootY, 19, "#242e4b");
-
-    drawLimb(rightFootX - 10, rightFootY, rightFootX + 23, rightFootY, 13, "#f2f3f8");
-
-}
-
-
-// ------------------------------
-// SHADOW
-// ------------------------------
-
-function drawShadow(t) {
-
-    const pulse = Math.sin(t * 4) * 5;
-
-    ctx.fillStyle = "rgba(0,0,0,0.25)";
-
-    ctx.beginPath();
-
-    ctx.ellipse(
-        0,
-        235,
-        100 + pulse,
-        20,
-        0,
-        0,
-        Math.PI * 2
+    limb(
+        rightKneeX,
+        140,
+        rightFootX,
+        220 - Math.max(0, -step) * 35,
+        19,
+        "#242e4b"
     );
 
-    ctx.fill();
+    // Right shoe
+
+    limb(
+        rightFootX - 10,
+        220 - Math.max(0, -step) * 35,
+        rightFootX + 25,
+        220 - Math.max(0, -step) * 35,
+        13,
+        "#ffffff"
+    );
 
 }
 
 
-// ------------------------------
-// COMPLETE CHARACTER
-// ------------------------------
+// CHARACTER
 
 function drawCharacter(t) {
 
     ctx.save();
 
-    const bounce = Math.abs(Math.sin(t * 4)) * 18;
-
+    const bounce = Math.abs(Math.sin(t * 4)) * 20;
     const sway = Math.sin(t * 2) * 12;
 
     ctx.translate(
-        W / 2 + sway,
-        H / 2 - bounce
+        BASE_W / 2 + sway,
+        390 - bounce
     );
 
     ctx.scale(1.15, 1.15);
 
-    // Shadow stays near floor
+    // Shadow
 
-    drawShadow(t);
+    ctx.beginPath();
 
-    // Character movement
+    ctx.ellipse(
+        0,
+        245,
+        100 + Math.sin(t * 4) * 5,
+        18,
+        0,
+        0,
+        Math.PI * 2
+    );
+
+    ctx.fillStyle = "rgba(0,0,0,0.3)";
+    ctx.fill();
+
+    // Body movement
 
     ctx.rotate(Math.sin(t * 2) * 0.06);
 
     drawLegs(t);
-
     drawBody(t);
-
     drawArms(t);
-
     drawHead(t);
 
     ctx.restore();
@@ -394,36 +326,35 @@ function drawCharacter(t) {
 }
 
 
-// ------------------------------
 // BACKGROUND PARTICLES
-// ------------------------------
 
 const particles = Array.from({ length: 35 }, () => ({
 
-    x: Math.random(),
-    y: Math.random(),
+    x: Math.random() * BASE_W,
+    y: Math.random() * BASE_H,
 
     size: Math.random() * 3 + 1,
-
-    speed: Math.random() * 0.15 + 0.05
+    speed: Math.random() * 30 + 15
 
 }));
-
 
 function drawParticles(t) {
 
     particles.forEach(p => {
 
-        const x = p.x * W;
-
-        const y = ((p.y - t * p.speed * 0.1) % 1 + 1) % 1 * H;
-
-        ctx.fillStyle = "rgba(130,210,255,0.5)";
+        const y = (p.y - t * p.speed) % BASE_H;
 
         ctx.beginPath();
 
-        ctx.arc(x, y, p.size, 0, Math.PI * 2);
+        ctx.arc(
+            p.x,
+            (y + BASE_H) % BASE_H,
+            p.size,
+            0,
+            Math.PI * 2
+        );
 
+        ctx.fillStyle = "rgba(130,210,255,0.6)";
         ctx.fill();
 
     });
@@ -431,25 +362,28 @@ function drawParticles(t) {
 }
 
 
-// ------------------------------
-// ANIMATION LOOP
-// ------------------------------
+// ANIMATION ENGINE
 
-let start = performance.now();
+let previousTime = 0;
 
-function animate(now) {
+function animate(timestamp) {
 
-    const t = (now - start) / 1000;
+    if (!previousTime) previousTime = timestamp;
 
-    ctx.clearRect(0, 0, W, H);
+    const delta = Math.min((timestamp - previousTime) / 1000, 0.05);
 
-    drawParticles(t);
+    previousTime = timestamp;
 
-    drawCharacter(t);
+    time += delta;
+
+    ctx.clearRect(0, 0, BASE_W, BASE_H);
+
+    drawParticles(time);
+
+    drawCharacter(time);
 
     requestAnimationFrame(animate);
 
 }
 
 requestAnimationFrame(animate);
-```
