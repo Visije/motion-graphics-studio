@@ -6,45 +6,40 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Motion Graphics Studio</title>
+    <title>Dancing Character</title>
 
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-    <main id="stage">
+    <main class="hero">
 
-        <canvas id="canvas"></canvas>
+        <div class="background-glow"></div>
 
-        <div class="top-left">STUDIO / 001</div>
-        <div class="top-right">VISUAL SYSTEMS</div>
+        <div class="hero-content">
 
-        <div class="title-container">
+            <span class="eyebrow">CREATIVE MOTION STUDIO</span>
 
-            <h1 id="title">MOTION</h1>
+            <h1>
+                LET'S<br>
+                <span>DANCE.</span>
+            </h1>
 
-            <div class="underline"></div>
-
-            <p>DESIGN IN MOTION / IDEAS WITHOUT LIMITS</p>
+            <p>
+                Bringing characters to life through motion.
+            </p>
 
         </div>
 
-        <div class="bottom-left">15 SEC MOTION STUDY</div>
+        <div class="character-container">
 
-        <div class="bottom-right" id="percentage">
-            00%
+            <canvas id="danceCanvas"></canvas>
+
         </div>
 
-        <div class="progress-container">
-            <div id="progress"></div>
-        </div>
-
-        <div class="controls">
-
-            <button id="playBtn">PLAY</button>
-            <button id="restartBtn">RESTART</button>
-
+        <div class="bottom-label">
+            CHARACTER ANIMATION / 001
         </div>
 
     </main>
