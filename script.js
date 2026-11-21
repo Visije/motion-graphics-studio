@@ -1,4 +1,3 @@
-```javascript
 const canvas = document.getElementById("danceCanvas");
 const ctx = canvas.getContext("2d");
 
