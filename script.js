@@ -687,4 +687,3 @@ render(0);
 requestAnimationFrame(animate);
 
 console.log("Dancing character animation started successfully.");
-```
