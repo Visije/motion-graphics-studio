@@ -203,3 +203,208 @@ button:hover {
 
 }
 ```
+```css
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #090d19;
+    font-family: Arial, sans-serif;
+    overflow: hidden;
+}
+
+.hero {
+
+    width: 100%;
+    height: 100vh;
+
+    min-height: 600px;
+
+    position: relative;
+
+    overflow: hidden;
+
+    display: flex;
+    align-items: center;
+
+    background:
+        radial-gradient(
+            circle at 75% 50%,
+            #263b63,
+            #10182b 45%,
+            #090d19 80%
+        );
+
+}
+
+/* BACKGROUND GLOW */
+
+.background-glow {
+
+    position: absolute;
+
+    width: 500px;
+    height: 500px;
+
+    right: 12%;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    background: #47c9ff;
+
+    opacity: 0.12;
+
+    filter: blur(140px);
+
+    border-radius: 50%;
+
+}
+
+/* LEFT CONTENT */
+
+.hero-content {
+
+    position: relative;
+
+    z-index: 2;
+
+    margin-left: 10%;
+
+    color: white;
+
+}
+
+.eyebrow {
+
+    font-size: 12px;
+
+    letter-spacing: 5px;
+
+    color: #7ddfff;
+
+}
+
+h1 {
+
+    font-size: clamp(65px, 9vw, 130px);
+
+    line-height: 0.95;
+
+    margin-top: 25px;
+
+    font-weight: 900;
+
+    letter-spacing: -5px;
+
+}
+
+h1 span {
+
+    color: #67dfff;
+
+}
+
+.hero-content p {
+
+    margin-top: 30px;
+
+    color: #aebbd0;
+
+    font-size: 17px;
+
+    letter-spacing: 1px;
+
+}
+
+/* CHARACTER */
+
+.character-container {
+
+    position: absolute;
+
+    right: 7%;
+
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    width: min(48vw, 650px);
+
+    height: min(85vh, 800px);
+
+    z-index: 1;
+
+}
+
+canvas {
+
+    width: 100%;
+    height: 100%;
+
+    display: block;
+
+}
+
+/* FOOTER */
+
+.bottom-label {
+
+    position: absolute;
+
+    bottom: 35px;
+
+    left: 10%;
+
+    color: #65748d;
+
+    font-size: 11px;
+
+    letter-spacing: 4px;
+
+}
+
+@media(max-width: 800px) {
+
+    .hero {
+        justify-content: center;
+        align-items: flex-start;
+    }
+
+    .hero-content {
+
+        margin: 60px 0 0;
+
+        text-align: center;
+
+    }
+
+    h1 {
+        font-size: 65px;
+    }
+
+    .character-container {
+
+        width: 90vw;
+
+        height: 60vh;
+
+        right: 5%;
+
+        top: auto;
+
+        bottom: 0;
+
+        transform: none;
+
+    }
+
+    .hero-content p {
+        font-size: 13px;
+    }
+
+}
+```
