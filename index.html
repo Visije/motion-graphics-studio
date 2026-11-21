@@ -1,9 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dancing Character</title>
+
+    <title>Dancing Character | Motion Studio</title>
+
+    <link rel="icon" href="data:,">
+
     <link rel="stylesheet" href="style.css">
 </head>
 
@@ -11,21 +16,52 @@
 
     <main class="hero">
 
+        <!-- Background -->
+        <div class="background-glow"></div>
+
         <div class="hero-content">
-            <span>CREATIVE MOTION STUDIO</span>
-            <h1>LET'S<br><span>DANCE.</span></h1>
-            <p>Bringing characters to life through motion.</p>
+
+            <span class="eyebrow">CREATIVE MOTION STUDIO</span>
+
+            <h1>
+                LET'S<br>
+                <span>DANCE.</span>
+            </h1>
+
+            <p>
+                Bringing characters to life through motion.
+            </p>
+
+            <div class="hero-button">
+                EXPLORE ANIMATION
+                <span>↗</span>
+            </div>
+
         </div>
 
+
+        <!-- Dancing Character -->
         <div class="character-container">
+
             <canvas id="danceCanvas"></canvas>
+
         </div>
 
-        <div class="bottom-label">CHARACTER ANIMATION / 001</div>
+
+        <!-- Footer -->
+        <div class="bottom-label">
+            CHARACTER ANIMATION / 001
+        </div>
+
+        <div class="bottom-right">
+            MADE WITH CODE
+        </div>
 
     </main>
+
 
     <script src="script.js"></script>
 
 </body>
+
 </html>
