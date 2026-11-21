@@ -1,171 +1,428 @@
 ```javascript
-const canvas = document.getElementById("canvas");
+const canvas = document.getElementById("danceCanvas");
 const ctx = canvas.getContext("2d");
 
-const title = document.getElementById("title");
-const underline = document.querySelector(".underline");
-const subtitle = document.querySelector(".title-container p");
+let W, H;
 
-const progress = document.getElementById("progress");
-const percentage = document.getElementById("percentage");
-
-const playBtn = document.getElementById("playBtn");
-const restartBtn = document.getElementById("restartBtn");
-
-const DURATION = 15;
-
-let elapsed = 0;
-let playing = true;
-let lastTime = 0;
-
-let width;
-let height;
-let scale;
-
-let particles = [];
-
-function resizeCanvas() {
+function resize() {
 
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
 
-    width = canvas.clientWidth;
-    height = canvas.clientHeight;
+    W = canvas.clientWidth;
+    H = canvas.clientHeight;
 
-    canvas.width = width * dpr;
-    canvas.height = height * dpr;
-
-    scale = dpr;
+    canvas.width = W * dpr;
+    canvas.height = H * dpr;
 
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
 }
 
-window.addEventListener("resize", resizeCanvas);
+window.addEventListener("resize", resize);
+resize();
 
-resizeCanvas();
+
+// ------------------------------
+// DRAWING UTILITIES
+// ------------------------------
+
+function roundedRect(x, y, w, h, r, color) {
+
+    ctx.fillStyle = color;
+
+    ctx.beginPath();
+
+    ctx.roundRect(x, y, w, h, r);
+
+    ctx.fill();
+
+}
 
 
-// EASING FUNCTION
+function drawLimb(x1, y1, x2, y2, thickness, color) {
 
-function ease(t) {
+    ctx.strokeStyle = color;
 
-    t = Math.max(0, Math.min(1, t));
+    ctx.lineWidth = thickness;
 
-    return t * t * (3 - 2 * t);
+    ctx.lineCap = "round";
+
+    ctx.beginPath();
+
+    ctx.moveTo(x1, y1);
+
+    ctx.lineTo(x2, y2);
+
+    ctx.stroke();
 
 }
 
 
-// PARTICLE GENERATION
+function drawJoint(x, y, radius, color) {
 
-function createParticles() {
+    ctx.fillStyle = color;
 
-    particles = [];
+    ctx.beginPath();
 
-    for (let i = 0; i < 100; i++) {
+    ctx.arc(x, y, radius, 0, Math.PI * 2);
 
-        particles.push({
-
-            angle: Math.random() * Math.PI * 2,
-
-            radius: 80 + Math.random() * 350,
-
-            speed: 0.1 + Math.random() * 0.3,
-
-            size: 1 + Math.random() * 3,
-
-            alpha: 0.2 + Math.random() * 0.7
-
-        });
-
-    }
+    ctx.fill();
 
 }
 
-createParticles();
+
+// ------------------------------
+// CHARACTER HEAD
+// ------------------------------
+
+function drawHead(t) {
+
+    ctx.save();
+
+    const headTilt = Math.sin(t * 3) * 0.12;
+
+    ctx.translate(0, -105);
+
+    ctx.rotate(headTilt);
+
+    // Neck
+
+    roundedRect(-13, 25, 26, 35, 10, "#b86e4d");
+
+    // Head
+
+    ctx.fillStyle = "#e5a078";
+
+    ctx.beginPath();
+
+    ctx.ellipse(0, 0, 48, 58, 0, 0, Math.PI * 2);
+
+    ctx.fill();
+
+    // Hair
+
+    ctx.fillStyle = "#25212b";
+
+    ctx.beginPath();
+
+    ctx.arc(0, -23, 49, Math.PI, Math.PI * 2);
+
+    ctx.fill();
+
+    ctx.beginPath();
+
+    ctx.ellipse(-32, -17, 17, 34, -0.4, 0, Math.PI * 2);
+
+    ctx.fill();
+
+    ctx.beginPath();
+
+    ctx.ellipse(32, -17, 17, 34, 0.4, 0, Math.PI * 2);
+
+    ctx.fill();
+
+    // Eyes
+
+    ctx.fillStyle = "#29232a";
+
+    ctx.beginPath();
+
+    ctx.arc(-17, -3, 4, 0, Math.PI * 2);
+
+    ctx.arc(17, -3, 4, 0, Math.PI * 2);
+
+    ctx.fill();
+
+    // Smile
+
+    ctx.strokeStyle = "#783d39";
+
+    ctx.lineWidth = 3;
+
+    ctx.beginPath();
+
+    ctx.arc(0, 12, 12, 0.15, Math.PI - 0.15);
+
+    ctx.stroke();
+
+    // Cheeks
+
+    ctx.fillStyle = "rgba(255,100,120,0.3)";
+
+    ctx.beginPath();
+
+    ctx.arc(-30, 13, 8, 0, Math.PI * 2);
+
+    ctx.arc(30, 13, 8, 0, Math.PI * 2);
+
+    ctx.fill();
+
+    ctx.restore();
+
+}
 
 
-// BACKGROUND
+// ------------------------------
+// BODY
+// ------------------------------
 
-function drawBackground(t) {
+function drawBody(t) {
 
-    const gradient = ctx.createRadialGradient(
+    ctx.save();
 
-        width / 2 + Math.sin(t * 0.5) * 100,
-        height / 2,
-        10,
+    const bounce = Math.sin(t * 4) * 5;
 
-        width / 2,
-        height / 2,
-        Math.max(width, height)
+    ctx.translate(0, bounce);
 
+    // Shirt
+
+    ctx.fillStyle = "#5c75ff";
+
+    ctx.beginPath();
+
+    ctx.moveTo(-38, -55);
+
+    ctx.lineTo(38, -55);
+
+    ctx.lineTo(48, 65);
+
+    ctx.lineTo(-48, 65);
+
+    ctx.closePath();
+
+    ctx.fill();
+
+    // Shirt details
+
+    ctx.strokeStyle = "#a9b6ff";
+
+    ctx.lineWidth = 3;
+
+    ctx.beginPath();
+
+    ctx.moveTo(0, -45);
+
+    ctx.lineTo(0, 50);
+
+    ctx.stroke();
+
+    // Shirt collar
+
+    ctx.strokeStyle = "#e8eeff";
+
+    ctx.lineWidth = 4;
+
+    ctx.beginPath();
+
+    ctx.moveTo(-15, -55);
+
+    ctx.lineTo(0, -38);
+
+    ctx.lineTo(15, -55);
+
+    ctx.stroke();
+
+    // Belt
+
+    roundedRect(-43, 57, 86, 13, 4, "#242c43");
+
+    ctx.restore();
+
+}
+
+
+// ------------------------------
+// ARMS
+// ------------------------------
+
+function drawArms(t) {
+
+    const swing = Math.sin(t * 4);
+
+    const shoulderY = -40;
+
+    // Left arm
+
+    const leftAngle = -1.0 + swing * 0.8;
+
+    const leftElbowX = -55 + Math.cos(leftAngle) * 45;
+    const leftElbowY = shoulderY + Math.sin(leftAngle) * 45;
+
+    const leftHandX = leftElbowX - 25;
+    const leftHandY = leftElbowY - 40 + swing * 12;
+
+    drawLimb(-35, shoulderY, leftElbowX, leftElbowY, 19, "#5c75ff");
+
+    drawJoint(leftElbowX, leftElbowY, 10, "#e5a078");
+
+    drawLimb(leftElbowX, leftElbowY, leftHandX, leftHandY, 13, "#e5a078");
+
+    drawJoint(leftHandX, leftHandY, 11, "#e5a078");
+
+
+    // Right arm
+
+    const rightAngle = -2.1 - swing * 0.8;
+
+    const rightElbowX = 55 + Math.cos(rightAngle) * 45;
+    const rightElbowY = shoulderY + Math.sin(rightAngle) * 45;
+
+    const rightHandX = rightElbowX + 25;
+    const rightHandY = rightElbowY - 35 - swing * 12;
+
+    drawLimb(35, shoulderY, rightElbowX, rightElbowY, 19, "#5c75ff");
+
+    drawJoint(rightElbowX, rightElbowY, 10, "#e5a078");
+
+    drawLimb(rightElbowX, rightElbowY, rightHandX, rightHandY, 13, "#e5a078");
+
+    drawJoint(rightHandX, rightHandY, 11, "#e5a078");
+
+}
+
+
+// ------------------------------
+// LEGS
+// ------------------------------
+
+function drawLegs(t) {
+
+    const step = Math.sin(t * 4);
+
+    const hipY = 70;
+
+    // Left leg
+
+    const leftKneeX = -25 + step * 20;
+    const leftKneeY = 135 - Math.max(0, step) * 25;
+
+    const leftFootX = -35 + step * 40;
+    const leftFootY = 210 - Math.max(0, step) * 35;
+
+    drawLimb(-22, hipY, leftKneeX, leftKneeY, 23, "#242e4b");
+
+    drawJoint(leftKneeX, leftKneeY, 11, "#d99570");
+
+    drawLimb(leftKneeX, leftKneeY, leftFootX, leftFootY, 19, "#242e4b");
+
+    drawLimb(leftFootX - 10, leftFootY, leftFootX + 23, leftFootY, 13, "#f2f3f8");
+
+
+    // Right leg
+
+    const rightKneeX = 25 - step * 20;
+    const rightKneeY = 135 + Math.max(0, step) * 25;
+
+    const rightFootX = 35 - step * 40;
+    const rightFootY = 210 + Math.max(0, step) * 20;
+
+    drawLimb(22, hipY, rightKneeX, rightKneeY, 23, "#242e4b");
+
+    drawJoint(rightKneeX, rightKneeY, 11, "#d99570");
+
+    drawLimb(rightKneeX, rightKneeY, rightFootX, rightFootY, 19, "#242e4b");
+
+    drawLimb(rightFootX - 10, rightFootY, rightFootX + 23, rightFootY, 13, "#f2f3f8");
+
+}
+
+
+// ------------------------------
+// SHADOW
+// ------------------------------
+
+function drawShadow(t) {
+
+    const pulse = Math.sin(t * 4) * 5;
+
+    ctx.fillStyle = "rgba(0,0,0,0.25)";
+
+    ctx.beginPath();
+
+    ctx.ellipse(
+        0,
+        235,
+        100 + pulse,
+        20,
+        0,
+        0,
+        Math.PI * 2
     );
 
-    gradient.addColorStop(0, "#172c50");
-    gradient.addColorStop(0.5, "#0a142d");
-    gradient.addColorStop(1, "#050914");
-
-    ctx.fillStyle = gradient;
-
-    ctx.fillRect(0, 0, width, height);
+    ctx.fill();
 
 }
 
 
-// GRID
+// ------------------------------
+// COMPLETE CHARACTER
+// ------------------------------
 
-function drawGrid() {
+function drawCharacter(t) {
 
-    ctx.strokeStyle = "rgba(120,170,220,0.07)";
+    ctx.save();
 
-    ctx.lineWidth = 1;
+    const bounce = Math.abs(Math.sin(t * 4)) * 18;
 
-    const spacing = 65;
+    const sway = Math.sin(t * 2) * 12;
 
-    for (let x = 0; x < width; x += spacing) {
+    ctx.translate(
+        W / 2 + sway,
+        H / 2 - bounce
+    );
 
-        ctx.beginPath();
+    ctx.scale(1.15, 1.15);
 
-        ctx.moveTo(x, 0);
-        ctx.lineTo(x, height);
+    // Shadow stays near floor
 
-        ctx.stroke();
+    drawShadow(t);
 
-    }
+    // Character movement
 
-    for (let y = 0; y < height; y += spacing) {
+    ctx.rotate(Math.sin(t * 2) * 0.06);
 
-        ctx.beginPath();
+    drawLegs(t);
 
-        ctx.moveTo(0, y);
-        ctx.lineTo(width, y);
+    drawBody(t);
 
-        ctx.stroke();
+    drawArms(t);
 
-    }
+    drawHead(t);
+
+    ctx.restore();
 
 }
 
 
-// PARTICLES
+// ------------------------------
+// BACKGROUND PARTICLES
+// ------------------------------
+
+const particles = Array.from({ length: 35 }, () => ({
+
+    x: Math.random(),
+    y: Math.random(),
+
+    size: Math.random() * 3 + 1,
+
+    speed: Math.random() * 0.15 + 0.05
+
+}));
+
 
 function drawParticles(t) {
 
-    const cx = width / 2;
-    const cy = height / 2;
-
     particles.forEach(p => {
 
-        const angle = p.angle + t * p.speed;
+        const x = p.x * W;
 
-        const x = cx + Math.cos(angle) * p.radius;
-        const y = cy + Math.sin(angle) * p.radius * 0.55;
+        const y = ((p.y - t * p.speed * 0.1) % 1 + 1) % 1 * H;
+
+        ctx.fillStyle = "rgba(130,210,255,0.5)";
 
         ctx.beginPath();
 
         ctx.arc(x, y, p.size, 0, Math.PI * 2);
-
-        ctx.fillStyle = `rgba(100,210,255,${p.alpha})`;
 
         ctx.fill();
 
@@ -174,241 +431,25 @@ function drawParticles(t) {
 }
 
 
-// GEOMETRIC RINGS
+// ------------------------------
+// ANIMATION LOOP
+// ------------------------------
 
-function drawRings(t) {
+let start = performance.now();
 
-    const cx = width / 2;
-    const cy = height / 2;
+function animate(now) {
 
-    ctx.save();
+    const t = (now - start) / 1000;
 
-    ctx.translate(cx, cy);
-
-    for (let i = 0; i < 5; i++) {
-
-        ctx.beginPath();
-
-        ctx.ellipse(
-
-            0,
-            0,
-
-            150 + i * 35,
-            80 + i * 20,
-
-            t * 0.15 * (i % 2 ? -1 : 1),
-
-            0,
-            Math.PI * 2
-
-        );
-
-        const colors = [
-            "#54dfff",
-            "#9275ff",
-            "#4ce6c2",
-            "#ef73c9",
-            "#75aaff"
-        ];
-
-        ctx.strokeStyle = colors[i];
-
-        ctx.globalAlpha = 0.65 - i * 0.09;
-
-        ctx.lineWidth = i < 2 ? 2 : 1;
-
-        ctx.stroke();
-
-    }
-
-    ctx.globalAlpha = 1;
-
-    ctx.restore();
-
-}
-
-
-// GLOWING ORB
-
-function drawOrb(t) {
-
-    const x = width / 2 + Math.cos(t * 0.8) * 300;
-
-    const y = height / 2 + Math.sin(t * 0.8) * 160;
-
-    const radius = 25 + Math.sin(t * 2) * 5;
-
-    const glow = ctx.createRadialGradient(
-
-        x, y, 0,
-
-        x, y, radius * 3
-
-    );
-
-    glow.addColorStop(0, "rgba(80,220,255,0.9)");
-    glow.addColorStop(0.4, "rgba(30,150,255,0.25)");
-    glow.addColorStop(1, "rgba(30,150,255,0)");
-
-    ctx.fillStyle = glow;
-
-    ctx.beginPath();
-
-    ctx.arc(x, y, radius * 3, 0, Math.PI * 2);
-
-    ctx.fill();
-
-    ctx.beginPath();
-
-    ctx.arc(x, y, radius, 0, Math.PI * 2);
-
-    ctx.fillStyle = "#70e5ff";
-
-    ctx.fill();
-
-}
-
-
-// TITLE ANIMATION
-
-function animateTitle(t) {
-
-    const reveal = ease((t - 0.5) / 0.85);
-
-    const exit = 1 - ease((t - 13.5) / 1.3);
-
-    const opacity = reveal * exit;
-
-    title.style.opacity = opacity;
-
-    title.style.transform = `
-        translateY(${(1 - reveal) * 50}px)
-    `;
-
-    underline.style.width =
-        `${260 * ease((t - 1) / 1.1) * exit}px`;
-
-    subtitle.style.opacity = opacity;
-
-}
-
-
-// MAIN RENDER FUNCTION
-
-function render(t) {
-
-    ctx.clearRect(0, 0, width, height);
-
-    drawBackground(t);
-
-    drawGrid();
+    ctx.clearRect(0, 0, W, H);
 
     drawParticles(t);
 
-    drawRings(t);
+    drawCharacter(t);
 
-    drawOrb(t);
-
-    animateTitle(t);
-
-    progress.style.width =
-        `${(t / DURATION) * 100}%`;
-
-    percentage.textContent =
-        `${Math.floor((t / DURATION) * 100)}%`;
+    requestAnimationFrame(animate);
 
 }
 
-
-// ANIMATION LOOP
-
-function animationLoop(timestamp) {
-
-    if (!playing) return;
-
-    if (!lastTime) lastTime = timestamp;
-
-    const delta = (timestamp - lastTime) / 1000;
-
-    lastTime = timestamp;
-
-    elapsed += delta;
-
-    if (elapsed >= DURATION) {
-
-        elapsed = DURATION;
-
-        playing = false;
-
-        playBtn.textContent = "REPLAY";
-
-    }
-
-    render(elapsed);
-
-    if (playing) {
-
-        requestAnimationFrame(animationLoop);
-
-    }
-
-}
-
-
-// PLAY / PAUSE
-
-playBtn.addEventListener("click", () => {
-
-    if (elapsed >= DURATION) {
-
-        elapsed = 0;
-
-    }
-
-    playing = !playing;
-
-    if (playing) {
-
-        lastTime = 0;
-
-        playBtn.textContent = "PAUSE";
-
-        requestAnimationFrame(animationLoop);
-
-    } else {
-
-        playBtn.textContent = "PLAY";
-
-    }
-
-});
-
-
-// RESTART
-
-restartBtn.addEventListener("click", () => {
-
-    elapsed = 0;
-
-    playing = true;
-
-    lastTime = 0;
-
-    playBtn.textContent = "PAUSE";
-
-    render(0);
-
-    requestAnimationFrame(animationLoop);
-
-});
-
-
-// INITIALIZE
-
-playBtn.textContent = "PAUSE";
-
-render(0);
-
-requestAnimationFrame(animationLoop);
+requestAnimationFrame(animate);
 ```
