@@ -2,128 +2,177 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Explore | Motion Studio</title>
+<title>Funny Dance | Motion Studio</title>
 
-    <link rel="stylesheet" href="style.css">
+<style>
 
-    <style>
-        .page-wrapper {
-            min-height: 100vh;
-            padding: 40px 8%;
-            background: #090d19;
-            color: white;
-        }
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-bottom: 35px;
-            border-bottom: 1px solid #27334b;
-        }
+body {
+    background: #090d19;
+    font-family: Arial, sans-serif;
+    overflow: hidden;
+}
 
-        .logo {
-            font-size: 22px;
-            font-weight: 900;
-            letter-spacing: 3px;
-        }
+.page {
+    width: 100%;
+    height: 100vh;
+    position: relative;
+    overflow: hidden;
 
-        .navbar a {
-            color: #b8c8df;
-            text-decoration: none;
-            margin-left: 30px;
-            font-size: 13px;
-            transition: 0.3s;
-        }
+    background:
+    radial-gradient(circle at 50% 45%,
+    #293c67,
+    #111a30 55%,
+    #080c17);
+}
 
-        .navbar a:hover {
-            color: #54dfff;
-        }
+/* NAVIGATION */
 
-        .page-heading {
-            margin-top: 100px;
-            max-width: 750px;
-        }
+nav {
+    position: absolute;
+    top: 35px;
+    left: 8%;
+    right: 8%;
 
-        .page-heading span {
-            color: #54dfff;
-            letter-spacing: 4px;
-            font-size: 12px;
-        }
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 
-        .page-heading h1 {
-            font-size: clamp(45px, 7vw, 85px);
-            margin: 25px 0;
-            line-height: 1;
-        }
+    z-index: 10;
+}
 
-        .page-heading p {
-            color: #aab8ce;
-            line-height: 1.8;
-            font-size: 16px;
-        }
+.logo {
+    color: white;
+    font-size: 20px;
+    font-weight: 900;
+    letter-spacing: 3px;
+}
 
-        .cards {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 25px;
-            margin-top: 80px;
-        }
+nav a {
+    color: #bdcce0;
+    text-decoration: none;
+    margin-left: 30px;
+    font-size: 12px;
+    letter-spacing: 2px;
+}
 
-        .card {
-            padding: 35px;
-            min-height: 220px;
-            background: linear-gradient(145deg, #172642, #101729);
-            border: 1px solid #293a59;
-            border-radius: 15px;
-            transition: 0.3s;
-        }
+nav a:hover {
+    color: #54dfff;
+}
 
-        .card:hover {
-            transform: translateY(-10px);
-            border-color: #54dfff;
-        }
+/* HEADING */
 
-        .card h2 {
-            margin-bottom: 18px;
-            font-size: 22px;
-        }
+.heading {
+    position: absolute;
+    top: 18%;
+    left: 0;
+    width: 100%;
 
-        .card p {
-            color: #aab8ce;
-            line-height: 1.7;
-            font-size: 14px;
-        }
+    text-align: center;
 
-        .card a {
-            display: inline-block;
-            margin-top: 25px;
-            color: #54dfff;
-            text-decoration: none;
-            font-size: 13px;
-            letter-spacing: 2px;
-        }
+    z-index: 2;
+    pointer-events: none;
+}
 
-        @media(max-width: 800px) {
-            .cards {
-                grid-template-columns: 1fr;
-            }
+.heading h1 {
+    color: white;
+    font-size: clamp(35px, 5vw, 65px);
+    font-weight: 900;
+    letter-spacing: -2px;
+}
 
-            .navbar a {
-                margin-left: 10px;
-            }
-        }
-    </style>
+.heading h1 span {
+    color: #54dfff;
+}
+
+.heading p {
+    color: #aabbd5;
+    margin-top: 15px;
+    font-size: 13px;
+    letter-spacing: 3px;
+}
+
+/* CANVAS */
+
+#danceCanvas {
+    position: absolute;
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+}
+
+/* DANCE LABEL */
+
+.dance-label {
+    position: absolute;
+    bottom: 40px;
+    left: 8%;
+
+    color: #8192ae;
+    font-size: 11px;
+    letter-spacing: 3px;
+}
+
+/* BUTTON */
+
+.dance-button {
+    position: absolute;
+    bottom: 30px;
+    right: 8%;
+
+    padding: 13px 25px;
+
+    border: 1px solid #54dfff;
+    border-radius: 30px;
+
+    background: transparent;
+    color: white;
+
+    cursor: pointer;
+    letter-spacing: 2px;
+
+    z-index: 5;
+}
+
+.dance-button:hover {
+    background: #54dfff;
+    color: #090d19;
+}
+
+@media(max-width: 600px) {
+
+    .heading {
+        top: 15%;
+    }
+
+    .heading p {
+        font-size: 10px;
+    }
+
+    nav a {
+        margin-left: 10px;
+        font-size: 9px;
+    }
+
+}
+
+</style>
 </head>
 
 <body>
 
-<div class="page-wrapper">
+<div class="page">
 
-    <nav class="navbar">
+    <nav>
 
         <div class="logo">MOTION STUDIO</div>
 
@@ -135,64 +184,708 @@
 
     </nav>
 
-    <section class="page-heading">
 
-        <span>CREATIVE MOTION / 001</span>
+    <div class="heading">
 
-        <h1>Explore the world<br>of animation.</h1>
+        <h1>JUST <span>DANCE.</span></h1>
 
-        <p>
-            Discover creative experiments, character animation,
-            motion graphics and interactive visual experiences.
-            Everything begins with an idea and comes alive through motion.
-        </p>
+        <p>NO RULES. NO LIMITS. JUST FUN.</p>
 
-    </section>
+    </div>
 
-    <section class="cards">
 
-        <div class="card">
+    <canvas id="danceCanvas"></canvas>
 
-            <h2>Character Animation</h2>
 
-            <p>
-                Explore animated characters, expressive movements
-                and procedural animation techniques.
-            </p>
+    <div class="dance-label">
+        CHARACTER ANIMATION / FUNKY DANCE
+    </div>
 
-            <a href="content.html">EXPLORE →</a>
 
-        </div>
-
-        <div class="card">
-
-            <h2>Motion Graphics</h2>
-
-            <p>
-                Discover typography, geometric animation,
-                transitions and visual storytelling.
-            </p>
-
-            <a href="content.html">EXPLORE →</a>
-
-        </div>
-
-        <div class="card">
-
-            <h2>Creative Experiments</h2>
-
-            <p>
-                Explore interactive experiences built with
-                HTML, CSS, JavaScript and Canvas.
-            </p>
-
-            <a href="content.html">EXPLORE →</a>
-
-        </div>
-
-    </section>
+    <button class="dance-button" id="danceButton">
+        PAUSE DANCE
+    </button>
 
 </div>
+
+
+<script>
+
+const canvas = document.getElementById("danceCanvas");
+const ctx = canvas.getContext("2d");
+
+let W, H;
+let playing = true;
+let startTime = performance.now();
+let pausedTime = 0;
+let lastTime = 0;
+
+function resize() {
+
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+    W = canvas.clientWidth;
+    H = canvas.clientHeight;
+
+    canvas.width = W * dpr;
+    canvas.height = H * dpr;
+
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+}
+
+window.addEventListener("resize", resize);
+resize();
+
+
+// -----------------------------
+// HELPER FUNCTIONS
+// -----------------------------
+
+function ease(t) {
+
+    t = Math.max(0, Math.min(1, t));
+
+    return t * t * (3 - 2 * t);
+
+}
+
+
+function line(x1, y1, x2, y2, color, thickness) {
+
+    ctx.beginPath();
+
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x2, y2);
+
+    ctx.strokeStyle = color;
+    ctx.lineWidth = thickness;
+    ctx.lineCap = "round";
+    ctx.stroke();
+
+}
+
+
+function circle(x, y, radius, color) {
+
+    ctx.beginPath();
+
+    ctx.arc(x, y, radius, 0, Math.PI * 2);
+
+    ctx.fillStyle = color;
+    ctx.fill();
+
+}
+
+
+// -----------------------------
+// BACKGROUND
+// -----------------------------
+
+function background(t) {
+
+    const gradient = ctx.createLinearGradient(
+        0, 0, W, H
+    );
+
+    gradient.addColorStop(0, "#111c35");
+    gradient.addColorStop(0.5, "#192b4d");
+    gradient.addColorStop(1, "#090e1e");
+
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, W, H);
+
+    // Floating background circles
+
+    for (let i = 0; i < 20; i++) {
+
+        const x = (i * 173) % W;
+
+        const y = (
+            (i * 137 - t * 25) % H + H
+        ) % H;
+
+        circle(
+            x,
+            y,
+            2 + Math.sin(t + i) * 1.5,
+            "rgba(120,210,255,0.3)"
+        );
+
+    }
+
+}
+
+
+// -----------------------------
+// FLOOR
+// -----------------------------
+
+function floor(t) {
+
+    const groundY = H * 0.83;
+
+    const gradient = ctx.createLinearGradient(
+        0, groundY, 0, H
+    );
+
+    gradient.addColorStop(0, "rgba(40,65,105,0.2)");
+    gradient.addColorStop(1, "rgba(5,10,20,0.8)");
+
+    ctx.fillStyle = gradient;
+
+    ctx.fillRect(0, groundY, W, H - groundY);
+
+    // Floor line
+
+    line(
+        0, groundY,
+        W, groundY,
+        "rgba(110,190,255,0.25)",
+        2
+    );
+
+}
+
+
+// -----------------------------
+// CONFETTI
+// -----------------------------
+
+function confetti(t) {
+
+    const colors = [
+        "#54dfff",
+        "#ff73b5",
+        "#ffe36b",
+        "#8c7bff",
+        "#70f5c2"
+    ];
+
+    for (let i = 0; i < 35; i++) {
+
+        const x = (
+            i * 127 + Math.sin(t + i) * 30
+        ) % W;
+
+        const y = (
+            i * 89 + t * (35 + i % 5 * 10)
+        ) % H;
+
+        ctx.save();
+
+        ctx.translate(x, y);
+        ctx.rotate(t * 2 + i);
+
+        ctx.fillStyle = colors[i % colors.length];
+
+        ctx.fillRect(-3, -5, 6, 10);
+
+        ctx.restore();
+
+    }
+
+}
+
+
+// -----------------------------
+// CARTOON CHARACTER
+// -----------------------------
+
+function drawCharacter(t) {
+
+    const groundY = H * 0.83;
+
+    const scale = Math.min(W / 1100, H / 850, 1.05);
+
+    const bounce = Math.abs(Math.sin(t * 4.5)) * 35;
+
+    const sway = Math.sin(t * 2.5) * 25;
+
+    const hipShake = Math.sin(t * 7) * 12;
+
+    const cx = W * 0.5 + sway;
+
+    const cy = groundY - 280 * scale - bounce * scale;
+
+    ctx.save();
+
+    ctx.translate(cx, cy);
+
+    ctx.scale(scale, scale);
+
+
+    // -------------------------
+    // SHADOW
+    // -------------------------
+
+    ctx.save();
+
+    ctx.translate(0, 300 + bounce * 0.5);
+
+    ctx.scale(
+        1 + bounce * 0.002,
+        1 - bounce * 0.002
+    );
+
+    ctx.fillStyle = "rgba(0,0,0,0.35)";
+
+    ctx.beginPath();
+
+    ctx.ellipse(0, 0, 90, 16, 0, 0, Math.PI * 2);
+
+    ctx.fill();
+
+    ctx.restore();
+
+
+    // -------------------------
+    // LEGS
+    // -------------------------
+
+    const step = Math.sin(t * 4.5);
+
+    const kick = Math.pow(
+        Math.max(0, Math.sin(t * 2.2)),
+        3
+    );
+
+    const leftHipX = -25 + hipShake;
+    const rightHipX = 25 + hipShake;
+
+    const kneeLX = -45 + step * 25;
+    const kneeLY = 115 - kick * 35;
+
+    const kneeRX = 45 - step * 25;
+    const kneeRY = 115 + kick * 20;
+
+    const footLX = -55 + step * 35;
+    const footLY = 205 - kick * 65;
+
+    const footRX = 55 - step * 35;
+    const footRY = 205 + kick * 15;
+
+
+    // Left leg
+
+    line(
+        leftHipX, 60,
+        kneeLX, kneeLY,
+        "#34415d", 25
+    );
+
+    circle(kneeLX, kneeLY, 11, "#eaa17b");
+
+    line(
+        kneeLX, kneeLY,
+        footLX, footLY,
+        "#34415d", 21
+    );
+
+    // Left shoe
+
+    ctx.save();
+
+    ctx.translate(footLX, footLY);
+
+    ctx.rotate(-kick * 0.4);
+
+    ctx.fillStyle = "#ffca55";
+
+    ctx.beginPath();
+
+    ctx.ellipse(0, 0, 27, 12, 0, 0, Math.PI * 2);
+
+    ctx.fill();
+
+    ctx.restore();
+
+
+    // Right leg
+
+    line(
+        rightHipX, 60,
+        kneeRX, kneeRY,
+        "#34415d", 25
+    );
+
+    circle(kneeRX, kneeRY, 11, "#eaa17b");
+
+    line(
+        kneeRX, kneeRY,
+        footRX, footRY,
+        "#34415d", 21
+    );
+
+    // Right shoe
+
+    ctx.save();
+
+    ctx.translate(footRX, footRY);
+
+    ctx.rotate(kick * 0.4);
+
+    ctx.fillStyle = "#ffca55";
+
+    ctx.beginPath();
+
+    ctx.ellipse(0, 0, 27, 12, 0, 0, Math.PI * 2);
+
+    ctx.fill();
+
+    ctx.restore();
+
+
+    // -------------------------
+    // BODY
+    // -------------------------
+
+    ctx.save();
+
+    ctx.translate(0, hipShake);
+
+    ctx.rotate(Math.sin(t * 3) * 0.12);
+
+    // Shirt
+
+    ctx.fillStyle = "#ff6b86";
+
+    ctx.beginPath();
+
+    ctx.moveTo(-48, -65);
+
+    ctx.quadraticCurveTo(-65, -30, -48, 65);
+
+    ctx.lineTo(48, 65);
+
+    ctx.quadraticCurveTo(65, -30, 48, -65);
+
+    ctx.closePath();
+
+    ctx.fill();
+
+
+    // Shirt details
+
+    ctx.fillStyle = "#ffe36b";
+
+    circle(-20, -15, 6, "#ffe36b");
+    circle(20, -15, 6, "#ffe36b");
+
+    circle(-20, 15, 6, "#ffe36b");
+    circle(20, 15, 6, "#ffe36b");
+
+
+    // Neck
+
+    ctx.fillStyle = "#eaa17b";
+
+    ctx.fillRect(-13, -85, 26, 30);
+
+
+    // -------------------------
+    // ARMS
+    // -------------------------
+
+    const armSwing = Math.sin(t * 4.5);
+
+    // Left arm
+
+    const leftShoulder = {
+        x: -40,
+        y: -48
+    };
+
+    const leftElbow = {
+        x: -90 + armSwing * 25,
+        y: -100 - Math.abs(armSwing) * 35
+    };
+
+    const leftHand = {
+        x: -125 + armSwing * 20,
+        y: -155 + Math.sin(t * 6) * 25
+    };
+
+
+    line(
+        leftShoulder.x,
+        leftShoulder.y,
+        leftElbow.x,
+        leftElbow.y,
+        "#ff6b86",
+        19
+    );
+
+    circle(
+        leftElbow.x,
+        leftElbow.y,
+        11,
+        "#eaa17b"
+    );
+
+    line(
+        leftElbow.x,
+        leftElbow.y,
+        leftHand.x,
+        leftHand.y,
+        "#eaa17b",
+        14
+    );
+
+    circle(
+        leftHand.x,
+        leftHand.y,
+        13,
+        "#eaa17b"
+    );
+
+
+    // Right arm
+
+    const rightElbow = {
+        x: 90 - armSwing * 25,
+        y: -100 + Math.abs(armSwing) * 35
+    };
+
+    const rightHand = {
+        x: 125 - armSwing * 20,
+        y: -155 - Math.sin(t * 6) * 25
+    };
+
+
+    line(
+        40, -48,
+        rightElbow.x,
+        rightElbow.y,
+        "#ff6b86",
+        19
+    );
+
+    circle(
+        rightElbow.x,
+        rightElbow.y,
+        11,
+        "#eaa17b"
+    );
+
+    line(
+        rightElbow.x,
+        rightElbow.y,
+        rightHand.x,
+        rightHand.y,
+        "#eaa17b",
+        14
+    );
+
+    circle(
+        rightHand.x,
+        rightHand.y,
+        13,
+        "#eaa17b"
+    );
+
+
+    ctx.restore();
+
+
+    // -------------------------
+    // HEAD
+    // -------------------------
+
+    ctx.save();
+
+    const headTilt = Math.sin(t * 5) * 0.18;
+
+    ctx.translate(0, -120);
+
+    ctx.rotate(headTilt);
+
+
+    // Hair
+
+    ctx.fillStyle = "#29243a";
+
+    ctx.beginPath();
+
+    ctx.arc(0, -8, 57, Math.PI, Math.PI * 2);
+
+    ctx.fill();
+
+
+    // Head
+
+    ctx.fillStyle = "#f0b18b";
+
+    ctx.beginPath();
+
+    ctx.ellipse(
+        0, 0,
+        49, 58,
+        0, 0, Math.PI * 2
+    );
+
+    ctx.fill();
+
+
+    // Ears
+
+    circle(-49, 5, 11, "#f0b18b");
+    circle(49, 5, 11, "#f0b18b");
+
+
+    // Eyes
+
+    const blink = Math.sin(t * 2.8) > 0.98;
+
+    if (!blink) {
+
+        circle(-18, -8, 5, "#29243a");
+        circle(18, -8, 5, "#29243a");
+
+    } else {
+
+        line(-23, -8, -13, -8, "#29243a", 3);
+        line(13, -8, 23, -8, "#29243a", 3);
+
+    }
+
+
+    // Eyebrows
+
+    line(-27, -23, -12, -27, "#29243a", 4);
+    line(12, -27, 27, -23, "#29243a", 4);
+
+
+    // Nose
+
+    circle(0, 8, 4, "#c97f62");
+
+
+    // Big funny smile
+
+    ctx.fillStyle = "#773d42";
+
+    ctx.beginPath();
+
+    ctx.arc(0, 20, 18, 0, Math.PI);
+
+    ctx.fill();
+
+
+    // Teeth
+
+    ctx.fillStyle = "white";
+
+    ctx.fillRect(-9, 20, 18, 5);
+
+
+    // Cheeks
+
+    circle(-32, 17, 7, "rgba(255,100,120,0.45)");
+    circle(32, 17, 7, "rgba(255,100,120,0.45)");
+
+
+    // Hair spikes
+
+    ctx.fillStyle = "#29243a";
+
+    for (let i = 0; i < 5; i++) {
+
+        const x = -35 + i * 17;
+
+        ctx.beginPath();
+
+        ctx.moveTo(x, -45);
+
+        ctx.lineTo(x + 10, -75 - Math.sin(t * 5 + i) * 8);
+
+        ctx.lineTo(x + 20, -42);
+
+        ctx.fill();
+
+    }
+
+    ctx.restore();
+
+
+    // -------------------------
+    // CHARACTER FINISH
+    // -------------------------
+
+    ctx.restore();
+
+}
+
+
+// -----------------------------
+// MAIN ANIMATION
+// -----------------------------
+
+function render(t) {
+
+    ctx.clearRect(0, 0, W, H);
+
+    background(t);
+
+    floor(t);
+
+    confetti(t);
+
+    drawCharacter(t);
+
+}
+
+
+// -----------------------------
+// ANIMATION LOOP
+// -----------------------------
+
+function animate(now) {
+
+    if (!playing) return;
+
+    const t = (now - startTime + pausedTime) / 1000;
+
+    render(t);
+
+    requestAnimationFrame(animate);
+
+}
+
+requestAnimationFrame(animate);
+
+
+// -----------------------------
+// PAUSE / RESUME
+// -----------------------------
+
+const button = document.getElementById("danceButton");
+
+button.addEventListener("click", () => {
+
+    if (playing) {
+
+        playing = false;
+
+        pausedTime = performance.now() - startTime - pausedTime;
+
+        button.textContent = "RESUME DANCE";
+
+    } else {
+
+        playing = true;
+
+        startTime = performance.now() - pausedTime;
+
+        button.textContent = "PAUSE DANCE";
+
+        requestAnimationFrame(animate);
+
+    }
+
+});
+
+</script>
 
 </body>
 </html>
