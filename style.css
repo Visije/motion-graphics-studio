@@ -353,3 +353,24 @@ canvas {
     }
 
 }
+.main-navigation {
+    position: absolute;
+    top: 35px;
+    right: 8%;
+    z-index: 10;
+
+    display: flex;
+    gap: 30px;
+}
+
+.main-navigation a {
+    color: #b8c8df;
+    text-decoration: none;
+    font-size: 12px;
+    letter-spacing: 2px;
+    transition: color 0.3s;
+}
+
+.main-navigation a:hover {
+    color: #54dfff;
+}
