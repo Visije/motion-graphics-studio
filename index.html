@@ -2,35 +2,52 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="theme-color" content="#090d19">
+
+    <meta name="description"
+        content="Motion Studio — Bringing characters to life through animation and creative motion graphics.">
 
     <title>Dancing Character | Motion Studio</title>
 
     <link rel="icon" href="data:,">
 
     <link rel="stylesheet" href="style.css">
+
 </head>
 
 <body>
 
     <main class="hero">
 
+        <!-- NAVIGATION -->
+
         <nav class="main-navigation">
 
-    <a href="index.html">HOME</a>
+            <a href="index.html" class="active">HOME</a>
 
-    <a href="page.html">EXPLORE</a>
+            <a href="page.html">EXPLORE</a>
 
-    <a href="content.html">CONTENT</a>
+            <a href="content.html">CONTENT</a>
 
-</nav>
-        <!-- Background -->
+        </nav>
+
+
+        <!-- BACKGROUND EFFECTS -->
+
         <div class="background-glow"></div>
+
+
+        <!-- HERO CONTENT -->
 
         <div class="hero-content">
 
-            <span class="eyebrow">CREATIVE MOTION STUDIO</span>
+            <span class="eyebrow">
+                CREATIVE MOTION STUDIO
+            </span>
 
             <h1>
                 LET'S<br>
@@ -41,35 +58,56 @@
                 Bringing characters to life through motion.
             </p>
 
-            <div class="hero-button">
+
+            <!-- EXPLORE BUTTON -->
+
+            <a href="page.html" class="hero-button">
+
                 EXPLORE ANIMATION
+
                 <span>↗</span>
-            </div>
+
+            </a>
 
         </div>
 
 
-        <!-- Dancing Character -->
+        <!-- DANCING CHARACTER -->
+
         <div class="character-container">
 
-            <canvas id="danceCanvas"></canvas>
+            <canvas id="danceCanvas">
+
+                Your browser does not support HTML5 Canvas.
+
+            </canvas>
 
         </div>
 
 
-        <!-- Footer -->
+        <!-- FOOTER -->
+
         <div class="bottom-label">
+
             CHARACTER ANIMATION / 001
+
         </div>
+
 
         <div class="bottom-right">
+
             MADE WITH CODE
+
         </div>
+
 
     </main>
 
 
+    <!-- JAVASCRIPT -->
+
     <script src="script.js"></script>
+
 
 </body>
 
