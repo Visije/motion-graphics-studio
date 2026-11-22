@@ -1,11 +1,235 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <title>My Chrome HTML Document</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Character Animation | Motion Studio</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        .content-wrapper {
+            min-height: 100vh;
+            padding: 40px 8%;
+            background: #090d19;
+            color: white;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 35px;
+            border-bottom: 1px solid #27334b;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: 900;
+            letter-spacing: 3px;
+        }
+
+        .navbar a {
+            color: #b8c8df;
+            text-decoration: none;
+            margin-left: 30px;
+            font-size: 13px;
+        }
+
+        .navbar a:hover {
+            color: #54dfff;
+        }
+
+        .content-header {
+            margin-top: 90px;
+        }
+
+        .content-header span {
+            color: #54dfff;
+            font-size: 12px;
+            letter-spacing: 4px;
+        }
+
+        .content-header h1 {
+            font-size: clamp(45px, 7vw, 80px);
+            margin: 25px 0;
+        }
+
+        .content-header p {
+            color: #aab8ce;
+            max-width: 700px;
+            line-height: 1.8;
+        }
+
+        .content-section {
+            margin-top: 65px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: center;
+        }
+
+        .visual-box {
+            min-height: 350px;
+            border-radius: 20px;
+            background:
+                radial-gradient(circle, #263f70, #111b31 70%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            border: 1px solid #344665;
+            padding: 30px;
+        }
+
+        .visual-box h2 {
+            font-size: 35px;
+            color: #54dfff;
+        }
+
+        .details h2 {
+            font-size: 30px;
+            margin-bottom: 20px;
+        }
+
+        .details p {
+            color: #aab8ce;
+            line-height: 1.9;
+            margin-bottom: 20px;
+        }
+
+        .action-button {
+            display: inline-block;
+            padding: 15px 25px;
+            background: #54dfff;
+            color: #09101d;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 5px;
+            margin-top: 15px;
+            transition: 0.3s;
+        }
+
+        .action-button:hover {
+            background: white;
+            transform: translateY(-3px);
+        }
+
+        .tech-section {
+            margin-top: 100px;
+            padding: 40px;
+            background: #121e33;
+            border-radius: 15px;
+        }
+
+        .tech-section h2 {
+            margin-bottom: 25px;
+        }
+
+        .tech-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .tech-list span {
+            padding: 12px 20px;
+            border: 1px solid #3a5276;
+            border-radius: 30px;
+            color: #54dfff;
+            font-size: 13px;
+        }
+
+        @media(max-width: 800px) {
+            .content-section {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
+
 <body>
-    <h1>Hello, World!</h1>
-    <p>This is my first HTML page opened in Google Chrome.</p>
+
+<div class="content-wrapper">
+
+    <nav class="navbar">
+
+        <div class="logo">MOTION STUDIO</div>
+
+        <div>
+            <a href="index.html">HOME</a>
+            <a href="page.html">EXPLORE</a>
+            <a href="content.html">CONTENT</a>
+        </div>
+
+    </nav>
+
+    <header class="content-header">
+
+        <span>ANIMATION / CHARACTER DESIGN</span>
+
+        <h1>Character Animation</h1>
+
+        <p>
+            Character animation is the process of bringing
+            illustrated characters to life through movement,
+            expressions, body mechanics and storytelling.
+        </p>
+
+    </header>
+
+    <section class="content-section">
+
+        <div class="visual-box">
+
+            <h2>BRING<br>IDEAS<br>TO LIFE.</h2>
+
+        </div>
+
+        <div class="details">
+
+            <h2>Beyond Static Design</h2>
+
+            <p>
+                A character is more than a collection of shapes.
+                Every movement communicates personality, emotion
+                and intention.
+            </p>
+
+            <p>
+                Using JavaScript and Canvas, we can draw individual
+                body parts, connect them through joints and animate
+                their movements using mathematical functions.
+            </p>
+
+            <a href="index.html" class="action-button">
+                WATCH DANCING CHARACTER →
+            </a>
+
+        </div>
+
+    </section>
+
+    <section class="tech-section">
+
+        <h2>Technologies Used</h2>
+
+        <div class="tech-list">
+
+            <span>HTML5</span>
+            <span>CSS3</span>
+            <span>JavaScript</span>
+            <span>Canvas API</span>
+            <span>2D Animation</span>
+            <span>Procedural Animation</span>
+
+        </div>
+
+    </section>
+
+</div>
+
 </body>
 </html>
