@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Footage Library | Motion Studio</title>
+
+<style>
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #090e18;
+    color: #eaf0fa;
+    font-family: Arial, sans-serif;
+}
+
+/* NAVIGATION */
+
+.navbar {
+    height: 70px;
+    background: #111a29;
+    border-bottom: 1px solid #29364a;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 0 5%;
+}
+
+.logo {
+    font-size: 21px;
+    font-weight: 900;
+    letter-spacing: 3px;
+}
+
+.logo span {
+    color: #54dfff;
+}
+
+.nav-links {
+    display: flex;
+    gap: 28px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #9eafc8;
+    font-size: 12px;
+    letter-spacing: 1px;
+    transition: 0.3s;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+    color: #54dfff;
+}
+
+.edit-button {
+    background: #54dfff;
+    color: #07111c;
+    border: none;
+    padding: 11px 20px;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* MAIN */
+
+.container {
+    padding: 45px 5%;
+    max-width: 1700px;
+    margin: auto;
+}
+
+.heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.heading span {
+    color: #54dfff;
+    font-size: 11px;
+    letter-spacing: 4px;
+}
+
+.heading h1 {
+    font-size: 42px;
+    margin-top: 15px;
+}
+
+.heading p {
+    color: #91a2bb;
+    margin-top: 12px;
+    font-size: 14px;
+}
+
+.upload-button {
+    background: #54dfff;
+    color: #07111c;
+
+    border: none;
+    padding: 15px 25px;
+
+    border-radius: 5px;
+
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.upload-button:hover,
+.edit-button:hover {
+    background: white;
+}
+
+/* STATISTICS */
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-top: 45px;
+}
+
+.stat-card {
+    padding: 25px;
+    background: #121e30;
+    border: 1px solid #293950;
+    border-radius: 8px;
+}
+
+.stat-card h2 {
+    font-size: 28px;
+    color: #54dfff;
+}
+
+.stat-card p {
+    color: #91a2bb;
+    font-size: 12px;
+    margin-top: 10px;
+    letter-spacing: 1px;
+}
+
+/* TOOLBAR */
+
+.toolbar {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-top: 55px;
+    margin-bottom: 25px;
+}
+
+.search-box {
+    background: #121e30;
+    border: 1px solid #34465f;
+    padding: 12px 15px;
+    border-radius: 5px;
+    color: white;
+    width: min(350px, 100%);
+    outline: none;
+}
+
+.filter {
+    background: #121e30;
+    color: white;
+    border: 1px solid #34465f;
+    padding: 12px 18px;
+    border-radius: 5px;
+}
+
+/* FOOTAGE GRID */
+
+.footage-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 22px;
+}
+
+.footage-card {
+    background: #121e30;
+    border: 1px solid #293950;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: 0.3s;
+}
+
+.footage-card:hover {
+    transform: translateY(-5px);
+    border-color: #54dfff;
+}
+
+.thumbnail {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: #080e18;
+    position: relative;
+    overflow: hidden;
+}
+
+.thumbnail video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.play-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    width: 45px;
+    height: 45px;
+
+    background: rgba(0,0,0,0.65);
+    border-radius: 50%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    pointer-events: none;
+    color: white;
+}
+
+.footage-info {
+    padding: 16px;
+}
+
+.footage-info h3 {
+    font-size: 14px;
+    overflow-wrap: anywhere;
+}
+
+.metadata {
+    margin-top: 12px;
+    color: #899bb5;
+    font-size: 11px;
+    line-height: 1.9;
+}
+
+.card-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 15px;
+}
+
+.card-actions button {
+    flex: 1;
+    padding: 9px 5px;
+    border-radius: 4px;
+    border: 1px solid #40536f;
+    background: #1a2a41;
+    color: white;
+    font-size: 11px;
+    cursor: pointer;
+}
+
+.card-actions button:hover {
+    background: #245477;
+}
+
+/* EMPTY STATE */
+
+.empty-state {
+    display: none;
+    padding: 90px 20px;
+    text-align: center;
+    border: 1px dashed #40536f;
+    border-radius: 10px;
+    color: #91a2bb;
+    margin-top: 20px;
+}
+
+.empty-state h2 {
+    color: white;
+    margin-bottom: 12px;
+}
+
+/* FOOTER */
+
+footer {
+    margin-top: 70px;
+    border-top: 1px solid #29364a;
+    padding: 25px 5%;
+    color: #657892;
+    font-size: 11px;
+    letter-spacing: 2px;
+}
+
+/* RESPONSIVE */
+
+@media(max-width: 1100px) {
+    .footage-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media(max-width: 750px) {
+
+    .footage-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .stats {
+        grid-template-columns: 1fr;
+    }
+
+    .nav-links {
+        display: none;
+    }
+
+    .heading h1 {
+        font-size: 32px;
+    }
+
+}
+
+@media(max-width: 450px) {
+    .footage-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+
+<header class="navbar">
+
+    <div class="logo">
+        MOTION <span>STUDIO</span>
+    </div>
+
+    <nav class="nav-links">
+
+        <a href="index.html">HOME</a>
+        <a href="page.html">EXPLORE</a>
+        <a href="content.html">CONTENT</a>
+        <a href="footage.html" class="active">FOOTAGE</a>
+        <a href="edit.html">EDITOR</a>
+
+    </nav>
+
+    <button class="edit-button" onclick="location.href='edit.html'">
+        OPEN EDITOR →
+    </button>
+
+</header>
+
+
+<!-- MAIN -->
+
+<main class="container">
+
+    <section class="heading">
+
+        <div>
+
+            <span>MEDIA MANAGEMENT / 001</span>
+
+            <h1>Footage Library</h1>
+
+            <p>
+                Import, organize and preview your video assets.
+            </p>
+
+        </div>
+
+        <div>
+
+            <input
+                type="file"
+                id="fileInput"
+                accept="video/*"
+                multiple
+                hidden
+            >
+
+            <button
+                class="upload-button"
+                onclick="document.getElementById('fileInput').click()"
+            >
+                + IMPORT FOOTAGE
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- STATISTICS -->
+
+    <section class="stats">
+
+        <div class="stat-card">
+
+            <h2 id="totalVideos">0</h2>
+
+            <p>TOTAL VIDEOS</p>
+
+        </div>
+
+        <div class="stat-card">
+
+            <h2 id="totalSize">0 MB</h2>
+
+            <p>STORAGE USED</p>
+
+        </div>
+
+        <div class="stat-card">
+
+            <h2 id="totalDuration">00:00</h2>
+
+            <p>TOTAL DURATION</p>
+
+        </div>
+
+    </section>
+
+
+    <!-- TOOLBAR -->
+
+    <section class="toolbar">
+
+        <input
+            type="text"
+            class="search-box"
+            id="searchInput"
+            placeholder="Search footage..."
+        >
+
+        <select class="filter" id="sortFilter">
+
+            <option value="newest">Recently Added</option>
+            <option value="oldest">Oldest First</option>
+            <option value="name">Name A-Z</option>
+            <option value="duration">Longest Duration</option>
+
+        </select>
+
+    </section>
+
+
+    <!-- FOOTAGE -->
+
+    <section class="footage-grid" id="footageGrid"></section>
+
+
+    <section class="empty-state" id="emptyState">
+
+        <h2>No footage found</h2>
+
+        <p>Import video files to populate your footage library.</p>
+
+    </section>
+
+</main>
+
+
+<footer>
+    MOTION STUDIO / FOOTAGE MANAGEMENT SYSTEM
+</footer>
+
+
+<!-- VIDEO PREVIEW MODAL -->
+
+<div id="previewModal" style="
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.9);
+    z-index:100;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+">
+
+    <div style="
+        width:min(900px,100%);
+        background:#121e30;
+        padding:15px;
+        border-radius:10px;
+    ">
+
+        <button
+            onclick="closePreview()"
+            style="
+                float:right;
+                padding:8px 15px;
+                background:#54dfff;
+                border:none;
+                cursor:pointer;
+            "
+        >
+            CLOSE ✕
+        </button>
+
+        <video
+            id="previewVideo"
+            controls
+            style="
+                width:100%;
+                max-height:75vh;
+                margin-top:35px;
+                background:black;
+            "
+        ></video>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* STORAGE */
+
+let footage = [];
+
+let nextId = 1;
+
+
+/* IMPORT */
+
+const fileInput = document.getElementById("fileInput");
+
+fileInput.addEventListener("change", async function() {
+
+    const files = Array.from(this.files);
+
+    for (const file of files) {
+
+        if (!file.type.startsWith("video/")) continue;
+
+        const url = URL.createObjectURL(file);
+
+        const metadata = await getMetadata(url);
+
+        footage.push({
+
+            id: nextId++,
+
+            name: file.name,
+
+            file: file,
+
+            url: url,
+
+            size: file.size,
+
+            duration: metadata.duration,
+
+            width: metadata.width,
+
+            height: metadata.height,
+
+            added: Date.now()
+
+        });
+
+    }
+
+    renderFootage();
+
+    this.value = "";
+
+});
+
+
+/* GET VIDEO METADATA */
+
+function getMetadata(url) {
+
+    return new Promise(resolve => {
+
+        const video = document.createElement("video");
+
+        video.preload = "metadata";
+
+        video.src = url;
+
+        video.onloadedmetadata = function() {
+
+            resolve({
+
+                duration: Number.isFinite(video.duration)
+                    ? video.duration : 0,
+
+                width: video.videoWidth,
+
+                height: video.videoHeight
+
+            });
+
+            video.removeAttribute("src");
+            video.load();
+
+        };
+
+        video.onerror = function() {
+
+            resolve({
+                duration: 0,
+                width: 0,
+                height: 0
+            });
+
+        };
+
+    });
+
+}
+
+
+/* FORMAT TIME */
+
+function formatTime(seconds) {
+
+    if (!Number.isFinite(seconds)) return "00:00";
+
+    const min = Math.floor(seconds / 60);
+
+    const sec = Math.floor(seconds % 60);
+
+    return `${String(min).padStart(2,"0")}:${String(sec).padStart(2,"0")}`;
+
+}
+
+
+/* FORMAT SIZE */
+
+function formatSize(bytes) {
+
+    if (bytes < 1024 * 1024) {
+
+        return (bytes / 1024).toFixed(1) + " KB";
+
+    }
+
+    return (bytes / 1024 / 1024).toFixed(2) + " MB";
+
+}
+
+
+/* RENDER */
+
+function renderFootage() {
+
+    const grid = document.getElementById("footageGrid");
+
+    const search = document.getElementById("searchInput")
+        .value.toLowerCase();
+
+    const sort = document.getElementById("sortFilter").value;
+
+    let list = footage.filter(item =>
+        item.name.toLowerCase().includes(search)
+    );
+
+    if (sort === "newest") {
+
+        list.sort((a,b) => b.added - a.added);
+
+    }
+
+    if (sort === "oldest") {
+
+        list.sort((a,b) => a.added - b.added);
+
+    }
+
+    if (sort === "name") {
+
+        list.sort((a,b) => a.name.localeCompare(b.name));
+
+    }
+
+    if (sort === "duration") {
+
+        list.sort((a,b) => b.duration - a.duration);
+
+    }
+
+    grid.innerHTML = "";
+
+    list.forEach(item => {
+
+        const card = document.createElement("article");
+
+        card.className = "footage-card";
+
+        const thumbnail = document.createElement("div");
+
+        thumbnail.className = "thumbnail";
+
+        const video = document.createElement("video");
+
+        video.src = item.url;
+
+        video.preload = "metadata";
+
+        video.muted = true;
+
+        video.playsInline = true;
+
+        video.addEventListener("loadedmetadata", () => {
+
+            video.currentTime = Math.min(0.5, item.duration / 2);
+
+        }, {once:true});
+
+        const play = document.createElement("div");
+
+        play.className = "play-icon";
+
+        play.textContent = "▶";
+
+        thumbnail.append(video, play);
+
+        thumbnail.addEventListener("click", () => {
+
+            openPreview(item.id);
+
+        });
+
+        const info = document.createElement("div");
+
+        info.className = "footage-info";
+
+        const name = document.createElement("h3");
+
+        name.textContent = item.name;
+
+        const metadata = document.createElement("div");
+
+        metadata.className = "metadata";
+
+        metadata.textContent =
+            `${formatTime(item.duration)}  •  ${item.width} × ${item.height}  •  ${formatSize(item.size)}`;
+
+        const actions = document.createElement("div");
+
+        actions.className = "card-actions";
+
+        const previewButton = document.createElement("button");
+
+        previewButton.textContent = "PREVIEW";
+
+        previewButton.onclick = () => openPreview(item.id);
+
+        const editButton = document.createElement("button");
+
+        editButton.textContent = "EDIT";
+
+        editButton.onclick = () => openInEditor(item.id);
+
+        const deleteButton = document.createElement("button");
+
+        deleteButton.textContent = "DELETE";
+
+        deleteButton.onclick = () => deleteFootage(item.id);
+
+        actions.append(previewButton, editButton, deleteButton);
+
+        info.append(name, metadata, actions);
+
+        card.append(thumbnail, info);
+
+        grid.appendChild(card);
+
+    });
+
+    document.getElementById("emptyState").style.display =
+        list.length ? "none" : "block";
+
+    updateStatistics();
+
+}
+
+
+/* STATISTICS */
+
+function updateStatistics() {
+
+    document.getElementById("totalVideos").textContent =
+        footage.length;
+
+    const size = footage.reduce(
+        (sum,item) => sum + item.size, 0
+    );
+
+    document.getElementById("totalSize").textContent =
+        formatSize(size);
+
+    const duration = footage.reduce(
+        (sum,item) => sum + item.duration, 0
+    );
+
+    document.getElementById("totalDuration").textContent =
+        formatTime(duration);
+
+}
+
+
+/* SEARCH AND SORT */
+
+document.getElementById("searchInput")
+    .addEventListener("input", renderFootage);
+
+document.getElementById("sortFilter")
+    .addEventListener("change", renderFootage);
+
+
+/* PREVIEW */
+
+function openPreview(id) {
+
+    const item = footage.find(item => item.id === id);
+
+    if (!item) return;
+
+    const video = document.getElementById("previewVideo");
+
+    video.src = item.url;
+
+    document.getElementById("previewModal").style.display = "flex";
+
+    video.play().catch(() => {});
+
+}
+
+function closePreview() {
+
+    const video = document.getElementById("previewVideo");
+
+    video.pause();
+
+    video.removeAttribute("src");
+
+    video.load();
+
+    document.getElementById("previewModal").style.display = "none";
+
+}
+
+
+/* DELETE */
+
+function deleteFootage(id) {
+
+    const item = footage.find(item => item.id === id);
+
+    if (!item) return;
+
+    if (!confirm(`Delete ${item.name}?`)) return;
+
+    URL.revokeObjectURL(item.url);
+
+    footage = footage.filter(item => item.id !== id);
+
+    renderFootage();
+
+}
+
+
+/* SEND TO EDITOR */
+
+function openInEditor(id) {
+
+    const item = footage.find(item => item.id === id);
+
+    if (!item) return;
+
+    const transferId = "motionStudioFootage";
+
+    const dbRequest = indexedDB.open("MotionStudio", 1);
+
+    dbRequest.onupgradeneeded = function() {
+
+        const db = dbRequest.result;
+
+        if (!db.objectStoreNames.contains("footage")) {
+
+            db.createObjectStore("footage");
+
+        }
+
+    };
+
+    dbRequest.onsuccess = function() {
+
+        const db = dbRequest.result;
+
+        const transaction = db.transaction("footage", "readwrite");
+
+        transaction.objectStore("footage").put(
+            {
+                file: item.file,
+                name: item.name
+            },
+            transferId
+        );
+
+        transaction.oncomplete = function() {
+
+            window.location.href = "edit.html";
+
+        };
+
+        transaction.onerror = function() {
+
+            alert("Could not transfer footage to the editor.");
+
+        };
+
+    };
+
+    dbRequest.onerror = function() {
+
+        alert("Could not open the footage database.");
+
+    };
+
+}
+
+
+/* INITIALIZE */
+
+renderFootage();
+
+</script>
+
+</body>
+</html>
