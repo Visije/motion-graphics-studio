@@ -5,9 +5,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>GSAP Motion Playground</title>
+<title>GSAP Animation Playground</title>
 
-<!-- GSAP -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.14.2/gsap.min.js"></script>
 
 <style>
@@ -19,293 +18,245 @@
 }
 
 body {
-    background: #080b14;
+    background: #090d19;
     color: white;
     font-family: Arial, sans-serif;
     overflow: hidden;
 }
 
-/* MAIN STAGE */
+/* MAIN WORKSPACE */
 
-.stage {
-
-    position: relative;
-
+.workspace {
     width: 100vw;
     height: 100vh;
-
-    overflow: hidden;
-
-    background:
-    radial-gradient(
-        circle at center,
-        #172440,
-        #080b14 75%
-    );
-
-}
-
-/* GRID */
-
-.grid {
-
-    position: absolute;
-    inset: 0;
-
-    background-image:
-        linear-gradient(rgba(130,160,210,.045) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(130,160,210,.045) 1px, transparent 1px);
-
-    background-size: 60px 60px;
-
+    display: flex;
+    flex-direction: column;
 }
 
 /* HEADER */
 
 .header {
-
-    position: absolute;
-
-    top: 30px;
-    left: 45px;
-    right: 45px;
-
+    height: 65px;
     display: flex;
-    justify-content: space-between;
-
-    z-index: 20;
-
-    font-size: 11px;
-    letter-spacing: 3px;
-
-    color: #8194b2;
-
-}
-
-/* MAIN CONTENT */
-
-.composition {
-
-    position: absolute;
-
-    width: 100%;
-    height: 100%;
-
-    display: flex;
-    justify-content: center;
     align-items: center;
-
+    justify-content: space-between;
+    padding: 0 30px;
+    background: #10182a;
+    border-bottom: 1px solid #25334c;
 }
 
-/* TYPOGRAPHY */
+.logo {
+    font-size: 16px;
+    font-weight: bold;
+    letter-spacing: 3px;
+}
 
-.title {
+.logo span {
+    color: #54dfff;
+}
 
+.status {
+    font-size: 11px;
+    color: #54dfff;
+    letter-spacing: 2px;
+}
+
+/* ANIMATION STAGE */
+
+.stage {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+
+    background:
+    radial-gradient(
+        circle at center,
+        #172744,
+        #090d19 75%
+    );
+}
+
+/* GRID */
+
+.grid {
     position: absolute;
+    inset: 0;
 
-    font-size: clamp(60px, 12vw, 180px);
+    background-image:
+        linear-gradient(rgba(120,160,210,.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(120,160,210,.05) 1px, transparent 1px);
 
-    font-weight: 900;
-
-    letter-spacing: 12px;
-
-    white-space: nowrap;
-
-    z-index: 5;
-
+    background-size: 50px 50px;
 }
 
-.title span {
+/* OBJECTS */
 
-    display: inline-block;
-
-    opacity: 0;
-
-}
-
-/* SUBTITLE */
-
-.subtitle {
-
+.objects {
     position: absolute;
+    inset: 0;
 
-    top: 63%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-    font-size: 13px;
-
-    letter-spacing: 6px;
-
-    color: #9db0cc;
-
-    opacity: 0;
-
+    gap: 45px;
 }
 
 /* SHAPES */
 
 .shape {
+    width: 95px;
+    height: 95px;
 
-    position: absolute;
+    border-radius: 20px;
 
-    width: 180px;
-    height: 180px;
+    background: linear-gradient(135deg,#54dfff,#5273ff);
 
-    border: 2px solid #54dfff;
-
-    opacity: 0;
-
+    box-shadow:
+    0 0 35px rgba(84,223,255,.25);
 }
 
-.circle {
-
+.shape:nth-child(2) {
+    background: linear-gradient(135deg,#a27aff,#e06aff);
     border-radius: 50%;
-
 }
 
-.square {
-
-    border-color: #9b7aff;
-
+.shape:nth-child(3) {
+    background: linear-gradient(135deg,#5df0c3,#22bca8);
+    border-radius: 8px;
 }
 
-.diamond {
-
-    border-color: #ff79bd;
-
-    transform: rotate(45deg);
-
+.shape:nth-child(4) {
+    background: linear-gradient(135deg,#ffbd65,#ff6b86);
+    border-radius: 50% 10% 50% 10%;
 }
 
-/* GLOW */
+/* LABEL */
 
-.glow {
-
+.stage-label {
     position: absolute;
+    bottom: 25px;
+    left: 30px;
 
-    width: 300px;
-    height: 300px;
-
-    background: #38bfff;
-
-    filter: blur(140px);
-
-    opacity: .2;
-
+    color: #64758f;
+    font-size: 11px;
+    letter-spacing: 2px;
 }
 
-/* PARTICLES */
-
-.particle {
-
-    position: absolute;
-
-    width: 3px;
-    height: 3px;
-
-    border-radius: 50%;
-
-    background: #83e7ff;
-
-    box-shadow: 0 0 10px #54dfff;
-
-}
-
-/* CONTROLS */
+/* CONTROL PANEL */
 
 .controls {
+    height: 160px;
 
-    position: absolute;
+    background: #10182a;
 
-    bottom: 35px;
-    left: 45px;
+    border-top: 1px solid #25334c;
+
+    padding: 20px 30px;
 
     display: flex;
-    gap: 12px;
+    flex-direction: column;
+    justify-content: space-between;
+}
 
-    z-index: 30;
+.control-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
 
+.buttons {
+    display: flex;
+    gap: 10px;
 }
 
 button {
+    padding: 10px 22px;
 
-    background: transparent;
+    border: 1px solid #344865;
 
-    border: 1px solid #344665;
+    background: #17243b;
 
     color: white;
 
-    padding: 12px 22px;
-
     cursor: pointer;
 
-    font-size: 10px;
+    border-radius: 5px;
 
-    letter-spacing: 2px;
+    font-size: 11px;
+    letter-spacing: 1px;
 
-    transition: .3s;
-
+    transition: .2s;
 }
 
 button:hover {
-
     background: #54dfff;
-
-    color: #080b14;
-
-    border-color: #54dfff;
-
+    color: #090d19;
 }
 
-/* TIMELINE */
+button.active {
+    background: #54dfff;
+    color: #090d19;
+}
+
+.timeline-info {
+    color: #8192ad;
+    font-size: 12px;
+}
 
 .timeline {
-
-    position: absolute;
-
-    bottom: 45px;
-    right: 45px;
-
-    width: 25%;
-
-    height: 3px;
-
-    background: #29354c;
-
-    z-index: 30;
-
+    width: 100%;
 }
 
-.timeline-progress {
+input[type="range"] {
+    width: 100%;
+    accent-color: #54dfff;
+    cursor: pointer;
+}
 
-    width: 0%;
-    height: 100%;
+/* SPEED */
 
-    background: #54dfff;
+.speed-control {
+    display: flex;
+    align-items: center;
+    gap: 12px;
 
-    box-shadow: 0 0 10px #54dfff;
+    font-size: 11px;
+    color: #8192ad;
+}
 
+select {
+    background: #17243b;
+    color: white;
+    border: 1px solid #344865;
+    padding: 8px;
+    border-radius: 4px;
 }
 
 /* RESPONSIVE */
 
 @media(max-width:700px) {
 
-    .title {
-        letter-spacing: 4px;
+    .objects {
+        gap: 15px;
     }
 
-    .header {
-        left: 20px;
-        right: 20px;
+    .shape {
+        width: 50px;
+        height: 50px;
     }
 
     .controls {
-        left: 20px;
-        bottom: 20px;
+        height: 190px;
     }
 
-    .timeline {
-        display: none;
+    .control-top {
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    button {
+        padding: 9px 12px;
     }
 
 }
@@ -316,385 +267,418 @@ button:hover {
 
 <body>
 
-<div class="stage">
+<div class="workspace">
 
-    <div class="grid"></div>
+    <!-- HEADER -->
 
-    <div class="glow" id="glow"></div>
+    <header class="header">
 
-    <div class="header">
+        <div class="logo">
+            GSAP <span>PLAYGROUND</span>
+        </div>
 
-        <div>GSAP / MOTION LAB</div>
+        <div class="status" id="status">
+            READY
+        </div>
 
-        <div>EXPERIMENT 001</div>
-
-    </div>
-
-
-    <div class="composition">
-
-        <div class="shape circle" id="circle"></div>
-
-        <div class="shape square" id="square"></div>
-
-        <div class="shape diamond" id="diamond"></div>
+    </header>
 
 
-        <h1 class="title" id="title">
+    <!-- ANIMATION STAGE -->
 
-            <span>M</span><span>O</span><span>T</span>
-            <span>I</span><span>O</span><span>N</span>
+    <main class="stage">
 
-        </h1>
+        <div class="grid"></div>
 
+        <div class="objects">
 
-        <div class="subtitle" id="subtitle">
-
-            DESIGN WITHOUT LIMITS
+            <div class="shape"></div>
+            <div class="shape"></div>
+            <div class="shape"></div>
+            <div class="shape"></div>
 
         </div>
 
-    </div>
+        <div class="stage-label">
+            ANIMATION CANVAS / 001
+        </div>
+
+    </main>
 
 
-    <div id="particles"></div>
+    <!-- CONTROLS -->
+
+    <footer class="controls">
+
+        <div class="control-top">
+
+            <div class="buttons">
+
+                <button id="play">PLAY</button>
+
+                <button id="pause">PAUSE</button>
+
+                <button id="reverse">REVERSE</button>
+
+                <button id="restart">RESTART</button>
+
+            </div>
 
 
-    <div class="controls">
+            <div class="speed-control">
 
-        <button id="play">PLAY</button>
+                SPEED
 
-        <button id="pause">PAUSE</button>
+                <select id="speed">
 
-        <button id="restart">RESTART</button>
+                    <option value="0.5">0.5x</option>
+                    <option value="1" selected>1x</option>
+                    <option value="1.5">1.5x</option>
+                    <option value="2">2x</option>
 
-    </div>
+                </select>
+
+            </div>
 
 
-    <div class="timeline">
+            <div class="timeline-info">
 
-        <div class="timeline-progress" id="progress"></div>
+                <span id="currentTime">0.00</span>
+                /
+                <span id="totalTime">0.00</span>
 
-    </div>
+            </div>
+
+        </div>
+
+
+        <div class="timeline">
+
+            <input
+                type="range"
+                id="scrubber"
+                min="0"
+                max="100"
+                value="0"
+                step="0.1"
+            >
+
+        </div>
+
+    </footer>
 
 </div>
 
 
 <script>
 
-// ==================================
-// PARTICLE GENERATION
-// ==================================
+// ====================================
+// GSAP PLAYGROUND
+// ====================================
 
-const particleContainer =
-document.getElementById("particles");
+gsap.registerPlugin();
 
-for (let i = 0; i < 70; i++) {
+const shapes = gsap.utils.toArray(".shape");
 
-    const particle = document.createElement("div");
+const status = document.getElementById("status");
 
-    particle.className = "particle";
+const scrubber = document.getElementById("scrubber");
 
-    particle.style.left = Math.random() * 100 + "%";
+const currentTime = document.getElementById("currentTime");
 
-    particle.style.top = Math.random() * 100 + "%";
+const totalTime = document.getElementById("totalTime");
 
-    particleContainer.appendChild(particle);
+const speed = document.getElementById("speed");
+
+let isScrubbing = false;
+
+
+// ====================================
+// CREATE TIMELINE
+// ====================================
+
+const tl = gsap.timeline({
+
+    paused: true,
+
+    repeat: -1,
+
+    repeatDelay: 0.5,
+
+    onUpdate: updateInterface
+
+});
+
+
+// ====================================
+// ANIMATION SEQUENCE
+// ====================================
+
+// Phase 1: Entrance
+
+tl.from(shapes, {
+
+    y: 200,
+
+    opacity: 0,
+
+    scale: 0.2,
+
+    duration: 1.2,
+
+    stagger: 0.15,
+
+    ease: "back.out(1.7)"
+
+});
+
+
+// Phase 2: Rotation
+
+tl.to(shapes, {
+
+    rotation: 360,
+
+    duration: 2,
+
+    stagger: 0.15,
+
+    ease: "power2.inOut"
+
+});
+
+
+// Phase 3: Jump
+
+tl.to(shapes, {
+
+    y: -120,
+
+    duration: 0.45,
+
+    stagger: 0.12,
+
+    ease: "power2.out"
+
+});
+
+tl.to(shapes, {
+
+    y: 0,
+
+    duration: 0.65,
+
+    stagger: 0.12,
+
+    ease: "bounce.out"
+
+});
+
+
+// Phase 4: Scale
+
+tl.to(shapes, {
+
+    scale: 1.5,
+
+    duration: 0.7,
+
+    stagger: 0.12,
+
+    ease: "elastic.out(1,0.4)"
+
+});
+
+tl.to(shapes, {
+
+    scale: 1,
+
+    duration: 0.7,
+
+    stagger: 0.12,
+
+    ease: "power2.inOut"
+
+});
+
+
+// Phase 5: Horizontal movement
+
+tl.to(shapes, {
+
+    x: 180,
+
+    duration: 1,
+
+    stagger: 0.12,
+
+    ease: "power3.inOut"
+
+});
+
+tl.to(shapes, {
+
+    x: -180,
+
+    duration: 1,
+
+    stagger: 0.12,
+
+    ease: "power3.inOut"
+
+});
+
+
+// Phase 6: Fade
+
+tl.to(shapes, {
+
+    opacity: 0.2,
+
+    duration: 0.8,
+
+    stagger: 0.12,
+
+    ease: "power2.inOut"
+
+});
+
+tl.to(shapes, {
+
+    opacity: 1,
+
+    duration: 0.8,
+
+    stagger: 0.12,
+
+    ease: "power2.inOut"
+
+});
+
+
+// ====================================
+// INTERFACE UPDATE
+// ====================================
+
+function updateInterface() {
+
+    if (isScrubbing) return;
+
+    const time = tl.time();
+
+    const duration = tl.duration();
+
+    currentTime.textContent = time.toFixed(2);
+
+    totalTime.textContent = duration.toFixed(2);
+
+    scrubber.value = (time / duration) * 100;
 
 }
 
 
-// ==================================
-// GSAP REFERENCES
-// ==================================
-
-const titleLetters =
-document.querySelectorAll(".title span");
-
-const circle =
-document.getElementById("circle");
-
-const square =
-document.getElementById("square");
-
-const diamond =
-document.getElementById("diamond");
-
-const subtitle =
-document.getElementById("subtitle");
-
-const glow =
-document.getElementById("glow");
-
-const particles =
-document.querySelectorAll(".particle");
-
-const progress =
-document.getElementById("progress");
-
-
-// ==================================
-// MASTER TIMELINE
-// ==================================
-
-const master = gsap.timeline({
-
-    paused: true,
-
-    defaults: {
-        ease: "power3.out"
-    }
-
-});
-
-
-// ==================================
-// SCENE 01
-// TYPOGRAPHY REVEAL
-// ==================================
-
-master.fromTo(
-
-    titleLetters,
-
-    {
-        y: 150,
-        opacity: 0,
-        rotationX: -90,
-        scale: 0.5
-    },
-
-    {
-        y: 0,
-        opacity: 1,
-        rotationX: 0,
-        scale: 1,
-
-        duration: 1.2,
-
-        stagger: 0.12
-
-    },
-
-    0
-
-);
-
-
-// ==================================
-// SCENE 02
-// GEOMETRIC ANIMATION
-// ==================================
-
-master.to(circle, {
-
-    opacity: 0.8,
-
-    scale: 1.8,
-
-    rotation: 180,
-
-    duration: 2
-
-}, 0.5);
-
-
-master.to(square, {
-
-    opacity: 0.7,
-
-    scale: 1.5,
-
-    rotation: 225,
-
-    duration: 2
-
-}, 0.8);
-
-
-master.to(diamond, {
-
-    opacity: 0.7,
-
-    scale: 1.3,
-
-    rotation: 135,
-
-    duration: 2
-
-}, 1);
-
-
-// ==================================
-// SCENE 03
-// SUBTITLE
-// ==================================
-
-master.to(subtitle, {
-
-    opacity: 1,
-
-    y: 20,
-
-    duration: 1
-
-}, 2.5);
-
-
-// ==================================
-// SCENE 04
-// CINEMATIC MOVEMENT
-// ==================================
-
-master.to(titleLetters, {
-
-    scale: 1.2,
-
-    letterSpacing: 20,
-
-    duration: 1.5
-
-}, 4);
-
-
-master.to(glow, {
-
-    scale: 2,
-
-    opacity: 0.35,
-
-    duration: 2
-
-}, 3);
-
-
-// ==================================
-// SCENE 05
-// PARTICLES
-// ==================================
-
-particles.forEach((particle, i) => {
-
-    master.fromTo(
-
-        particle,
-
-        {
-            y: 100,
-            opacity: 0
-        },
-
-        {
-            y: -150,
-            opacity: 0.9,
-
-            duration: 2 + Math.random(),
-
-            ease: "power1.out"
-
-        },
-
-        2 + i * 0.025
-
-    );
-
-});
-
-
-// ==================================
-// SCENE 06
-// EXIT TRANSITION
-// ==================================
-
-master.to(titleLetters, {
-
-    y: -120,
-
-    opacity: 0,
-
-    stagger: 0.05,
-
-    duration: 1
-
-}, 7);
-
-
-master.to(subtitle, {
-
-    opacity: 0,
-
-    y: 50,
-
-    duration: 0.8
-
-}, 7.2);
-
-
-master.to(
-
-    [circle, square, diamond],
-
-    {
-
-        scale: 2.5,
-
-        opacity: 0,
-
-        rotation: 360,
-
-        duration: 1.5
-
-    },
-
-    7
-
-);
-
-
-// ==================================
-// TIMELINE PROGRESS
-// ==================================
-
-master.eventCallback("onUpdate", () => {
-
-    const percentage =
-    (master.progress() * 100).toFixed(1);
-
-    progress.style.width = percentage + "%";
-
-});
-
-
-// ==================================
-// CONTROLS
-// ==================================
+// ====================================
+// PLAY
+// ====================================
 
 document.getElementById("play").onclick = () => {
 
-    master.play();
+    tl.play();
+
+    status.textContent = "PLAYING";
 
 };
 
+
+// ====================================
+// PAUSE
+// ====================================
 
 document.getElementById("pause").onclick = () => {
 
-    master.pause();
+    tl.pause();
+
+    status.textContent = "PAUSED";
 
 };
 
+
+// ====================================
+// REVERSE
+// ====================================
+
+document.getElementById("reverse").onclick = () => {
+
+    tl.reverse();
+
+    status.textContent = "REVERSE";
+
+};
+
+
+// ====================================
+// RESTART
+// ====================================
 
 document.getElementById("restart").onclick = () => {
 
-    master.restart();
+    tl.restart();
+
+    status.textContent = "PLAYING";
 
 };
 
 
-// ==================================
-// AUTOMATIC INITIAL PLAY
-// ==================================
+// ====================================
+// SPEED
+// ====================================
 
-master.play();
+speed.onchange = () => {
+
+    tl.timeScale(Number(speed.value));
+
+};
+
+
+// ====================================
+// TIMELINE SCRUBBER
+// ====================================
+
+scrubber.addEventListener("input", () => {
+
+    isScrubbing = true;
+
+    const time = Number(scrubber.value) / 100 * tl.duration();
+
+    tl.pause();
+
+    tl.time(time);
+
+    currentTime.textContent = time.toFixed(2);
+
+    status.textContent = "SCRUBBING";
+
+});
+
+
+scrubber.addEventListener("change", () => {
+
+    isScrubbing = false;
+
+    status.textContent = "PAUSED";
+
+    updateInterface();
+
+});
+
+
+// ====================================
+// INITIALIZE
+// ====================================
+
+totalTime.textContent = tl.duration().toFixed(2);
+
+updateInterface();
 
 </script>
 
