@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Premium Bottle Model</title>
+
+<title>Footage | Bottle</title>
 
 <style>
+
 * {
     margin: 0;
     padding: 0;
@@ -19,463 +22,550 @@ html, body {
 }
 
 body {
-    background: #f0efe9;
+    background: #fafaf8;
 }
+
+/* MAIN STAGE */
 
 .stage {
     width: 100%;
     height: 100vh;
+
     display: flex;
     justify-content: center;
     align-items: center;
+
+    background:
+        radial-gradient(
+            ellipse at 50% 45%,
+            #ffffff 0%,
+            #fafaf8 65%,
+            #f1f0ec 100%
+        );
+
+    overflow: hidden;
 }
+
+/* BOTTLE CONTAINER */
+
+.bottle-container {
+
+    position: relative;
+
+    width: 280px;
+    height: 620px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    animation: bottleFloat 5s ease-in-out infinite;
+
+}
+
+/* SVG */
 
 .bottle {
-    width: 300px;
-    height: 540px;
-    max-height: 95vh;
-}
-
-svg {
     width: 100%;
     height: 100%;
+
     overflow: visible;
+
+    filter:
+        drop-shadow(12px 22px 18px rgba(0,0,0,0.12));
 }
+
+/* FLOATING ANIMATION */
+
+@keyframes bottleFloat {
+
+    0%, 100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-7px);
+    }
+
+}
+
+/* RESPONSIVE */
+
+@media(max-width: 600px) {
+
+    .bottle-container {
+        transform: scale(0.85);
+    }
+
+    @keyframes bottleFloat {
+
+        0%, 100% {
+            transform: scale(0.85) translateY(0);
+        }
+
+        50% {
+            transform: scale(0.85) translateY(-7px);
+        }
+
+    }
+
+}
+
 </style>
 </head>
 
+
 <body>
 
-<div class="stage">
+<main class="stage">
 
-<div class="bottle">
+<div class="bottle-container">
 
-<svg viewBox="0 0 300 540"
-     xmlns="http://www.w3.org/2000/svg">
+<svg
+    class="bottle"
+    viewBox="0 0 280 620"
+    xmlns="http://www.w3.org/2000/svg"
+>
 
 <defs>
 
-    <!-- Dark glass body -->
+    <!-- GLASS BODY GRADIENT -->
+
     <linearGradient id="glass" x1="0" y1="0" x2="1" y2="0">
 
-        <stop offset="0%" stop-color="#080909"/>
-        <stop offset="8%" stop-color="#343638"/>
-        <stop offset="18%" stop-color="#111213"/>
-        <stop offset="45%" stop-color="#090a0b"/>
-        <stop offset="72%" stop-color="#17191a"/>
-        <stop offset="91%" stop-color="#303234"/>
-        <stop offset="100%" stop-color="#080909"/>
+        <stop offset="0%" stop-color="#b7b98c" stop-opacity="0.35"/>
+
+        <stop offset="8%" stop-color="#ffffff" stop-opacity="0.75"/>
+
+        <stop offset="22%" stop-color="#f4f0c8" stop-opacity="0.2"/>
+
+        <stop offset="48%" stop-color="#ffffff" stop-opacity="0.15"/>
+
+        <stop offset="75%" stop-color="#d5d5a2" stop-opacity="0.3"/>
+
+        <stop offset="94%" stop-color="#ffffff" stop-opacity="0.8"/>
+
+        <stop offset="100%" stop-color="#a7a77c" stop-opacity="0.4"/>
 
     </linearGradient>
 
-    <!-- Neck glass -->
-    <linearGradient id="neck" x1="0" y1="0" x2="1" y2="0">
 
-        <stop offset="0%" stop-color="#090909"/>
-        <stop offset="20%" stop-color="#343436"/>
-        <stop offset="50%" stop-color="#080808"/>
-        <stop offset="85%" stop-color="#29292a"/>
-        <stop offset="100%" stop-color="#080808"/>
+    <!-- OIL GRADIENT -->
 
-    </linearGradient>
+    <linearGradient id="oil" x1="0" y1="0" x2="1" y2="0">
 
-    <!-- Gold foil -->
-    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stop-color="#b7ad55" stop-opacity="0.55"/>
 
-        <stop offset="0%" stop-color="#80601e"/>
-        <stop offset="15%" stop-color="#c69c43"/>
-        <stop offset="35%" stop-color="#f5df8b"/>
-        <stop offset="55%" stop-color="#b18a35"/>
-        <stop offset="75%" stop-color="#f1d57c"/>
-        <stop offset="100%" stop-color="#80601e"/>
+        <stop offset="15%" stop-color="#e6df9b" stop-opacity="0.7"/>
+
+        <stop offset="40%" stop-color="#f4f0bd" stop-opacity="0.55"/>
+
+        <stop offset="70%" stop-color="#e8df9c" stop-opacity="0.55"/>
+
+        <stop offset="100%" stop-color="#a9a04c" stop-opacity="0.45"/>
 
     </linearGradient>
 
-    <!-- Metallic label -->
-    <linearGradient id="label" x1="0" y1="0" x2="1" y2="0">
 
-        <stop offset="0%" stop-color="#424548"/>
-        <stop offset="20%" stop-color="#73777a"/>
-        <stop offset="50%" stop-color="#55595b"/>
-        <stop offset="80%" stop-color="#777b7c"/>
-        <stop offset="100%" stop-color="#393d3f"/>
+    <!-- OIL LIGHT -->
 
-    </linearGradient>
+    <linearGradient id="oilLight" x1="0" y1="0" x2="0" y2="1">
 
-    <!-- Gold typography -->
-    <linearGradient id="goldText" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#fffbd6" stop-opacity="0.8"/>
 
-        <stop offset="0%" stop-color="#fff0ad"/>
-        <stop offset="50%" stop-color="#d5ae53"/>
-        <stop offset="100%" stop-color="#9e742b"/>
+        <stop offset="100%" stop-color="#c6bb68" stop-opacity="0.2"/>
 
     </linearGradient>
 
-    <!-- Glass reflection -->
+
+    <!-- GLASS REFLECTION -->
+
     <linearGradient id="reflection" x1="0" y1="0" x2="1" y2="0">
 
-        <stop offset="0%" stop-color="#ffffff" stop-opacity="0"/>
-        <stop offset="50%" stop-color="#ffffff" stop-opacity="0.32"/>
-        <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+        <stop offset="0%" stop-color="#ffffff" stop-opacity="0.9"/>
+
+        <stop offset="50%" stop-color="#ffffff" stop-opacity="0.1"/>
+
+        <stop offset="100%" stop-color="#ffffff" stop-opacity="0.8"/>
 
     </linearGradient>
 
-    <!-- Ground shadow -->
-    <filter id="shadow" x="-100%" y="-100%" width="300%" height="300%">
-        <feGaussianBlur stdDeviation="5"/>
+
+    <!-- CORK GRADIENT -->
+
+    <linearGradient id="cork" x1="0" y1="0" x2="1" y2="0">
+
+        <stop offset="0%" stop-color="#79552f"/>
+
+        <stop offset="30%" stop-color="#c4a16b"/>
+
+        <stop offset="60%" stop-color="#a98250"/>
+
+        <stop offset="100%" stop-color="#6f4a29"/>
+
+    </linearGradient>
+
+
+    <!-- NECK GLASS -->
+
+    <linearGradient id="neckGlass" x1="0" y1="0" x2="1" y2="0">
+
+        <stop offset="0%" stop-color="#a5a579" stop-opacity="0.5"/>
+
+        <stop offset="30%" stop-color="#ffffff" stop-opacity="0.8"/>
+
+        <stop offset="70%" stop-color="#f3eebd" stop-opacity="0.3"/>
+
+        <stop offset="100%" stop-color="#a6a276" stop-opacity="0.5"/>
+
+    </linearGradient>
+
+
+    <!-- BLUR SHADOW -->
+
+    <filter id="shadow">
+
+        <feGaussianBlur stdDeviation="12"/>
+
     </filter>
 
-    <!-- Bottle clipping -->
+
+    <!-- CLIP OIL INSIDE BOTTLE -->
+
     <clipPath id="bodyClip">
+
         <path d="
-            M132 198
-            L132 143
-            L168 143
-            L168 198
-            C168 212 184 220 195 234
-            C207 249 210 264 210 286
-            L210 500
-            Q210 520 190 520
-            L110 520
-            Q90 520 90 500
-            L90 286
-            C90 264 93 249 105 234
-            C116 220 132 212 132 198
+            M92 260
+            Q92 225 112 205
+            L112 160
+            L168 160
+            L168 205
+            Q188 225 188 260
+            L188 520
+            Q188 538 170 538
+            L110 538
+            Q92 538 92 520
             Z
         "/>
+
     </clipPath>
 
 </defs>
 
 
-<!-- FLOOR SHADOW -->
+<!-- GROUND SHADOW -->
 
 <ellipse
-    cx="150"
-    cy="523"
-    rx="70"
-    ry="6"
-    fill="#77766e"
-    opacity="0.22"
+    cx="145"
+    cy="560"
+    rx="83"
+    ry="15"
+    fill="#000000"
+    opacity="0.12"
     filter="url(#shadow)"
 />
 
 
-<!-- MAIN BOTTLE BODY -->
+<!-- BOTTLE BODY -->
 
-<path
-    d="
-        M132 198
-        L132 143
-        L168 143
-        L168 198
-        C168 212 184 220 195 234
-        C207 249 210 264 210 286
-        L210 500
-        Q210 520 190 520
-        L110 520
-        Q90 520 90 500
-        L90 286
-        C90 264 93 249 105 234
-        C116 220 132 212 132 198
-        Z
-    "
-    fill="url(#glass)"
-    stroke="#111213"
-    stroke-width="1.5"
-/>
+<g>
 
+    <!-- Oil inside -->
 
-<!-- NECK GLASS -->
-
-<path
-    d="
-        M132 140
-        L132 198
-        C132 212 116 220 105 234
-        M168 140
-        L168 198
-        C168 212 184 220 195 234
-    "
-    fill="none"
-    stroke="url(#neck)"
-    stroke-width="2"
-/>
-
-
-<!-- GOLD FOIL NECK -->
-
-<path
-    d="
-        M132 56
-        Q132 49 139 49
-        L161 49
-        Q168 49 168 56
-        L168 143
-        L132 143
-        Z
-    "
-    fill="url(#gold)"
-    stroke="#94712d"
-    stroke-width="1"
-/>
-
-
-<!-- GOLD CAP TOP -->
-
-<path
-    d="
-        M132 57
-        Q132 46 140 46
-        L160 46
-        Q168 46 168 57
-        L168 64
-        L132 64
-        Z
-    "
-    fill="url(#gold)"
-/>
-
-
-<!-- FOIL HIGHLIGHTS -->
-
-<path d="M137 61 L137 133"
-      stroke="#fff0b2"
-      stroke-width="3"
-      opacity="0.6"/>
-
-<path d="M163 61 L163 133"
-      stroke="#76561c"
-      stroke-width="2"
-      opacity="0.7"/>
-
-
-<!-- FOIL BOTTOM RINGS -->
-
-<path d="M132 134 H168"
-      stroke="#76551d"
-      stroke-width="2"/>
-
-<path d="M132 140 H168"
-      stroke="#e8cb77"
-      stroke-width="2"/>
-
-
-<!-- DARK NECK SECTION -->
-
-<path
-    d="
-        M132 145
-        L168 145
-        L168 198
-        C168 211 180 218 180 218
-        L120 218
-        C120 218 132 211 132 198
-        Z
-    "
-    fill="url(#neck)"
-/>
-
-
-<!-- GLASS SHOULDER REFLECTION -->
-
-<path
-    d="
-        M110 232
-        Q96 247 96 280
-        L96 490
-    "
-    fill="none"
-    stroke="#ffffff"
-    stroke-width="5"
-    opacity="0.12"
-/>
-
-<path
-    d="
-        M190 232
-        Q204 247 204 280
-        L204 490
-    "
-    fill="none"
-    stroke="#ffffff"
-    stroke-width="3"
-    opacity="0.13"
-/>
-
-
-<!-- LABEL -->
-
-<g clip-path="url(#bodyClip)">
-
-    <rect
-        x="91"
-        y="284"
-        width="118"
-        height="177"
-        fill="url(#label)"
+    <path
+        d="
+            M96 270
+            Q96 230 116 210
+            L116 160
+            L164 160
+            L164 210
+            Q184 230 184 270
+            L184 520
+            Q184 534 168 534
+            L112 534
+            Q96 534 96 520
+            Z
+        "
+        fill="url(#oil)"
     />
 
-    <!-- Label texture -->
-    <path d="M94 286 V460"
-          stroke="#ffffff"
-          stroke-width="1"
-          opacity="0.12"/>
 
-    <path d="M207 286 V460"
-          stroke="#000000"
-          stroke-width="1"
-          opacity="0.25"/>
+    <!-- Oil central illumination -->
+
+    <rect
+        x="112"
+        y="260"
+        width="55"
+        height="260"
+        fill="url(#oilLight)"
+        opacity="0.5"
+        clip-path="url(#bodyClip)"
+    />
+
+
+    <!-- Bottle glass body -->
+
+    <path
+        d="
+            M92 260
+            Q92 225 112 205
+            L112 160
+            L168 160
+            L168 205
+            Q188 225 188 260
+            L188 520
+            Q188 538 170 538
+            L110 538
+            Q92 538 92 520
+            Z
+        "
+        fill="url(#glass)"
+        stroke="#b5b58b"
+        stroke-opacity="0.55"
+        stroke-width="2"
+    />
+
+
+    <!-- Left glass highlight -->
+
+    <path
+        d="
+            M99 265
+            Q99 230 117 210
+            L117 170
+        "
+        fill="none"
+        stroke="#ffffff"
+        stroke-width="5"
+        opacity="0.8"
+        stroke-linecap="round"
+    />
+
+
+    <path
+        d="
+            M101 280
+            L101 510
+        "
+        fill="none"
+        stroke="#ffffff"
+        stroke-width="3"
+        opacity="0.7"
+        stroke-linecap="round"
+    />
+
+
+    <!-- Right glass reflection -->
+
+    <path
+        d="
+            M181 270
+            L181 510
+        "
+        fill="none"
+        stroke="#a7a36f"
+        stroke-width="3"
+        opacity="0.45"
+    />
+
+
+    <!-- Body front reflection -->
+
+    <path
+        d="
+            M118 255
+            Q115 330 117 500
+        "
+        fill="none"
+        stroke="#ffffff"
+        stroke-width="2"
+        opacity="0.35"
+    />
+
+
+    <!-- Bottom thick glass -->
+
+    <path
+        d="
+            M94 518
+            Q140 528 186 518
+            L186 529
+            Q140 544 94 529
+            Z
+        "
+        fill="#d5d3a5"
+        opacity="0.45"
+    />
+
 
 </g>
 
 
-<!-- LABEL TOP TEXT -->
+<!-- BOTTLE NECK -->
 
-<text
-    x="150"
-    y="316"
-    text-anchor="middle"
-    font-size="5"
-    letter-spacing="1"
-    fill="url(#goldText)"
->
-    PERFECTLY EXCLUSIVE
-</text>
+<g>
 
-
-<!-- LABEL MAIN TEXT -->
-
-<text
-    x="150"
-    y="345"
-    text-anchor="middle"
-    font-size="7"
-    letter-spacing="1"
-    fill="#e8dfc6"
->
-    LONG NECK
-</text>
-
-<text
-    x="150"
-    y="362"
-    text-anchor="middle"
-    font-family="Arial"
-    font-weight="bold"
-    font-size="17"
-    letter-spacing="0.5"
-    fill="url(#goldText)"
->
-    BOTTLE
-</text>
-
-<text
-    x="150"
-    y="375"
-    text-anchor="middle"
-    font-size="8"
-    letter-spacing="1"
-    fill="#e9ca72"
->
-    MOCKUP
-</text>
+    <path
+        d="
+            M115 154
+            L115 100
+            Q115 94 122 94
+            L158 94
+            Q165 94 165 100
+            L165 154
+            Z
+        "
+        fill="url(#neckGlass)"
+        stroke="#b7b38c"
+        stroke-width="2"
+    />
 
 
-<!-- LABEL DESCRIPTION -->
+    <!-- Oil inside neck -->
 
-<text
-    x="150"
-    y="401"
-    text-anchor="middle"
-    font-size="4.5"
-    fill="#eeeeee"
->
-    <tspan x="150" dy="0">Premium elegance crafted</tspan>
-    <tspan x="150" dy="7">with timeless design and</tspan>
-    <tspan x="150" dy="7">sophisticated detailing.</tspan>
-    <tspan x="150" dy="7">A statement of style.</tspan>
-</text>
+    <rect
+        x="122"
+        y="120"
+        width="36"
+        height="34"
+        fill="url(#oil)"
+        opacity="0.65"
+    />
 
 
-<!-- LABEL DECORATIVE ORNAMENT -->
+    <!-- Neck reflection -->
 
-<g
-    transform="translate(150 438)"
-    stroke="#c6a65c"
-    stroke-width="0.7"
-    fill="none"
-    opacity="0.9"
->
+    <path
+        d="M120 103 L120 150"
+        stroke="#ffffff"
+        stroke-width="3"
+        opacity="0.8"
+    />
 
-    <path d="M-34 0 Q-17 -16 0 0 Q17 -16 34 0"/>
+    <path
+        d="M160 104 L160 151"
+        stroke="#b0a96e"
+        stroke-width="2"
+        opacity="0.4"
+    />
 
-    <path d="M-28 5 Q-14 -8 0 5 Q14 -8 28 5"/>
 
-    <path d="M0 -9 V11"/>
+    <!-- Neck ring -->
 
-    <circle cx="0" cy="0" r="3"/>
+    <rect
+        x="111"
+        y="147"
+        width="58"
+        height="12"
+        rx="3"
+        fill="url(#glass)"
+        stroke="#b4b18a"
+        stroke-width="1.5"
+    />
 
 </g>
 
 
-<text
-    x="150"
-    y="455"
-    text-anchor="middle"
-    font-size="4.5"
-    letter-spacing="0.5"
-    fill="#e4dfd1"
->
-    PREMIUM GLASS COLLECTION
-</text>
+<!-- CORK STOPPER -->
+
+<g>
+
+    <!-- Cork base -->
+
+    <path
+        d="
+            M117 89
+            L163 89
+            L160 102
+            L120 102
+            Z
+        "
+        fill="url(#cork)"
+    />
 
 
-<!-- BODY REFLECTIONS -->
+    <!-- Main cork -->
+
+    <path
+        d="
+            M116 48
+            Q140 44 164 48
+            L160 91
+            L120 91
+            Z
+        "
+        fill="url(#cork)"
+        stroke="#74512e"
+        stroke-width="1"
+    />
+
+
+    <!-- Cork texture -->
+
+    <path
+        d="M123 55 L125 85"
+        stroke="#e1c18a"
+        stroke-width="2"
+        opacity="0.4"
+    />
+
+    <path
+        d="M137 52 L138 87"
+        stroke="#604224"
+        stroke-width="2"
+        opacity="0.25"
+    />
+
+    <path
+        d="M151 53 L149 85"
+        stroke="#e4c28c"
+        stroke-width="2"
+        opacity="0.4"
+    />
+
+
+    <!-- Cork top -->
+
+    <ellipse
+        cx="140"
+        cy="48"
+        rx="24"
+        ry="5"
+        fill="#c6a574"
+    />
+
+</g>
+
+
+<!-- FINAL GLASS DETAILS -->
 
 <path
     d="
-        M99 285
-        Q94 340 98 450
+        M94 260
+        Q94 235 109 218
     "
     fill="none"
-    stroke="url(#reflection)"
-    stroke-width="7"
+    stroke="#ffffff"
+    stroke-width="2"
+    opacity="0.7"
+/>
+
+
+<ellipse
+    cx="140"
+    cy="537"
+    rx="32"
+    ry="3"
+    fill="#ffffff"
     opacity="0.6"
 />
 
-
-<!-- BOTTOM BASE REFLECTION -->
-
-<path
-    d="
-        M94 505
-        Q150 516 206 505
-    "
-    fill="none"
-    stroke="#9b9fa0"
-    stroke-width="2"
-    opacity="0.5"
-/>
-
-
-<!-- GLASS BASE -->
-
-<path
-    d="
-        M94 515
-        Q150 527 206 515
-    "
-    fill="none"
-    stroke="#333637"
-    stroke-width="3"
-/>
 
 </svg>
 
 </div>
 
-</div>
+</main>
 
 </body>
 </html>
