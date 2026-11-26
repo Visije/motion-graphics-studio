@@ -5,11 +5,27 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>GSAP Animation Playground</title>
+<title>NEXORA — SaaS Experience</title>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.14.2/gsap.min.js"></script>
+<!-- GOOGLE FONTS -->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<!-- GSAP -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollTrigger.min.js"></script>
+
 
 <style>
+
+/* ===================================
+   GLOBAL
+=================================== */
 
 * {
     margin: 0;
@@ -17,246 +33,1177 @@
     box-sizing: border-box;
 }
 
+:root {
+
+    --background: #080b14;
+
+    --surface: #101522;
+
+    --surface-light: #171e30;
+
+    --border: rgba(255,255,255,0.09);
+
+    --white: #f5f7ff;
+
+    --muted: #929bb0;
+
+    --blue: #6b8cff;
+
+    --cyan: #54dfff;
+
+    --purple: #a17cff;
+
+}
+
+html {
+    scroll-behavior: auto;
+}
+
 body {
-    background: #090d19;
-    color: white;
-    font-family: Arial, sans-serif;
-    overflow: hidden;
+
+    background: var(--background);
+
+    color: var(--white);
+
+    font-family: 'DM Sans', sans-serif;
+
+    overflow-x: hidden;
+
 }
 
-/* MAIN WORKSPACE */
-
-.workspace {
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-}
-
-/* HEADER */
-
-.header {
-    height: 65px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 30px;
-    background: #10182a;
-    border-bottom: 1px solid #25334c;
-}
-
-.logo {
-    font-size: 16px;
-    font-weight: bold;
-    letter-spacing: 3px;
-}
-
-.logo span {
-    color: #54dfff;
-}
-
-.status {
-    font-size: 11px;
-    color: #54dfff;
-    letter-spacing: 2px;
-}
-
-/* ANIMATION STAGE */
-
-.stage {
-    flex: 1;
-    position: relative;
-    overflow: hidden;
-
-    background:
-    radial-gradient(
-        circle at center,
-        #172744,
-        #090d19 75%
-    );
-}
-
-/* GRID */
-
-.grid {
-    position: absolute;
-    inset: 0;
-
-    background-image:
-        linear-gradient(rgba(120,160,210,.05) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(120,160,210,.05) 1px, transparent 1px);
-
-    background-size: 50px 50px;
-}
-
-/* OBJECTS */
-
-.objects {
-    position: absolute;
-    inset: 0;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    gap: 45px;
-}
-
-/* SHAPES */
-
-.shape {
-    width: 95px;
-    height: 95px;
-
-    border-radius: 20px;
-
-    background: linear-gradient(135deg,#54dfff,#5273ff);
-
-    box-shadow:
-    0 0 35px rgba(84,223,255,.25);
-}
-
-.shape:nth-child(2) {
-    background: linear-gradient(135deg,#a27aff,#e06aff);
-    border-radius: 50%;
-}
-
-.shape:nth-child(3) {
-    background: linear-gradient(135deg,#5df0c3,#22bca8);
-    border-radius: 8px;
-}
-
-.shape:nth-child(4) {
-    background: linear-gradient(135deg,#ffbd65,#ff6b86);
-    border-radius: 50% 10% 50% 10%;
-}
-
-/* LABEL */
-
-.stage-label {
-    position: absolute;
-    bottom: 25px;
-    left: 30px;
-
-    color: #64758f;
-    font-size: 11px;
-    letter-spacing: 2px;
-}
-
-/* CONTROL PANEL */
-
-.controls {
-    height: 160px;
-
-    background: #10182a;
-
-    border-top: 1px solid #25334c;
-
-    padding: 20px 30px;
-
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
-
-.control-top {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.buttons {
-    display: flex;
-    gap: 10px;
+a {
+    text-decoration: none;
+    color: inherit;
 }
 
 button {
-    padding: 10px 22px;
+    font-family: inherit;
+    cursor: pointer;
+}
 
-    border: 1px solid #344865;
+.container {
 
-    background: #17243b;
+    width: min(1200px, 90%);
+
+    margin: auto;
+
+}
+
+.section-padding {
+
+    padding: 120px 0;
+
+}
+
+
+/* ===================================
+   BACKGROUND
+=================================== */
+
+.background-glow {
+
+    position: fixed;
+
+    width: 600px;
+    height: 600px;
+
+    border-radius: 50%;
+
+    background: #365bff;
+
+    filter: blur(180px);
+
+    opacity: 0.12;
+
+    pointer-events: none;
+
+    z-index: -1;
+
+    top: -200px;
+    left: 30%;
+
+}
+
+.grid-background {
+
+    position: fixed;
+
+    inset: 0;
+
+    pointer-events: none;
+
+    z-index: -1;
+
+    background-image:
+
+        linear-gradient(
+            rgba(255,255,255,0.025) 1px,
+            transparent 1px
+        ),
+
+        linear-gradient(
+            90deg,
+            rgba(255,255,255,0.025) 1px,
+            transparent 1px
+        );
+
+    background-size: 70px 70px;
+
+    mask-image:
+        linear-gradient(
+            to bottom,
+            black,
+            transparent 85%
+        );
+
+}
+
+
+/* ===================================
+   NAVIGATION
+=================================== */
+
+.navbar {
+
+    height: 85px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    border-bottom: 1px solid var(--border);
+
+    position: relative;
+
+    z-index: 100;
+
+}
+
+.logo {
+
+    font-family: 'Space Grotesk', sans-serif;
+
+    font-size: 25px;
+
+    font-weight: 700;
+
+    letter-spacing: -1px;
+
+}
+
+.logo span {
+
+    color: var(--blue);
+
+}
+
+.nav-links {
+
+    display: flex;
+
+    gap: 35px;
+
+}
+
+.nav-links a {
+
+    color: var(--muted);
+
+    font-size: 13px;
+
+    transition: color .3s;
+
+}
+
+.nav-links a:hover {
 
     color: white;
 
-    cursor: pointer;
+}
 
-    border-radius: 5px;
+.nav-actions {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 20px;
+
+}
+
+.login {
+
+    color: var(--muted);
+
+    font-size: 13px;
+
+}
+
+.nav-button {
+
+    background: white;
+
+    color: #080b14;
+
+    padding: 12px 20px;
+
+    border-radius: 7px;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    transition: .3s;
+
+}
+
+.nav-button:hover {
+
+    background: var(--cyan);
+
+    transform: translateY(-3px);
+
+}
+
+
+/* ===================================
+   HERO
+=================================== */
+
+.hero {
+
+    min-height: 850px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    text-align: center;
+
+    padding: 90px 0 0;
+
+    position: relative;
+
+}
+
+.announcement {
+
+    border: 1px solid rgba(107,140,255,.35);
+
+    background: rgba(107,140,255,.08);
+
+    padding: 9px 17px;
+
+    border-radius: 30px;
+
+    color: #b9c8ff;
 
     font-size: 11px;
+
     letter-spacing: 1px;
 
-    transition: .2s;
+    margin-bottom: 30px;
+
 }
 
-button:hover {
-    background: #54dfff;
-    color: #090d19;
+.announcement span {
+
+    color: var(--cyan);
+
+    margin-right: 8px;
+
 }
 
-button.active {
-    background: #54dfff;
-    color: #090d19;
+.hero h1 {
+
+    font-family: 'Space Grotesk', sans-serif;
+
+    font-size: clamp(55px, 8vw, 100px);
+
+    line-height: 1.04;
+
+    letter-spacing: -6px;
+
+    max-width: 950px;
+
 }
 
-.timeline-info {
-    color: #8192ad;
-    font-size: 12px;
+.gradient-text {
+
+    background: linear-gradient(
+        100deg,
+        #70a2ff,
+        #b49aff,
+        #54dfff
+    );
+
+    background-clip: text;
+
+    -webkit-background-clip: text;
+
+    color: transparent;
+
 }
 
-.timeline {
-    width: 100%;
+.hero-description {
+
+    max-width: 590px;
+
+    margin-top: 28px;
+
+    color: var(--muted);
+
+    font-size: 16px;
+
+    line-height: 1.8;
+
 }
 
-input[type="range"] {
-    width: 100%;
-    accent-color: #54dfff;
-    cursor: pointer;
-}
+.hero-buttons {
 
-/* SPEED */
-
-.speed-control {
     display: flex;
+
+    gap: 15px;
+
+    margin-top: 35px;
+
+}
+
+.primary-button {
+
+    background: #ffffff;
+
+    color: #090d19;
+
+    padding: 16px 26px;
+
+    border-radius: 7px;
+
+    font-weight: 700;
+
+    font-size: 13px;
+
+    transition: .3s;
+
+}
+
+.primary-button:hover {
+
+    background: var(--cyan);
+
+    transform: translateY(-4px);
+
+    box-shadow: 0 10px 35px rgba(84,223,255,.2);
+
+}
+
+.secondary-button {
+
+    border: 1px solid var(--border);
+
+    padding: 16px 26px;
+
+    border-radius: 7px;
+
+    font-size: 13px;
+
+    color: white;
+
+    transition: .3s;
+
+}
+
+.secondary-button:hover {
+
+    border-color: var(--blue);
+
+    background: rgba(107,140,255,.1);
+
+}
+
+
+/* ===================================
+   HERO DASHBOARD
+=================================== */
+
+.dashboard-wrapper {
+
+    width: min(1000px, 95%);
+
+    margin: 100px auto 0;
+
+    position: relative;
+
+    perspective: 1200px;
+
+}
+
+.dashboard {
+
+    background: #101625;
+
+    border: 1px solid rgba(255,255,255,.13);
+
+    border-radius: 16px;
+
+    padding: 20px;
+
+    box-shadow:
+
+        0 40px 100px rgba(0,0,0,.5),
+
+        0 0 80px rgba(77,110,255,.12);
+
+    transform: rotateX(5deg);
+
+    position: relative;
+
+    overflow: hidden;
+
+}
+
+.dashboard-top {
+
+    display: flex;
+
+    justify-content: space-between;
+
     align-items: center;
-    gap: 12px;
+
+    padding-bottom: 20px;
+
+    border-bottom: 1px solid var(--border);
+
+}
+
+.dashboard-title {
+
+    font-size: 14px;
+
+    font-weight: 700;
+
+}
+
+.dashboard-status {
+
+    color: #70e8bd;
 
     font-size: 11px;
-    color: #8192ad;
+
 }
 
-select {
-    background: #17243b;
-    color: white;
-    border: 1px solid #344865;
-    padding: 8px;
-    border-radius: 4px;
+.dashboard-body {
+
+    display: grid;
+
+    grid-template-columns: 1fr 1fr 1fr;
+
+    gap: 15px;
+
+    margin-top: 20px;
+
 }
 
-/* RESPONSIVE */
+.stat-card {
 
-@media(max-width:700px) {
+    background: #171f30;
 
-    .objects {
+    padding: 20px;
+
+    border: 1px solid var(--border);
+
+    border-radius: 9px;
+
+}
+
+.stat-label {
+
+    font-size: 11px;
+
+    color: var(--muted);
+
+}
+
+.stat-number {
+
+    font-family: 'Space Grotesk';
+
+    font-size: 30px;
+
+    margin-top: 12px;
+
+}
+
+.stat-change {
+
+    color: #6be3b2;
+
+    font-size: 11px;
+
+    margin-top: 5px;
+
+}
+
+.chart-card {
+
+    grid-column: span 3;
+
+    height: 190px;
+
+    background: #171f30;
+
+    border-radius: 9px;
+
+    border: 1px solid var(--border);
+
+    padding: 20px;
+
+}
+
+.chart-title {
+
+    font-size: 12px;
+
+    color: var(--muted);
+
+    margin-bottom: 20px;
+
+}
+
+.chart {
+
+    height: 115px;
+
+    display: flex;
+
+    align-items: end;
+
+    gap: 12px;
+
+}
+
+.bar {
+
+    flex: 1;
+
+    border-radius: 4px 4px 0 0;
+
+    background: linear-gradient(
+        to top,
+        #506aff,
+        #54dfff
+    );
+
+    height: 0%;
+
+    opacity: .85;
+
+}
+
+
+/* FLOATING CARDS */
+
+.floating-card {
+
+    position: absolute;
+
+    padding: 17px 22px;
+
+    background: rgba(25,35,57,.95);
+
+    border: 1px solid rgba(255,255,255,.13);
+
+    backdrop-filter: blur(20px);
+
+    border-radius: 10px;
+
+    box-shadow: 0 15px 50px rgba(0,0,0,.3);
+
+    font-size: 12px;
+
+}
+
+.floating-one {
+
+    top: 18%;
+
+    left: -90px;
+
+}
+
+.floating-two {
+
+    bottom: 18%;
+
+    right: -80px;
+
+}
+
+.float-number {
+
+    font-size: 22px;
+
+    font-weight: 700;
+
+    margin-top: 8px;
+
+    color: var(--cyan);
+
+}
+
+
+/* ===================================
+   TRUST SECTION
+=================================== */
+
+.trust-section {
+
+    padding: 110px 0;
+
+    text-align: center;
+
+}
+
+.trust-section p {
+
+    color: var(--muted);
+
+    font-size: 12px;
+
+    letter-spacing: 2px;
+
+    margin-bottom: 40px;
+
+}
+
+.brand-list {
+
+    display: flex;
+
+    justify-content: center;
+
+    flex-wrap: wrap;
+
+    gap: 70px;
+
+    color: #647087;
+
+    font-family: 'Space Grotesk';
+
+    font-size: 23px;
+
+    font-weight: 700;
+
+}
+
+
+/* ===================================
+   SECTION HEADINGS
+=================================== */
+
+.section-heading {
+
+    text-align: center;
+
+    margin-bottom: 65px;
+
+}
+
+.section-heading span {
+
+    color: var(--cyan);
+
+    font-size: 11px;
+
+    letter-spacing: 3px;
+
+}
+
+.section-heading h2 {
+
+    font-family: 'Space Grotesk';
+
+    font-size: clamp(35px, 5vw, 58px);
+
+    margin-top: 20px;
+
+    letter-spacing: -2px;
+
+}
+
+.section-heading p {
+
+    color: var(--muted);
+
+    max-width: 550px;
+
+    margin: 20px auto 0;
+
+    line-height: 1.8;
+
+    font-size: 14px;
+
+}
+
+
+/* ===================================
+   FEATURES
+=================================== */
+
+.features-grid {
+
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 18px;
+
+}
+
+.feature-card {
+
+    background: linear-gradient(
+        145deg,
+        #151d30,
+        #0e1422
+    );
+
+    border: 1px solid var(--border);
+
+    border-radius: 13px;
+
+    padding: 32px;
+
+    min-height: 250px;
+
+    transition: .4s;
+
+}
+
+.feature-card:hover {
+
+    transform: translateY(-9px);
+
+    border-color: rgba(84,223,255,.5);
+
+    background: #18243b;
+
+}
+
+.feature-icon {
+
+    width: 45px;
+
+    height: 45px;
+
+    border-radius: 12px;
+
+    background: rgba(107,140,255,.15);
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    color: var(--cyan);
+
+    font-size: 22px;
+
+    margin-bottom: 30px;
+
+}
+
+.feature-card h3 {
+
+    font-size: 19px;
+
+    margin-bottom: 14px;
+
+}
+
+.feature-card p {
+
+    font-size: 13px;
+
+    color: var(--muted);
+
+    line-height: 1.8;
+
+}
+
+
+/* ===================================
+   PRODUCT SHOWCASE
+=================================== */
+
+.product-section {
+
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    align-items: center;
+
+    gap: 90px;
+
+}
+
+.product-content span {
+
+    color: var(--cyan);
+
+    font-size: 11px;
+
+    letter-spacing: 3px;
+
+}
+
+.product-content h2 {
+
+    font-family: 'Space Grotesk';
+
+    font-size: clamp(38px, 5vw, 60px);
+
+    line-height: 1.1;
+
+    margin: 25px 0;
+
+}
+
+.product-content p {
+
+    color: var(--muted);
+
+    font-size: 14px;
+
+    line-height: 1.9;
+
+}
+
+.product-points {
+
+    margin-top: 30px;
+
+}
+
+.product-points div {
+
+    padding: 13px 0;
+
+    border-bottom: 1px solid var(--border);
+
+    color: #d5dced;
+
+    font-size: 13px;
+
+}
+
+.product-points div::before {
+
+    content: "✓";
+
+    color: var(--cyan);
+
+    margin-right: 12px;
+
+}
+
+
+/* PRODUCT VISUAL */
+
+.product-visual {
+
+    min-height: 420px;
+
+    background:
+
+        radial-gradient(
+            circle at center,
+            #263d78,
+            #11192b 70%
+        );
+
+    border: 1px solid var(--border);
+
+    border-radius: 20px;
+
+    position: relative;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    overflow: hidden;
+
+}
+
+.visual-circle {
+
+    width: 220px;
+
+    height: 220px;
+
+    border-radius: 50%;
+
+    border: 1px solid rgba(84,223,255,.5);
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    box-shadow: 0 0 100px rgba(84,223,255,.2);
+
+}
+
+.visual-circle-inner {
+
+    width: 150px;
+
+    height: 150px;
+
+    border-radius: 50%;
+
+    background: linear-gradient(
+        135deg,
+        #6b8cff,
+        #54dfff
+    );
+
+    box-shadow: 0 0 80px rgba(84,223,255,.5);
+
+}
+
+.orbit {
+
+    position: absolute;
+
+    width: 330px;
+
+    height: 330px;
+
+    border: 1px dashed rgba(255,255,255,.2);
+
+    border-radius: 50%;
+
+}
+
+.orbit-dot {
+
+    position: absolute;
+
+    top: 0;
+
+    left: 50%;
+
+    width: 15px;
+
+    height: 15px;
+
+    background: var(--cyan);
+
+    border-radius: 50%;
+
+    box-shadow: 0 0 20px var(--cyan);
+
+}
+
+
+/* ===================================
+   CTA
+=================================== */
+
+.cta {
+
+    text-align: center;
+
+    background: linear-gradient(
+        120deg,
+        #17284b,
+        #171a38
+    );
+
+    border: 1px solid rgba(107,140,255,.3);
+
+    border-radius: 20px;
+
+    padding: 90px 25px;
+
+    position: relative;
+
+    overflow: hidden;
+
+}
+
+.cta h2 {
+
+    font-family: 'Space Grotesk';
+
+    font-size: clamp(35px, 5vw, 60px);
+
+    letter-spacing: -2px;
+
+}
+
+.cta p {
+
+    color: #aebbd4;
+
+    margin: 20px auto 30px;
+
+    max-width: 500px;
+
+    line-height: 1.8;
+
+    font-size: 14px;
+
+}
+
+
+/* ===================================
+   FOOTER
+=================================== */
+
+footer {
+
+    padding: 45px 0;
+
+    border-top: 1px solid var(--border);
+
+    margin-top: 120px;
+
+    color: var(--muted);
+
+    font-size: 12px;
+
+}
+
+.footer-inner {
+
+    display: flex;
+
+    justify-content: space-between;
+
+}
+
+
+/* ===================================
+   SCROLL ANIMATION INITIAL STATES
+=================================== */
+
+.reveal {
+
+    opacity: 0;
+
+    transform: translateY(50px);
+
+}
+
+.reveal-left {
+
+    opacity: 0;
+
+    transform: translateX(-60px);
+
+}
+
+.reveal-right {
+
+    opacity: 0;
+
+    transform: translateX(60px);
+
+}
+
+
+/* ===================================
+   RESPONSIVE
+=================================== */
+
+@media(max-width: 850px) {
+
+    .nav-links {
+        display: none;
+    }
+
+    .dashboard-body {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .stat-card:last-of-type {
+        display: none;
+    }
+
+    .chart-card {
+        grid-column: span 2;
+    }
+
+    .floating-card {
+        display: none;
+    }
+
+    .features-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .product-section {
+        grid-template-columns: 1fr;
+        gap: 45px;
+    }
+
+    .brand-list {
+        gap: 30px;
+    }
+
+}
+
+@media(max-width: 550px) {
+
+    .hero {
+        min-height: 720px;
+    }
+
+    .hero h1 {
+        letter-spacing: -3px;
+    }
+
+    .dashboard-wrapper {
+        margin-top: 65px;
+    }
+
+    .dashboard {
+        padding: 12px;
+    }
+
+    .stat-number {
+        font-size: 21px;
+    }
+
+    .features-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .hero-buttons {
+        flex-direction: column;
+    }
+
+    .brand-list {
+        font-size: 17px;
+    }
+
+    .footer-inner {
+        flex-direction: column;
         gap: 15px;
-    }
-
-    .shape {
-        width: 50px;
-        height: 50px;
-    }
-
-    .controls {
-        height: 190px;
-    }
-
-    .control-top {
-        flex-wrap: wrap;
-        gap: 15px;
-    }
-
-    button {
-        padding: 9px 12px;
     }
 
 }
@@ -265,422 +1212,922 @@ select {
 
 </head>
 
+
 <body>
 
-<div class="workspace">
 
-    <!-- HEADER -->
+<div class="background-glow"></div>
 
-    <header class="header">
+<div class="grid-background"></div>
 
-        <div class="logo">
-            GSAP <span>PLAYGROUND</span>
+
+<!-- ===================================
+     NAVIGATION
+=================================== -->
+
+<header class="container">
+
+<nav class="navbar">
+
+    <a href="#" class="logo">
+        NEXORA<span>.</span>
+    </a>
+
+    <div class="nav-links">
+
+        <a href="#features">Features</a>
+
+        <a href="#product">Product</a>
+
+        <a href="#showcase">Showcase</a>
+
+        <a href="#pricing">Pricing</a>
+
+    </div>
+
+    <div class="nav-actions">
+
+        <a href="#" class="login">Log in</a>
+
+        <a href="#pricing" class="nav-button">
+            Get Started ↗
+        </a>
+
+    </div>
+
+</nav>
+
+</header>
+
+
+
+<!-- ===================================
+     HERO SECTION
+=================================== -->
+
+<section class="hero container">
+
+    <div class="announcement hero-anim">
+
+        <span>✦</span>
+
+        THE FUTURE OF PRODUCTIVITY IS HERE
+
+        <span>→</span>
+
+    </div>
+
+
+    <h1 class="hero-title">
+
+        Build better.<br>
+
+        <span class="gradient-text">
+            Move faster.
+        </span>
+
+    </h1>
+
+
+    <p class="hero-description hero-anim">
+
+        One powerful platform to manage your workflow,
+        organize your team and transform your ideas
+        into extraordinary results.
+
+    </p>
+
+
+    <div class="hero-buttons hero-anim">
+
+        <a href="#pricing" class="primary-button">
+            Start Building →
+        </a>
+
+        <a href="#product" class="secondary-button">
+            Explore Platform
+        </a>
+
+    </div>
+
+
+
+    <!-- DASHBOARD -->
+
+    <div class="dashboard-wrapper">
+
+        <div class="floating-card floating-one">
+
+            Active Projects
+
+            <div class="float-number">
+                24.8K
+            </div>
+
         </div>
 
-        <div class="status" id="status">
-            READY
-        </div>
 
-    </header>
+        <div class="dashboard">
 
+            <div class="dashboard-top">
 
-    <!-- ANIMATION STAGE -->
+                <div class="dashboard-title">
+                    Performance Overview
+                </div>
 
-    <main class="stage">
-
-        <div class="grid"></div>
-
-        <div class="objects">
-
-            <div class="shape"></div>
-            <div class="shape"></div>
-            <div class="shape"></div>
-            <div class="shape"></div>
-
-        </div>
-
-        <div class="stage-label">
-            ANIMATION CANVAS / 001
-        </div>
-
-    </main>
-
-
-    <!-- CONTROLS -->
-
-    <footer class="controls">
-
-        <div class="control-top">
-
-            <div class="buttons">
-
-                <button id="play">PLAY</button>
-
-                <button id="pause">PAUSE</button>
-
-                <button id="reverse">REVERSE</button>
-
-                <button id="restart">RESTART</button>
+                <div class="dashboard-status">
+                    ● All systems operational
+                </div>
 
             </div>
 
 
-            <div class="speed-control">
-
-                SPEED
-
-                <select id="speed">
-
-                    <option value="0.5">0.5x</option>
-                    <option value="1" selected>1x</option>
-                    <option value="1.5">1.5x</option>
-                    <option value="2">2x</option>
-
-                </select>
-
-            </div>
+            <div class="dashboard-body">
 
 
-            <div class="timeline-info">
+                <div class="stat-card">
 
-                <span id="currentTime">0.00</span>
-                /
-                <span id="totalTime">0.00</span>
+                    <div class="stat-label">
+                        Total Revenue
+                    </div>
+
+                    <div class="stat-number counter" data-target="84250">
+                        0
+                    </div>
+
+                    <div class="stat-change">
+                        ↑ 18.4%
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-label">
+                        Active Users
+                    </div>
+
+                    <div class="stat-number counter" data-target="12840">
+                        0
+                    </div>
+
+                    <div class="stat-change">
+                        ↑ 12.8%
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-label">
+                        Conversion Rate
+                    </div>
+
+                    <div class="stat-number counter" data-target="94">
+                        0
+                    </div>
+
+                    <div class="stat-change">
+                        ↑ 8.2%
+                    </div>
+
+                </div>
+
+
+                <div class="chart-card">
+
+                    <div class="chart-title">
+                        Growth Analytics
+                    </div>
+
+                    <div class="chart">
+
+                        <div class="bar" data-height="35"></div>
+
+                        <div class="bar" data-height="55"></div>
+
+                        <div class="bar" data-height="42"></div>
+
+                        <div class="bar" data-height="75"></div>
+
+                        <div class="bar" data-height="60"></div>
+
+                        <div class="bar" data-height="90"></div>
+
+                        <div class="bar" data-height="70"></div>
+
+                        <div class="bar" data-height="100"></div>
+
+                        <div class="bar" data-height="85"></div>
+
+                        <div class="bar" data-height="95"></div>
+
+                        <div class="bar" data-height="100"></div>
+
+                    </div>
+
+                </div>
+
 
             </div>
 
         </div>
 
 
-        <div class="timeline">
+        <div class="floating-card floating-two">
 
-            <input
-                type="range"
-                id="scrubber"
-                min="0"
-                max="100"
-                value="0"
-                step="0.1"
-            >
+            Monthly Growth
+
+            <div class="float-number">
+                +32.6%
+            </div>
 
         </div>
 
-    </footer>
+    </div>
 
-</div>
+</section>
 
+
+
+<!-- ===================================
+     TRUST SECTION
+=================================== -->
+
+<section class="trust-section container">
+
+    <p>POWERING THE NEXT GENERATION OF TEAMS</p>
+
+    <div class="brand-list">
+
+        <span>vertex</span>
+
+        <span>◈ orbit</span>
+
+        <span>◉ pulse</span>
+
+        <span>◈ cloudly</span>
+
+        <span>nimbus</span>
+
+    </div>
+
+</section>
+
+
+
+<!-- ===================================
+     FEATURES
+=================================== -->
+
+<section class="section-padding container" id="features">
+
+
+    <div class="section-heading reveal">
+
+        <span>POWERFUL FEATURES</span>
+
+        <h2>
+            Everything you need.<br>
+
+            <span class="gradient-text">
+                Nothing you don't.
+            </span>
+
+        </h2>
+
+        <p>
+            A complete ecosystem designed to simplify
+            complex workflows and help your team
+            accomplish more.
+        </p>
+
+    </div>
+
+
+
+    <div class="features-grid">
+
+
+        <div class="feature-card reveal">
+
+            <div class="feature-icon">✦</div>
+
+            <h3>Smart Automation</h3>
+
+            <p>
+                Automate repetitive tasks and focus
+                on the work that actually matters.
+            </p>
+
+        </div>
+
+
+        <div class="feature-card reveal">
+
+            <div class="feature-icon">◈</div>
+
+            <h3>Real-time Analytics</h3>
+
+            <p>
+                Understand your performance with
+                intelligent analytics and insights.
+            </p>
+
+        </div>
+
+
+        <div class="feature-card reveal">
+
+            <div class="feature-icon">⌘</div>
+
+            <h3>Team Collaboration</h3>
+
+            <p>
+                Bring your entire team together
+                with seamless collaboration tools.
+            </p>
+
+        </div>
+
+
+        <div class="feature-card reveal">
+
+            <div class="feature-icon">◎</div>
+
+            <h3>Cloud Integration</h3>
+
+            <p>
+                Access your projects from anywhere
+                with secure cloud synchronization.
+            </p>
+
+        </div>
+
+
+        <div class="feature-card reveal">
+
+            <div class="feature-icon">↗</div>
+
+            <h3>Advanced Reporting</h3>
+
+            <p>
+                Turn complex information into
+                actionable business decisions.
+            </p>
+
+        </div>
+
+
+        <div class="feature-card reveal">
+
+            <div class="feature-icon">⬡</div>
+
+            <h3>Enterprise Security</h3>
+
+            <p>
+                Protect your information with
+                advanced security architecture.
+            </p>
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+
+<!-- ===================================
+     PRODUCT SHOWCASE
+=================================== -->
+
+<section class="section-padding container" id="product">
+
+    <div class="product-section">
+
+
+        <div class="product-content reveal-left">
+
+            <span>BUILT FOR PERFORMANCE</span>
+
+            <h2>
+
+                Your workflow.<br>
+
+                <span class="gradient-text">
+                    Reimagined.
+                </span>
+
+            </h2>
+
+            <p>
+
+                Experience a smarter way to manage
+                your operations. Everything is
+                connected, beautifully organized
+                and designed to help you move faster.
+
+            </p>
+
+
+            <div class="product-points">
+
+                <div>Intelligent workflow management</div>
+
+                <div>Real-time collaboration</div>
+
+                <div>Advanced performance tracking</div>
+
+                <div>Flexible customization</div>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="product-visual reveal-right">
+
+            <div class="orbit">
+
+                <div class="orbit-dot"></div>
+
+            </div>
+
+            <div class="visual-circle">
+
+                <div class="visual-circle-inner"></div>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+
+<!-- ===================================
+     CTA
+=================================== -->
+
+<section class="section-padding container" id="pricing">
+
+    <div class="cta reveal" id="showcase">
+
+        <h2>
+
+            Ready to build<br>
+
+            <span class="gradient-text">
+                something amazing?
+            </span>
+
+        </h2>
+
+        <p>
+
+            Take your workflow to the next level.
+            Start creating better experiences today.
+
+        </p>
+
+        <a href="#features" class="primary-button">
+
+            Get Started Today →
+
+        </a>
+
+    </div>
+
+</section>
+
+
+
+<!-- ===================================
+     FOOTER
+=================================== -->
+
+<footer>
+
+    <div class="container footer-inner">
+
+        <div>
+            © 2026 NEXORA. All rights reserved.
+        </div>
+
+        <div>
+            Designed for the future.
+        </div>
+
+    </div>
+
+</footer>
+
+
+
+<!-- ===================================
+     GSAP ANIMATION ENGINE
+=================================== -->
 
 <script>
 
-// ====================================
-// GSAP PLAYGROUND
-// ====================================
-
-gsap.registerPlugin();
-
-const shapes = gsap.utils.toArray(".shape");
-
-const status = document.getElementById("status");
-
-const scrubber = document.getElementById("scrubber");
-
-const currentTime = document.getElementById("currentTime");
-
-const totalTime = document.getElementById("totalTime");
-
-const speed = document.getElementById("speed");
-
-let isScrubbing = false;
+gsap.registerPlugin(ScrollTrigger);
 
 
-// ====================================
-// CREATE TIMELINE
-// ====================================
+// ------------------------------------
+// INITIALIZATION
+// ------------------------------------
 
-const tl = gsap.timeline({
-
-    paused: true,
-
-    repeat: -1,
-
-    repeatDelay: 0.5,
-
-    onUpdate: updateInterface
-
-});
-
-
-// ====================================
-// ANIMATION SEQUENCE
-// ====================================
-
-// Phase 1: Entrance
-
-tl.from(shapes, {
-
-    y: 200,
+gsap.set(".hero-title", {
 
     opacity: 0,
 
-    scale: 0.2,
+    y: 80
 
-    duration: 1.2,
+});
 
-    stagger: 0.15,
+gsap.set(".hero-anim", {
 
-    ease: "back.out(1.7)"
+    opacity: 0,
+
+    y: 35
+
+});
+
+gsap.set(".dashboard-wrapper", {
+
+    opacity: 0,
+
+    y: 100,
+
+    rotateX: 15
 
 });
 
 
-// Phase 2: Rotation
+// ------------------------------------
+// HERO INTRO TIMELINE
+// ------------------------------------
 
-tl.to(shapes, {
+const intro = gsap.timeline({
 
-    rotation: 360,
+    defaults: {
 
-    duration: 2,
+        ease: "power3.out"
 
-    stagger: 0.15,
-
-    ease: "power2.inOut"
-
-});
-
-
-// Phase 3: Jump
-
-tl.to(shapes, {
-
-    y: -120,
-
-    duration: 0.45,
-
-    stagger: 0.12,
-
-    ease: "power2.out"
-
-});
-
-tl.to(shapes, {
-
-    y: 0,
-
-    duration: 0.65,
-
-    stagger: 0.12,
-
-    ease: "bounce.out"
+    }
 
 });
 
 
-// Phase 4: Scale
-
-tl.to(shapes, {
-
-    scale: 1.5,
-
-    duration: 0.7,
-
-    stagger: 0.12,
-
-    ease: "elastic.out(1,0.4)"
-
-});
-
-tl.to(shapes, {
-
-    scale: 1,
-
-    duration: 0.7,
-
-    stagger: 0.12,
-
-    ease: "power2.inOut"
-
-});
-
-
-// Phase 5: Horizontal movement
-
-tl.to(shapes, {
-
-    x: 180,
-
-    duration: 1,
-
-    stagger: 0.12,
-
-    ease: "power3.inOut"
-
-});
-
-tl.to(shapes, {
-
-    x: -180,
-
-    duration: 1,
-
-    stagger: 0.12,
-
-    ease: "power3.inOut"
-
-});
-
-
-// Phase 6: Fade
-
-tl.to(shapes, {
-
-    opacity: 0.2,
-
-    duration: 0.8,
-
-    stagger: 0.12,
-
-    ease: "power2.inOut"
-
-});
-
-tl.to(shapes, {
+intro.to(".navbar", {
 
     opacity: 1,
 
+    y: 0,
+
+    duration: 1
+
+});
+
+
+intro.to(".hero-title", {
+
+    opacity: 1,
+
+    y: 0,
+
+    duration: 1.2
+
+}, "-=0.5");
+
+
+intro.to(".hero-anim", {
+
+    opacity: 1,
+
+    y: 0,
+
+    duration: 0.9,
+
+    stagger: 0.2
+
+}, "-=0.8");
+
+
+intro.to(".dashboard-wrapper", {
+
+    opacity: 1,
+
+    y: 0,
+
+    rotateX: 0,
+
+    duration: 1.4
+
+}, "-=0.5");
+
+
+
+// ------------------------------------
+// FLOATING DASHBOARD
+// ------------------------------------
+
+gsap.to(".floating-one", {
+
+    y: -18,
+
+    duration: 2.5,
+
+    repeat: -1,
+
+    yoyo: true,
+
+    ease: "sine.inOut"
+
+});
+
+
+gsap.to(".floating-two", {
+
+    y: 18,
+
+    duration: 3,
+
+    repeat: -1,
+
+    yoyo: true,
+
+    ease: "sine.inOut"
+
+});
+
+
+
+// ------------------------------------
+// DASHBOARD CHART
+// ------------------------------------
+
+gsap.to(".bar", {
+
+    height: (i, el) => {
+
+        return el.dataset.height + "%";
+
+    },
+
+    duration: 1.5,
+
+    stagger: 0.1,
+
+    ease: "power3.out",
+
+    delay: 1.8
+
+});
+
+
+
+// ------------------------------------
+// COUNTERS
+// ------------------------------------
+
+document.querySelectorAll(".counter").forEach(counter => {
+
+    const target = Number(counter.dataset.target);
+
+    const obj = { value: 0 };
+
+    gsap.to(obj, {
+
+        value: target,
+
+        duration: 2,
+
+        delay: 1.8,
+
+        ease: "power2.out",
+
+        onUpdate: () => {
+
+            counter.textContent =
+
+                Math.floor(obj.value).toLocaleString("en-US");
+
+        }
+
+    });
+
+});
+
+
+
+// ------------------------------------
+// REVEAL ANIMATIONS
+// ------------------------------------
+
+gsap.utils.toArray(".reveal").forEach(element => {
+
+    gsap.to(element, {
+
+        opacity: 1,
+
+        y: 0,
+
+        duration: 1,
+
+        ease: "power3.out",
+
+        scrollTrigger: {
+
+            trigger: element,
+
+            start: "top 85%",
+
+            toggleActions: "play none none reverse"
+
+        }
+
+    });
+
+});
+
+
+
+gsap.utils.toArray(".reveal-left").forEach(element => {
+
+    gsap.to(element, {
+
+        opacity: 1,
+
+        x: 0,
+
+        duration: 1.2,
+
+        ease: "power3.out",
+
+        scrollTrigger: {
+
+            trigger: element,
+
+            start: "top 80%"
+
+        }
+
+    });
+
+});
+
+
+
+gsap.utils.toArray(".reveal-right").forEach(element => {
+
+    gsap.to(element, {
+
+        opacity: 1,
+
+        x: 0,
+
+        duration: 1.2,
+
+        ease: "power3.out",
+
+        scrollTrigger: {
+
+            trigger: element,
+
+            start: "top 80%"
+
+        }
+
+    });
+
+});
+
+
+
+// ------------------------------------
+// FEATURE CARD STAGGER
+// ------------------------------------
+
+gsap.from(".feature-card", {
+
+    y: 70,
+
+    opacity: 0,
+
     duration: 0.8,
 
-    stagger: 0.12,
+    stagger: 0.15,
 
-    ease: "power2.inOut"
+    ease: "power3.out",
+
+    scrollTrigger: {
+
+        trigger: ".features-grid",
+
+        start: "top 80%"
+
+    }
 
 });
 
 
-// ====================================
-// INTERFACE UPDATE
-// ====================================
 
-function updateInterface() {
+// ------------------------------------
+// ORBIT ANIMATION
+// ------------------------------------
 
-    if (isScrubbing) return;
+gsap.to(".orbit", {
 
-    const time = tl.time();
+    rotation: 360,
 
-    const duration = tl.duration();
+    duration: 18,
 
-    currentTime.textContent = time.toFixed(2);
+    repeat: -1,
 
-    totalTime.textContent = duration.toFixed(2);
+    ease: "none"
 
-    scrubber.value = (time / duration) * 100;
+});
+
+
+
+// ------------------------------------
+// PRODUCT PARALLAX
+// ------------------------------------
+
+gsap.to(".visual-circle-inner", {
+
+    scale: 1.2,
+
+    repeat: -1,
+
+    yoyo: true,
+
+    duration: 2.5,
+
+    ease: "sine.inOut"
+
+});
+
+
+
+// ------------------------------------
+// BUTTON HOVER
+// ------------------------------------
+
+document.querySelectorAll(".primary-button, .nav-button").forEach(button => {
+
+    button.addEventListener("mouseenter", () => {
+
+        gsap.to(button, {
+
+            scale: 1.05,
+
+            duration: 0.25,
+
+            ease: "power2.out"
+
+        });
+
+    });
+
+
+    button.addEventListener("mouseleave", () => {
+
+        gsap.to(button, {
+
+            scale: 1,
+
+            duration: 0.25
+
+        });
+
+    });
+
+});
+
+
+
+// ------------------------------------
+// REDUCED MOTION SUPPORT
+// ------------------------------------
+
+if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+
+    gsap.globalTimeline.timeScale(3);
 
 }
-
-
-// ====================================
-// PLAY
-// ====================================
-
-document.getElementById("play").onclick = () => {
-
-    tl.play();
-
-    status.textContent = "PLAYING";
-
-};
-
-
-// ====================================
-// PAUSE
-// ====================================
-
-document.getElementById("pause").onclick = () => {
-
-    tl.pause();
-
-    status.textContent = "PAUSED";
-
-};
-
-
-// ====================================
-// REVERSE
-// ====================================
-
-document.getElementById("reverse").onclick = () => {
-
-    tl.reverse();
-
-    status.textContent = "REVERSE";
-
-};
-
-
-// ====================================
-// RESTART
-// ====================================
-
-document.getElementById("restart").onclick = () => {
-
-    tl.restart();
-
-    status.textContent = "PLAYING";
-
-};
-
-
-// ====================================
-// SPEED
-// ====================================
-
-speed.onchange = () => {
-
-    tl.timeScale(Number(speed.value));
-
-};
-
-
-// ====================================
-// TIMELINE SCRUBBER
-// ====================================
-
-scrubber.addEventListener("input", () => {
-
-    isScrubbing = true;
-
-    const time = Number(scrubber.value) / 100 * tl.duration();
-
-    tl.pause();
-
-    tl.time(time);
-
-    currentTime.textContent = time.toFixed(2);
-
-    status.textContent = "SCRUBBING";
-
-});
-
-
-scrubber.addEventListener("change", () => {
-
-    isScrubbing = false;
-
-    status.textContent = "PAUSED";
-
-    updateInterface();
-
-});
-
-
-// ====================================
-// INITIALIZE
-// ====================================
-
-totalTime.textContent = tl.duration().toFixed(2);
-
-updateInterface();
 
 </script>
 
 </body>
+
 </html>
