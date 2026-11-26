@@ -2,13 +2,12 @@
 <html lang="en">
 
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Motion Studio | Dancing Musicians</title>
+<title>Motion Studio | Musical Characters</title>
 
-<!-- GSAP -->
+<!-- GSAP Animation Library -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js"></script>
 
 <style>
@@ -28,9 +27,11 @@ html {
 }
 
 body {
+    width: 100%;
+    height: 100%;
     background: #090d19;
     font-family: Arial, sans-serif;
-    color: white;
+    color: #ffffff;
     overflow: hidden;
 }
 
@@ -40,43 +41,40 @@ body {
 ===================================== */
 
 .hero {
-
     position: relative;
 
     width: 100%;
     height: 100vh;
-
     min-height: 650px;
-
-    overflow: hidden;
 
     display: flex;
     align-items: center;
 
+    overflow: hidden;
+
     background:
         radial-gradient(
             circle at 75% 45%,
-            #35425b 0%,
-            #1a263b 35%,
-            #090d19 85%
+            #41434b 0%,
+            #252c3b 38%,
+            #111827 75%,
+            #090d19 100%
         );
-
 }
 
 
 /* =====================================
-   ANIMATED BACKGROUND GLOW
+   BACKGROUND GLOW
 ===================================== */
 
 .background-glow {
-
     position: absolute;
 
-    width: 550px;
-    height: 550px;
+    width: 600px;
+    height: 600px;
 
-    right: 12%;
-    top: 50%;
+    right: 10%;
+    top: 45%;
 
     transform: translateY(-50%);
 
@@ -86,10 +84,39 @@ body {
 
     opacity: 0.10;
 
-    filter: blur(140px);
+    filter: blur(150px);
 
     pointer-events: none;
+}
 
+
+/* =====================================
+   BACKGROUND PARTICLES
+===================================== */
+
+.particles {
+    position: absolute;
+    inset: 0;
+
+    overflow: hidden;
+    pointer-events: none;
+
+    z-index: 1;
+}
+
+.particle {
+    position: absolute;
+
+    width: 3px;
+    height: 3px;
+
+    border-radius: 50%;
+
+    background: #8deaff;
+
+    box-shadow: 0 0 12px #54dfff;
+
+    opacity: 0.5;
 }
 
 
@@ -98,7 +125,6 @@ body {
 ===================================== */
 
 .main-navigation {
-
     position: absolute;
 
     top: 35px;
@@ -106,57 +132,40 @@ body {
     right: 8%;
 
     display: flex;
-    align-items: center;
     justify-content: space-between;
+    align-items: center;
 
     z-index: 20;
-
 }
 
 .logo {
-
     font-size: 21px;
-
     font-weight: 900;
-
     letter-spacing: 3px;
-
-    color: white;
-
 }
 
 .logo span {
-
     color: #54dfff;
-
 }
 
 .nav-links {
-
     display: flex;
-
-    gap: 32px;
-
+    gap: 30px;
 }
 
 .nav-links a {
-
     text-decoration: none;
 
     color: #bdc9dc;
 
     font-size: 12px;
-
     letter-spacing: 1.5px;
 
-    transition: color 0.3s;
-
+    transition: color 0.3s ease;
 }
 
 .nav-links a:hover {
-
     color: #54dfff;
-
 }
 
 
@@ -165,7 +174,6 @@ body {
 ===================================== */
 
 .hero-content {
-
     position: relative;
 
     z-index: 5;
@@ -173,53 +181,41 @@ body {
     margin-left: 10%;
 
     width: 42%;
-
 }
 
 .eyebrow {
-
-    font-size: 12px;
-
-    letter-spacing: 5px;
-
     color: #54dfff;
 
+    font-size: 12px;
+    letter-spacing: 5px;
 }
 
 .hero-content h1 {
+    margin-top: 25px;
 
     font-size: clamp(65px, 8vw, 120px);
 
-    line-height: 0.95;
-
     font-weight: 900;
 
+    line-height: 0.95;
+
     letter-spacing: -5px;
-
-    margin-top: 25px;
-
 }
 
 .hero-content h1 span {
-
     color: #54dfff;
-
 }
 
 .hero-content p {
+    max-width: 420px;
 
     margin-top: 30px;
-
-    max-width: 420px;
 
     color: #aabbd2;
 
     font-size: 15px;
 
     line-height: 1.8;
-
-    letter-spacing: 0.5px;
-
 }
 
 
@@ -228,27 +224,24 @@ body {
 ===================================== */
 
 .character-container {
-
     position: absolute;
 
     right: 5%;
-
     top: 50%;
 
     transform: translateY(-50%);
 
     width: min(49vw, 620px);
-
     height: 85vh;
 
     display: flex;
 
     align-items: center;
-
     justify-content: center;
 
-    z-index: 3;
+    z-index: 5;
 
+    visibility: visible;
 }
 
 
@@ -257,125 +250,108 @@ body {
 ===================================== */
 
 .musician-characters {
+    display: block;
 
     width: 100%;
-
     height: 100%;
 
     object-fit: contain;
+    object-position: center;
 
-    display: block;
+    opacity: 1;
+    visibility: visible;
 
     transform-origin: 50% 85%;
 
-    will-change: transform;
-
     filter:
-
         drop-shadow(
             0 25px 35px rgba(0,0,0,0.35)
         );
 
-}
-
-
-/* =====================================
-   CHARACTER GLOW
-===================================== */
-
-.character-glow {
-
-    position: absolute;
-
-    width: 75%;
-    height: 65%;
-
-    background: rgba(84,223,255,0.13);
-
-    filter: blur(100px);
-
-    border-radius: 50%;
-
-    z-index: -1;
+    will-change: transform;
 
 }
 
 
 /* =====================================
-   PARTICLES
+   IMAGE ERROR MESSAGE
 ===================================== */
 
-.particles {
+.image-error {
+    display: none;
 
     position: absolute;
 
     inset: 0;
 
-    pointer-events: none;
+    align-items: center;
+    justify-content: center;
 
-    overflow: hidden;
+    text-align: center;
 
-    z-index: 1;
+    padding: 30px;
 
-}
+    color: #ff9999;
 
-.particle {
+    font-size: 13px;
 
-    position: absolute;
+    line-height: 1.8;
 
-    width: 4px;
-    height: 4px;
+    background: rgba(0,0,0,0.4);
 
-    background: #54dfff;
+    border: 1px solid rgba(255,100,100,0.3);
 
-    border-radius: 50%;
-
-    opacity: 0.5;
-
-    box-shadow:
-
-        0 0 12px #54dfff;
-
+    border-radius: 12px;
 }
 
 
 /* =====================================
-   DECORATIVE LABEL
+   CHARACTER LIGHT
+===================================== */
+
+.character-light {
+    position: absolute;
+
+    width: 75%;
+    height: 65%;
+
+    background: rgba(84,223,255,0.12);
+
+    filter: blur(110px);
+
+    border-radius: 50%;
+
+    z-index: -1;
+
+    pointer-events: none;
+}
+
+
+/* =====================================
+   BOTTOM LABELS
 ===================================== */
 
 .bottom-label {
-
     position: absolute;
 
     bottom: 40px;
-
     left: 10%;
 
     color: #71829c;
 
     font-size: 10px;
-
     letter-spacing: 4px;
 
     z-index: 5;
-
 }
 
-
-/* =====================================
-   DANCE INDICATOR
-===================================== */
-
 .dance-indicator {
-
     position: absolute;
 
     right: 8%;
-
     bottom: 40px;
 
     display: flex;
-
     align-items: center;
 
     gap: 10px;
@@ -383,93 +359,71 @@ body {
     color: #aabbd2;
 
     font-size: 10px;
-
     letter-spacing: 3px;
 
     z-index: 5;
-
 }
 
 .indicator-dot {
-
     width: 7px;
     height: 7px;
 
-    border-radius: 50%;
-
     background: #54dfff;
 
-    box-shadow: 0 0 12px #54dfff;
+    border-radius: 50%;
 
+    box-shadow: 0 0 12px #54dfff;
 }
 
 
 /* =====================================
-   RESPONSIVE
+   RESPONSIVE DESIGN
 ===================================== */
 
 @media(max-width: 850px) {
 
     .hero {
-
-        justify-content: center;
-
         align-items: flex-start;
-
     }
 
     .hero-content {
+        width: 90%;
 
         margin: 140px auto 0;
 
-        width: 90%;
-
         text-align: center;
-
     }
 
     .hero-content h1 {
-
         font-size: 65px;
-
     }
 
     .hero-content p {
-
         margin: 20px auto;
-
     }
 
     .character-container {
-
         width: 90vw;
-
         height: 55vh;
 
         right: 5%;
 
         top: auto;
-
         bottom: 0;
 
+        transform: none;
     }
 
     .bottom-label {
-
         display: none;
-
     }
 
     .nav-links {
-
         gap: 12px;
-
     }
 
     .nav-links a {
-
         font-size: 9px;
-
     }
 
 }
@@ -477,42 +431,32 @@ body {
 @media(max-width: 480px) {
 
     .logo {
-
         font-size: 15px;
-
     }
 
     .nav-links {
-
         gap: 8px;
-
     }
 
     .nav-links a {
-
         font-size: 8px;
-
     }
 
     .hero-content h1 {
-
         font-size: 52px;
-
     }
 
 }
 
 
 /* =====================================
-   REDUCED MOTION
+   ACCESSIBILITY
 ===================================== */
 
 @media(prefers-reduced-motion: reduce) {
 
-    * {
-
-        scroll-behavior: auto !important;
-
+    html {
+        scroll-behavior: auto;
     }
 
 }
@@ -525,19 +469,12 @@ body {
 <body>
 
 
-<!-- =====================================
-     HERO SECTION
-===================================== -->
-
 <main class="hero">
 
 
     <!-- BACKGROUND -->
 
     <div class="background-glow"></div>
-
-
-    <!-- PARTICLES -->
 
     <div class="particles" id="particles"></div>
 
@@ -547,11 +484,8 @@ body {
     <nav class="main-navigation">
 
         <div class="logo">
-
             MOTION<span>.</span>
-
         </div>
-
 
         <div class="nav-links">
 
@@ -566,70 +500,54 @@ body {
     </nav>
 
 
-
-    <!-- LEFT CONTENT -->
+    <!-- HERO TEXT -->
 
     <section class="hero-content">
 
         <div class="eyebrow">
-
             CREATIVE MOTION STUDIO
-
         </div>
 
-
         <h1>
-
             LET'S<br>
-
             <span>DANCE.</span>
-
         </h1>
 
-
         <p>
-
             Two musicians. One rhythm.
 
             A little music, a little movement,
-
             and a whole lot of personality.
-
         </p>
 
     </section>
-
 
 
     <!-- CHARACTER IMAGE -->
 
     <div class="character-container">
 
-        <div class="character-glow"></div>
-
+        <div class="character-light"></div>
 
         <img
-
-            src="assets/musician-characters.png"
-
+            src="./assets/musician-characters.png"
             class="musician-characters"
-
-            alt="Two sculptural musicians playing a microphone and trumpet"
-
+            alt="Two sculptural musicians playing microphone and trumpet"
         >
 
-    </div>
+        <div class="image-error" id="imageError">
+            Character image not found.<br>
+            Check that assets/musician-characters.png exists.
+        </div>
 
+    </div>
 
 
     <!-- FOOTER -->
 
     <div class="bottom-label">
-
         CHARACTER ANIMATION / 001
-
     </div>
-
 
     <div class="dance-indicator">
 
@@ -643,37 +561,77 @@ body {
 </main>
 
 
-
 <!-- =====================================
-     GSAP ANIMATION ENGINE
+     JAVASCRIPT / GSAP ANIMATION
 ===================================== -->
 
 <script>
 
 
 // =====================================
-// SELECT ELEMENTS
+// ELEMENT SELECTION
 // =====================================
 
 const characters = document.querySelector(
     ".musician-characters"
 );
 
-const glow = document.querySelector(
-    ".character-glow"
+const characterLight = document.querySelector(
+    ".character-light"
 );
 
 const backgroundGlow = document.querySelector(
     ".background-glow"
 );
 
-const particleContainer = document.getElementById(
+const particles = document.getElementById(
     "particles"
+);
+
+const imageError = document.getElementById(
+    "imageError"
 );
 
 
 // =====================================
-// REDUCED MOTION CHECK
+// CHECK IMAGE
+// =====================================
+
+characters.addEventListener("load", () => {
+
+    console.log("Characters loaded successfully.");
+
+    characters.style.display = "block";
+
+    imageError.style.display = "none";
+
+});
+
+
+characters.addEventListener("error", () => {
+
+    console.error(
+        "Image loading failed. Check the image path."
+    );
+
+    characters.style.display = "none";
+
+    imageError.style.display = "flex";
+
+});
+
+
+// Handle image already loaded from browser cache
+
+if (characters.complete && characters.naturalWidth > 0) {
+
+    imageError.style.display = "none";
+
+}
+
+
+// =====================================
+// REDUCED MOTION
 // =====================================
 
 const reducedMotion = window.matchMedia(
@@ -682,77 +640,151 @@ const reducedMotion = window.matchMedia(
 
 
 // =====================================
-// CHARACTER DANCE ANIMATION
+// GSAP INITIAL ANIMATION
 // =====================================
 
 if (!reducedMotion) {
 
 
-    // Main body sway
+    // Navigation entrance
 
-    gsap.to(characters, {
+    gsap.from(".main-navigation", {
 
-        rotation: 2.2,
+        y: -25,
 
-        y: -9,
+        opacity: 0,
 
-        duration: 1.5,
+        duration: 1,
 
-        repeat: -1,
-
-        yoyo: true,
-
-        ease: "sine.inOut"
+        ease: "power3.out"
 
     });
 
 
+    // Text entrance
 
-    // Secondary rhythmic movement
+    gsap.from(".hero-content > *", {
 
-    gsap.to(characters, {
+        y: 40,
 
-        scale: 1.015,
+        opacity: 0,
 
         duration: 1.1,
 
-        repeat: -1,
+        stagger: 0.2,
 
-        yoyo: true,
+        ease: "power3.out",
 
-        ease: "sine.inOut"
-
-    });
-
-
-
-    // Character lighting
-
-    gsap.to(glow, {
-
-        opacity: 0.35,
-
-        scale: 1.2,
-
-        duration: 2,
-
-        repeat: -1,
-
-        yoyo: true,
-
-        ease: "sine.inOut"
+        delay: 0.2
 
     });
 
 
+    // Character entrance
 
-    // Background glow movement
+    gsap.fromTo(
+        characters,
 
-    gsap.to(backgroundGlow, {
+        {
+            x: 100,
+            opacity: 0
+        },
+
+        {
+            x: 0,
+            opacity: 1,
+
+            duration: 1.5,
+
+            ease: "power3.out",
+
+            delay: 0.3
+
+        }
+
+    );
+
+
+    // =================================
+    // DANCING ANIMATION
+    // =================================
+
+    const danceTimeline = gsap.timeline({
+
+        repeat: -1,
+
+        yoyo: true,
+
+        defaults: {
+            ease: "sine.inOut"
+        }
+
+    });
+
+
+    danceTimeline.to(characters, {
+
+        rotation: 2.2,
+
+        y: -10,
+
+        duration: 1.5
+
+    });
+
+
+    danceTimeline.to(characters, {
+
+        rotation: -2,
+
+        y: 5,
+
+        duration: 1.3
+
+    });
+
+
+    danceTimeline.to(characters, {
+
+        rotation: 1.5,
+
+        y: -7,
+
+        duration: 1.4
+
+    });
+
+
+    // =================================
+    // CHARACTER LIGHT ANIMATION
+    // =================================
+
+    gsap.to(characterLight, {
 
         scale: 1.3,
 
-        opacity: 0.17,
+        opacity: 0.4,
+
+        duration: 2.5,
+
+        repeat: -1,
+
+        yoyo: true,
+
+        ease: "sine.inOut"
+
+    });
+
+
+    // =================================
+    // BACKGROUND GLOW
+    // =================================
+
+    gsap.to(backgroundGlow, {
+
+        scale: 1.25,
+
+        opacity: 0.16,
 
         duration: 4,
 
@@ -765,39 +797,33 @@ if (!reducedMotion) {
     });
 
 
-}
+    // =================================
+    // FLOATING PARTICLES
+    // =================================
+
+    for (let i = 0; i < 30; i++) {
+
+        const particle = document.createElement("div");
+
+        particle.className = "particle";
+
+        particles.appendChild(particle);
 
 
+        gsap.set(particle, {
 
-// =====================================
-// PARTICLE GENERATION
-// =====================================
+            x: Math.random() * window.innerWidth,
 
-for (let i = 0; i < 30; i++) {
+            y: Math.random() * window.innerHeight,
 
-    const particle = document.createElement("div");
+            scale: Math.random() * 1.5 + 0.5
 
-    particle.className = "particle";
+        });
 
-    particleContainer.appendChild(particle);
-
-
-    gsap.set(particle, {
-
-        x: Math.random() * window.innerWidth,
-
-        y: Math.random() * window.innerHeight,
-
-        scale: Math.random() * 1.5 + 0.5
-
-    });
-
-
-    if (!reducedMotion) {
 
         gsap.to(particle, {
 
-            y: "-=120",
+            y: "-=150",
 
             x: "+=" + (Math.random() * 60 - 30),
 
@@ -819,80 +845,7 @@ for (let i = 0; i < 30; i++) {
 
 }
 
-
-
-// =====================================
-// IMAGE LOAD CHECK
-// =====================================
-
-characters.addEventListener("load", () => {
-
-    console.log("Musician characters loaded successfully.");
-
-});
-
-characters.addEventListener("error", () => {
-
-    console.error(
-        "Character image not found. Check assets/musician-characters.png"
-    );
-
-});
-
-
-// =====================================
-// ENTRANCE ANIMATION
-// =====================================
-
-if (!reducedMotion) {
-
-    gsap.from(".hero-content > *", {
-
-        opacity: 0,
-
-        y: 35,
-
-        duration: 1.2,
-
-        stagger: 0.2,
-
-        ease: "power3.out"
-
-    });
-
-
-    gsap.from(characters, {
-
-        opacity: 0,
-
-        x: 100,
-
-        duration: 1.6,
-
-        ease: "power3.out",
-
-        delay: 0.3
-
-    });
-
-
-    gsap.from(".main-navigation", {
-
-        opacity: 0,
-
-        y: -20,
-
-        duration: 1,
-
-        ease: "power3.out"
-
-    });
-
-}
-
 </script>
 
-
 </body>
-
 </html>
