@@ -1,24 +1,463 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Footage</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        html, body {
-            margin: 0;
-            width: 100%;
-            height: 100%;
-            background: #090d19;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Footage - Bottle</title>
+
+<style>
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #090d19;
+}
+
+/* MAIN STAGE */
+
+.stage {
+    width: 100%;
+    height: 100vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    position: relative;
+}
+
+/* BOTTLE */
+
+.bottle {
+    width: 260px;
+    height: 760px;
+
+    position: relative;
+
+    filter: drop-shadow(0 25px 35px rgba(0,0,0,0.5));
+}
+
+svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+}
+
+</style>
 </head>
+
 <body>
+
+<div class="stage">
+
+    <div class="bottle">
+
+        <svg viewBox="0 0 260 760"
+             xmlns="http://www.w3.org/2000/svg">
+
+            <defs>
+
+                <!-- Glass body gradient -->
+
+                <linearGradient id="glass" x1="0" y1="0" x2="1" y2="0">
+
+                    <stop offset="0%" stop-color="#496b70" stop-opacity="0.8"/>
+
+                    <stop offset="12%" stop-color="#b5d9d1" stop-opacity="0.5"/>
+
+                    <stop offset="30%" stop-color="#e1f5e9" stop-opacity="0.18"/>
+
+                    <stop offset="55%" stop-color="#8fbeb5" stop-opacity="0.15"/>
+
+                    <stop offset="85%" stop-color="#c5e6d9" stop-opacity="0.55"/>
+
+                    <stop offset="100%" stop-color="#365c5c" stop-opacity="0.85"/>
+
+                </linearGradient>
+
+
+                <!-- Neck gradient -->
+
+                <linearGradient id="neckGlass" x1="0" y1="0" x2="1" y2="0">
+
+                    <stop offset="0%" stop-color="#496e6a"/>
+
+                    <stop offset="20%" stop-color="#c7e7dc" stop-opacity="0.8"/>
+
+                    <stop offset="50%" stop-color="#d9f3e8" stop-opacity="0.3"/>
+
+                    <stop offset="85%" stop-color="#b0d6c8" stop-opacity="0.8"/>
+
+                    <stop offset="100%" stop-color="#345b57"/>
+
+                </linearGradient>
+
+
+                <!-- Bottle liquid -->
+
+                <linearGradient id="liquid" x1="0" y1="0" x2="0" y2="1">
+
+                    <stop offset="0%" stop-color="#d8ad4c" stop-opacity="0.85"/>
+
+                    <stop offset="100%" stop-color="#95601f" stop-opacity="0.95"/>
+
+                </linearGradient>
+
+
+                <!-- Cap -->
+
+                <linearGradient id="cap" x1="0" y1="0" x2="1" y2="0">
+
+                    <stop offset="0%" stop-color="#777d80"/>
+
+                    <stop offset="25%" stop-color="#e1e4e2"/>
+
+                    <stop offset="55%" stop-color="#969da0"/>
+
+                    <stop offset="85%" stop-color="#e8ecea"/>
+
+                    <stop offset="100%" stop-color="#656c70"/>
+
+                </linearGradient>
+
+
+                <!-- Label -->
+
+                <linearGradient id="label" x1="0" y1="0" x2="1" y2="0">
+
+                    <stop offset="0%" stop-color="#e5dfc9"/>
+
+                    <stop offset="50%" stop-color="#fff9e9"/>
+
+                    <stop offset="100%" stop-color="#d6cdb5"/>
+
+                </linearGradient>
+
+
+                <clipPath id="bottleClip">
+
+                    <path d="
+                        M 103 105
+                        L 103 230
+                        C 103 265 70 275 57 310
+                        C 48 335 46 365 46 395
+                        L 46 655
+                        Q 46 700 85 700
+                        L 175 700
+                        Q 214 700 214 655
+                        L 214 395
+                        C 214 365 212 335 203 310
+                        C 190 275 157 265 157 230
+                        L 157 105
+                        Z
+                    "/>
+
+                </clipPath>
+
+            </defs>
+
+
+            <!-- BOTTLE BODY -->
+
+            <path
+                d="
+                    M 103 105
+                    L 103 230
+                    C 103 265 70 275 57 310
+                    C 48 335 46 365 46 395
+                    L 46 655
+                    Q 46 700 85 700
+                    L 175 700
+                    Q 214 700 214 655
+                    L 214 395
+                    C 214 365 212 335 203 310
+                    C 190 275 157 265 157 230
+                    L 157 105
+                    Z
+                "
+                fill="url(#glass)"
+                stroke="#b9e1d6"
+                stroke-opacity="0.65"
+                stroke-width="2"
+            />
+
+
+            <!-- LIQUID INSIDE -->
+
+            <g clip-path="url(#bottleClip)">
+
+                <path
+                    d="
+                        M 46 460
+                        Q 130 450 214 460
+                        L 214 710
+                        L 46 710
+                        Z
+                    "
+                    fill="url(#liquid)"
+                />
+
+                <path
+                    d="
+                        M 46 460
+                        Q 130 450 214 460
+                    "
+                    fill="none"
+                    stroke="#f6d98b"
+                    stroke-opacity="0.6"
+                    stroke-width="3"
+                />
+
+            </g>
+
+
+            <!-- NECK -->
+
+            <path
+                d="
+                    M 103 105
+                    L 103 230
+                    C 103 265 70 275 57 310
+                    M 157 105
+                    L 157 230
+                    C 157 265 190 275 203 310
+                "
+                fill="none"
+                stroke="url(#neckGlass)"
+                stroke-width="5"
+            />
+
+
+            <!-- NECK INNER REFLECTION -->
+
+            <path
+                d="M 113 115 L 113 235"
+                stroke="#ffffff"
+                stroke-opacity="0.35"
+                stroke-width="4"
+                stroke-linecap="round"
+            />
+
+            <path
+                d="M 147 115 L 147 235"
+                stroke="#ffffff"
+                stroke-opacity="0.3"
+                stroke-width="3"
+                stroke-linecap="round"
+            />
+
+
+            <!-- BOTTLE MOUTH -->
+
+            <rect
+                x="97"
+                y="91"
+                width="66"
+                height="19"
+                rx="4"
+                fill="url(#neckGlass)"
+                stroke="#c5e5da"
+                stroke-width="2"
+            />
+
+
+            <ellipse
+                cx="130"
+                cy="92"
+                rx="33"
+                ry="7"
+                fill="#d4eee3"
+                fill-opacity="0.7"
+            />
+
+
+            <!-- METAL CAP -->
+
+            <rect
+                x="99"
+                y="37"
+                width="62"
+                height="56"
+                rx="5"
+                fill="url(#cap)"
+                stroke="#e4e8e6"
+                stroke-width="1"
+            />
+
+
+            <!-- CAP RIDGES -->
+
+            <g stroke="#565e62" stroke-opacity="0.65" stroke-width="1">
+
+                <line x1="103" y1="43" x2="157" y2="43"/>
+                <line x1="103" y1="49" x2="157" y2="49"/>
+                <line x1="103" y1="55" x2="157" y2="55"/>
+                <line x1="103" y1="61" x2="157" y2="61"/>
+                <line x1="103" y1="67" x2="157" y2="67"/>
+                <line x1="103" y1="73" x2="157" y2="73"/>
+                <line x1="103" y1="79" x2="157" y2="79"/>
+                <line x1="103" y1="85" x2="157" y2="85"/>
+
+            </g>
+
+
+            <!-- BOTTLE LABEL -->
+
+            <rect
+                x="54"
+                y="470"
+                width="152"
+                height="145"
+                rx="4"
+                fill="url(#label)"
+                stroke="#d1c4a5"
+                stroke-width="2"
+            />
+
+
+            <!-- LABEL BORDER -->
+
+            <rect
+                x="62"
+                y="478"
+                width="136"
+                height="129"
+                fill="none"
+                stroke="#a18b61"
+                stroke-width="1"
+            />
+
+
+            <!-- LABEL TYPOGRAPHY -->
+
+            <text
+                x="130"
+                y="505"
+                text-anchor="middle"
+                font-size="9"
+                letter-spacing="3"
+                fill="#7b6746"
+            >
+                PREMIUM
+            </text>
+
+
+            <text
+                x="130"
+                y="544"
+                text-anchor="middle"
+                font-size="25"
+                font-weight="bold"
+                letter-spacing="2"
+                fill="#253d36"
+            >
+                ORIGINAL
+            </text>
+
+
+            <line
+                x1="80"
+                y1="555"
+                x2="180"
+                y2="555"
+                stroke="#9a8359"
+                stroke-width="1"
+            />
+
+
+            <text
+                x="130"
+                y="577"
+                text-anchor="middle"
+                font-size="10"
+                letter-spacing="2"
+                fill="#66553b"
+            >
+                BOTTLED
+            </text>
+
+
+            <text
+                x="130"
+                y="593"
+                text-anchor="middle"
+                font-size="8"
+                letter-spacing="2"
+                fill="#66553b"
+            >
+                PRODUCT DESIGN
+            </text>
+
+
+            <!-- GLASS HIGHLIGHTS -->
+
+            <path
+                d="
+                    M 64 350
+                    Q 57 450 64 650
+                "
+                fill="none"
+                stroke="#ffffff"
+                stroke-opacity="0.4"
+                stroke-width="7"
+                stroke-linecap="round"
+            />
+
+
+            <path
+                d="
+                    M 77 330
+                    Q 73 365 74 420
+                "
+                fill="none"
+                stroke="#ffffff"
+                stroke-opacity="0.2"
+                stroke-width="3"
+                stroke-linecap="round"
+            />
+
+
+            <path
+                d="
+                    M 190 360
+                    Q 198 470 190 650
+                "
+                fill="none"
+                stroke="#ffffff"
+                stroke-opacity="0.4"
+                stroke-width="5"
+                stroke-linecap="round"
+            />
+
+
+            <!-- BOTTOM GLASS -->
+
+            <path
+                d="
+                    M 52 675
+                    Q 130 692 208 675
+                "
+                fill="none"
+                stroke="#d8f4e9"
+                stroke-opacity="0.65"
+                stroke-width="5"
+            />
+
+
+        </svg>
+
+    </div>
+
+</div>
+
 </body>
 </html>
