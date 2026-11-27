@@ -1,587 +1,3716 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>3D House Model</title>
+
+<title>NEXORA — SaaS Experience</title>
+
+<!-- GOOGLE FONTS -->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700\&family=Space+Grotesk:wght@400;500;600;700\&display=swap" rel="stylesheet">
+
+<!-- GSAP -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollTrigger.min.js"></script>
+
 
 <style>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+
+
+
+/\* ===================================
+
+&#x20;  GLOBAL
+
+=================================== \*/
+
+
+
+\* {
+
+&#x20;   margin: 0;
+
+&#x20;   padding: 0;
+
+&#x20;   box-sizing: border-box;
+
 }
+
+
+
+:root {
+
+
+
+&#x20;   --background: #080b14;
+
+
+
+&#x20;   --surface: #101522;
+
+
+
+&#x20;   --surface-light: #171e30;
+
+
+
+&#x20;   --border: rgba(255,255,255,0.09);
+
+
+
+&#x20;   --white: #f5f7ff;
+
+
+
+&#x20;   --muted: #929bb0;
+
+
+
+&#x20;   --blue: #6b8cff;
+
+
+
+&#x20;   --cyan: #54dfff;
+
+
+
+&#x20;   --purple: #a17cff;
+
+
+
+}
+
+
+
+html {
+
+&#x20;   scroll-behavior: auto;
+
+}
+
+
 
 body {
-    overflow: hidden;
-    background: #10141c;
-    font-family: Arial, sans-serif;
-    color: white;
+
+
+
+&#x20;   background: var(--background);
+
+
+
+&#x20;   color: var(--white);
+
+
+
+&#x20;   font-family: 'DM Sans', sans-serif;
+
+
+
+&#x20;   overflow-x: hidden;
+
+
+
 }
 
-#scene {
-    position: fixed;
-    inset: 0;
+
+
+a {
+
+&#x20;   text-decoration: none;
+
+&#x20;   color: inherit;
+
 }
 
-#ui {
-    position: fixed;
-    top: 20px;
-    left: 20px;
-    z-index: 10;
-    width: 270px;
-    padding: 20px;
-    background: rgba(20,25,35,.94);
-    border: 1px solid #343b49;
-    border-radius: 12px;
-}
 
-#ui h2 {
-    font-size: 19px;
-    margin-bottom: 7px;
-}
-
-#ui p {
-    color: #aeb8c8;
-    font-size: 12px;
-    margin-bottom: 16px;
-    line-height: 1.5;
-}
 
 button {
-    width: 100%;
-    padding: 11px;
-    margin-top: 8px;
-    border: 1px solid #454f60;
-    border-radius: 7px;
-    background: #252e3c;
-    color: white;
-    cursor: pointer;
-    font-size: 13px;
+
+&#x20;   font-family: inherit;
+
+&#x20;   cursor: pointer;
+
 }
 
-button:hover {
-    background: #39485c;
+
+
+.container {
+
+
+
+&#x20;   width: min(1200px, 90%);
+
+
+
+&#x20;   margin: auto;
+
+
+
 }
 
-button.active {
-    background: #b77c43;
-    border-color: #d49b64;
+
+
+.section-padding {
+
+
+
+&#x20;   padding: 120px 0;
+
+
+
 }
 
-#dimensions {
-    margin-top: 15px;
-    padding-top: 12px;
-    border-top: 1px solid #394353;
-    color: #c4cbd5;
-    font-size: 12px;
-    line-height: 1.8;
+
+
+
+
+/\* ===================================
+
+&#x20;  BACKGROUND
+
+=================================== \*/
+
+
+
+.background-glow {
+
+
+
+&#x20;   position: fixed;
+
+
+
+&#x20;   width: 600px;
+
+&#x20;   height: 600px;
+
+
+
+&#x20;   border-radius: 50%;
+
+
+
+&#x20;   background: #365bff;
+
+
+
+&#x20;   filter: blur(180px);
+
+
+
+&#x20;   opacity: 0.12;
+
+
+
+&#x20;   pointer-events: none;
+
+
+
+&#x20;   z-index: -1;
+
+
+
+&#x20;   top: -200px;
+
+&#x20;   left: 30%;
+
+
+
 }
 
-#loading {
-    position: fixed;
-    inset: 0;
-    display: grid;
-    place-items: center;
-    background: #10141c;
-    z-index: 20;
-    color: white;
-    text-align: center;
-    padding: 20px;
+
+
+.grid-background {
+
+
+
+&#x20;   position: fixed;
+
+
+
+&#x20;   inset: 0;
+
+
+
+&#x20;   pointer-events: none;
+
+
+
+&#x20;   z-index: -1;
+
+
+
+&#x20;   background-image:
+
+
+
+&#x20;       linear-gradient(
+
+&#x20;           rgba(255,255,255,0.025) 1px,
+
+&#x20;           transparent 1px
+
+&#x20;       ),
+
+
+
+&#x20;       linear-gradient(
+
+&#x20;           90deg,
+
+&#x20;           rgba(255,255,255,0.025) 1px,
+
+&#x20;           transparent 1px
+
+&#x20;       );
+
+
+
+&#x20;   background-size: 70px 70px;
+
+
+
+&#x20;   mask-image:
+
+&#x20;       linear-gradient(
+
+&#x20;           to bottom,
+
+&#x20;           black,
+
+&#x20;           transparent 85%
+
+&#x20;       );
+
+
+
 }
 
-#loading.hidden {
-    display: none;
+
+
+
+
+/\* ===================================
+
+&#x20;  NAVIGATION
+
+=================================== \*/
+
+
+
+.navbar {
+
+
+
+&#x20;   height: 85px;
+
+
+
+&#x20;   display: flex;
+
+
+
+&#x20;   align-items: center;
+
+
+
+&#x20;   justify-content: space-between;
+
+
+
+&#x20;   border-bottom: 1px solid var(--border);
+
+
+
+&#x20;   position: relative;
+
+
+
+&#x20;   z-index: 100;
+
+
+
 }
 
-#hint {
-    position: fixed;
-    bottom: 18px;
-    right: 20px;
-    color: #c0c8d5;
-    font-size: 12px;
-    background: rgba(20,25,35,.8);
-    padding: 10px 14px;
-    border-radius: 7px;
+
+
+.logo {
+
+
+
+&#x20;   font-family: 'Space Grotesk', sans-serif;
+
+
+
+&#x20;   font-size: 25px;
+
+
+
+&#x20;   font-weight: 700;
+
+
+
+&#x20;   letter-spacing: -1px;
+
+
+
 }
 
-@media(max-width:600px) {
-    #ui {
-        width: 210px;
-        top: 10px;
-        left: 10px;
-        padding: 13px;
-    }
+
+
+.logo span {
+
+
+
+&#x20;   color: var(--blue);
+
+
+
 }
-</style>
+
+
+
+.nav-links {
+
+
+
+&#x20;   display: flex;
+
+
+
+&#x20;   gap: 35px;
+
+
+
+}
+
+
+
+.nav-links a {
+
+
+
+&#x20;   color: var(--muted);
+
+
+
+&#x20;   font-size: 13px;
+
+
+
+&#x20;   transition: color .3s;
+
+
+
+}
+
+
+
+.nav-links a:hover {
+
+
+
+&#x20;   color: white;
+
+
+
+}
+
+
+
+.nav-actions {
+
+
+
+&#x20;   display: flex;
+
+
+
+&#x20;   align-items: center;
+
+
+
+&#x20;   gap: 20px;
+
+
+
+}
+
+
+
+.login {
+
+
+
+&#x20;   color: var(--muted);
+
+
+
+&#x20;   font-size: 13px;
+
+
+
+}
+
+
+
+.nav-button {
+
+
+
+&#x20;   background: white;
+
+
+
+&#x20;   color: #080b14;
+
+
+
+&#x20;   padding: 12px 20px;
+
+
+
+&#x20;   border-radius: 7px;
+
+
+
+&#x20;   font-size: 13px;
+
+
+
+&#x20;   font-weight: 700;
+
+
+
+&#x20;   transition: .3s;
+
+
+
+}
+
+
+
+.nav-button:hover {
+
+
+
+&#x20;   background: var(--cyan);
+
+
+
+&#x20;   transform: translateY(-3px);
+
+
+
+}
+
+
+
+
+
+/\* ===================================
+
+&#x20;  HERO
+
+=================================== \*/
+
+
+
+.hero {
+
+
+
+&#x20;   min-height: 850px;
+
+
+
+&#x20;   display: flex;
+
+
+
+&#x20;   flex-direction: column;
+
+
+
+&#x20;   align-items: center;
+
+
+
+&#x20;   justify-content: center;
+
+
+
+&#x20;   text-align: center;
+
+
+
+&#x20;   padding: 90px 0 0;
+
+
+
+&#x20;   position: relative;
+
+
+
+}
+
+
+
+.announcement {
+
+
+
+&#x20;   border: 1px solid rgba(107,140,255,.35);
+
+
+
+&#x20;   background: rgba(107,140,255,.08);
+
+
+
+&#x20;   padding: 9px 17px;
+
+
+
+&#x20;   border-radius: 30px;
+
+
+
+&#x20;   color: #b9c8ff;
+
+
+
+&#x20;   font-size: 11px;
+
+
+
+&#x20;   letter-spacing: 1px;
+
+
+
+&#x20;   margin-bottom: 30px;
+
+
+
+}
+
+
+
+.announcement span {
+
+
+
+&#x20;   color: var(--cyan);
+
+
+
+&#x20;   margin-right: 8px;
+
+
+
+}
+
+
+
+.hero h1 {
+
+
+
+&#x20;   font-family: 'Space Grotesk', sans-serif;
+
+
+
+&#x20;   font-size: clamp(55px, 8vw, 100px);
+
+
+
+&#x20;   line-height: 1.04;
+
+
+
+&#x20;   letter-spacing: -6px;
+
+
+
+&#x20;   max-width: 950px;
+
+
+
+}
+
+
+
+.gradient-text {
+
+
+
+&#x20;   background: linear-gradient(
+
+&#x20;       100deg,
+
+&#x20;       #70a2ff,
+
+&#x20;       #b49aff,
+
+&#x20;       #54dfff
+
+&#x20;   );
+
+
+
+&#x20;   background-clip: text;
+
+
+
+&#x20;   -webkit-background-clip: text;
+
+
+
+&#x20;   color: transparent;
+
+
+
+}
+
+
+
+.hero-description {
+
+
+
+&#x20;   max-width: 590px;
+
+
+
+&#x20;   margin-top: 28px;
+
+
+
+&#x20;   color: var(--muted);
+
+
+
+&#x20;   font-size: 16px;
+
+
+
+&#x20;   line-height: 1.8;
+
+
+
+}
+
+
+
+.hero-buttons {
+
+
+
+&#x20;   display: flex;
+
+
+
+&#x20;   gap: 15px;
+
+
+
+&#x20;   margin-top: 35px;
+
+
+
+}
+
+
+
+.primary-button {
+
+
+
+&#x20;   background: #ffffff;
+
+
+
+&#x20;   color: #090d19;
+
+
+
+&#x20;   padding: 16px 26px;
+
+
+
+&#x20;   border-radius: 7px;
+
+
+
+&#x20;   font-weight: 700;
+
+
+
+&#x20;   font-size: 13px;
+
+
+
+&#x20;   transition: .3s;
+
+
+
+}
+
+
+
+.primary-button:hover {
+
+
+
+&#x20;   background: var(--cyan);
+
+
+
+&#x20;   transform: translateY(-4px);
+
+
+
+&#x20;   box-shadow: 0 10px 35px rgba(84,223,255,.2);
+
+
+
+}
+
+
+
+.secondary-button {
+
+
+
+&#x20;   border: 1px solid var(--border);
+
+
+
+&#x20;   padding: 16px 26px;
+
+
+
+&#x20;   border-radius: 7px;
+
+
+
+&#x20;   font-size: 13px;
+
+
+
+&#x20;   color: white;
+
+
+
+&#x20;   transition: .3s;
+
+
+
+}
+
+
+
+.secondary-button:hover {
+
+
+
+&#x20;   border-color: var(--blue);
+
+
+
+&#x20;   background: rgba(107,140,255,.1);
+
+
+
+}
+
+
+
+
+
+/\* ===================================
+
+&#x20;  HERO DASHBOARD
+
+=================================== \*/
+
+
+
+.dashboard-wrapper {
+
+
+
+&#x20;   width: min(1000px, 95%);
+
+
+
+&#x20;   margin: 100px auto 0;
+
+
+
+&#x20;   position: relative;
+
+
+
+&#x20;   perspective: 1200px;
+
+
+
+}
+
+
+
+.dashboard {
+
+
+
+&#x20;   background: #101625;
+
+
+
+&#x20;   border: 1px solid rgba(255,255,255,.13);
+
+
+
+&#x20;   border-radius: 16px;
+
+
+
+&#x20;   padding: 20px;
+
+
+
+&#x20;   box-shadow:
+
+
+
+&#x20;       0 40px 100px rgba(0,0,0,.5),
+
+
+
+&#x20;       0 0 80px rgba(77,110,255,.12);
+
+
+
+&#x20;   transform: rotateX(5deg);
+
+
+
+&#x20;   position: relative;
+
+
+
+&#x20;   overflow: hidden;
+
+
+
+}
+
+
+
+.dashboard-top {
+
+
+
+&#x20;   display: flex;
+
+
+
+&#x20;   justify-content: space-between;
+
+
+
+&#x20;   align-items: center;
+
+
+
+&#x20;   padding-bottom: 20px;
+
+
+
+&#x20;   border-bottom: 1px solid var(--border);
+
+
+
+}
+
+
+
+.dashboard-title {
+
+
+
+&#x20;   font-size: 14px;
+
+
+
+&#x20;   font-weight: 700;
+
+
+
+}
+
+
+
+.dashboard-status {
+
+
+
+&#x20;   color: #70e8bd;
+
+
+
+&#x20;   font-size: 11px;
+
+
+
+}
+
+
+
+.dashboard-body {
+
+
+
+&#x20;   display: grid;
+
+
+
+&#x20;   grid-template-columns: 1fr 1fr 1fr;
+
+
+
+&#x20;   gap: 15px;
+
+
+
+&#x20;   margin-top: 20px;
+
+
+
+}
+
+
+
+.stat-card {
+
+
+
+&#x20;   background: #171f30;
+
+
+
+&#x20;   padding: 20px;
+
+
+
+&#x20;   border: 1px solid var(--border);
+
+
+
+&#x20;   border-radius: 9px;
+
+
+
+}
+
+
+
+.stat-label {
+
+
+
+&#x20;   font-size: 11px;
+
+
+
+&#x20;   color: var(--muted);
+
+
+
+}
+
+
+
+.stat-number {
+
+
+
+&#x20;   font-family: 'Space Grotesk';
+
+
+
+&#x20;   font-size: 30px;
+
+
+
+&#x20;   margin-top: 12px;
+
+
+
+}
+
+
+
+.stat-change {
+
+
+
+&#x20;   color: #6be3b2;
+
+
+
+&#x20;   font-size: 11px;
+
+
+
+&#x20;   margin-top: 5px;
+
+
+
+}
+
+
+
+.chart-card {
+
+
+
+&#x20;   grid-column: span 3;
+
+
+
+&#x20;   height: 190px;
+
+
+
+&#x20;   background: #171f30;
+
+
+
+&#x20;   border-radius: 9px;
+
+
+
+&#x20;   border: 1px solid var(--border);
+
+
+
+&#x20;   padding: 20px;
+
+
+
+}
+
+
+
+.chart-title {
+
+
+
+&#x20;   font-size: 12px;
+
+
+
+&#x20;   color: var(--muted);
+
+
+
+&#x20;   margin-bottom: 20px;
+
+
+
+}
+
+
+
+.chart {
+
+
+
+&#x20;   height: 115px;
+
+
+
+&#x20;   display: flex;
+
+
+
+&#x20;   align-items: end;
+
+
+
+&#x20;   gap: 12px;
+
+
+
+}
+
+
+
+.bar {
+
+
+
+&#x20;   flex: 1;
+
+
+
+&#x20;   border-radius: 4px 4px 0 0;
+
+
+
+&#x20;   background: linear-gradient(
+
+&#x20;       to top,
+
+&#x20;       #506aff,
+
+&#x20;       #54dfff
+
+&#x20;   );
+
+
+
+&#x20;   height: 0%;
+
+
+
+&#x20;   opacity: .85;
+
+
+
+}
+
+
+
+
+
+/\* FLOATING CARDS \*/
+
+
+
+.floating-card {
+
+
+
+&#x20;   position: absolute;
+
+
+
+&#x20;   padding: 17px 22px;
+
+
+
+&#x20;   background: rgba(25,35,57,.95);
+
+
+
+&#x20;   border: 1px solid rgba(255,255,255,.13);
+
+
+
+&#x20;   backdrop-filter: blur(20px);
+
+
+
+&#x20;   border-radius: 10px;
+
+
+
+&#x20;   box-shadow: 0 15px 50px rgba(0,0,0,.3);
+
+
+
+&#x20;   font-size: 12px;
+
+
+
+}
+
+
+
+.floating-one {
+
+
+
+&#x20;   top: 18%;
+
+
+
+&#x20;   left: -90px;
+
+
+
+}
+
+
+
+.floating-two {
+
+
+
+&#x20;   bottom: 18%;
+
+
+
+&#x20;   right: -80px;
+
+
+
+}
+
+
+
+.float-number {
+
+
+
+&#x20;   font-size: 22px;
+
+
+
+&#x20;   font-weight: 700;
+
+
+
+&#x20;   margin-top: 8px;
+
+
+
+&#x20;   color: var(--cyan);
+
+
+
+}
+
+
+
+
+
+/\* ===================================
+
+&#x20;  TRUST SECTION
+
+=================================== \*/
+
+
+
+.trust-section {
+
+
+
+&#x20;   padding: 110px 0;
+
+
+
+&#x20;   text-align: center;
+
+
+
+}
+
+
+
+.trust-section p {
+
+
+
+&#x20;   color: var(--muted);
+
+
+
+&#x20;   font-size: 12px;
+
+
+
+&#x20;   letter-spacing: 2px;
+
+
+
+&#x20;   margin-bottom: 40px;
+
+
+
+}
+
+
+
+.brand-list {
+
+
+
+&#x20;   display: flex;
+
+
+
+&#x20;   justify-content: center;
+
+
+
+&#x20;   flex-wrap: wrap;
+
+
+
+&#x20;   gap: 70px;
+
+
+
+&#x20;   color: #647087;
+
+
+
+&#x20;   font-family: 'Space Grotesk';
+
+
+
+&#x20;   font-size: 23px;
+
+
+
+&#x20;   font-weight: 700;
+
+
+
+}
+
+
+
+
+
+/\* ===================================
+
+&#x20;  SECTION HEADINGS
+
+=================================== \*/
+
+
+
+.section-heading {
+
+
+
+&#x20;   text-align: center;
+
+
+
+&#x20;   margin-bottom: 65px;
+
+
+
+}
+
+
+
+.section-heading span {
+
+
+
+&#x20;   color: var(--cyan);
+
+
+
+&#x20;   font-size: 11px;
+
+
+
+&#x20;   letter-spacing: 3px;
+
+
+
+}
+
+
+
+.section-heading h2 {
+
+
+
+&#x20;   font-family: 'Space Grotesk';
+
+
+
+&#x20;   font-size: clamp(35px, 5vw, 58px);
+
+
+
+&#x20;   margin-top: 20px;
+
+
+
+&#x20;   letter-spacing: -2px;
+
+
+
+}
+
+
+
+.section-heading p {
+
+
+
+&#x20;   color: var(--muted);
+
+
+
+&#x20;   max-width: 550px;
+
+
+
+&#x20;   margin: 20px auto 0;
+
+
+
+&#x20;   line-height: 1.8;
+
+
+
+&#x20;   font-size: 14px;
+
+
+
+}
+
+
+
+
+
+/\* ===================================
+
+&#x20;  FEATURES
+
+=================================== \*/
+
+
+
+.features-grid {
+
+
+
+&#x20;   display: grid;
+
+
+
+&#x20;   grid-template-columns: repeat(3, 1fr);
+
+
+
+&#x20;   gap: 18px;
+
+
+
+}
+
+
+
+.feature-card {
+
+
+
+&#x20;   background: linear-gradient(
+
+&#x20;       145deg,
+
+&#x20;       #151d30,
+
+&#x20;       #0e1422
+
+&#x20;   );
+
+
+
+&#x20;   border: 1px solid var(--border);
+
+
+
+&#x20;   border-radius: 13px;
+
+
+
+&#x20;   padding: 32px;
+
+
+
+&#x20;   min-height: 250px;
+
+
+
+&#x20;   transition: .4s;
+
+
+
+}
+
+
+
+.feature-card:hover {
+
+
+
+&#x20;   transform: translateY(-9px);
+
+
+
+&#x20;   border-color: rgba(84,223,255,.5);
+
+
+
+&#x20;   background: #18243b;
+
+
+
+}
+
+
+
+.feature-icon {
+
+
+
+&#x20;   width: 45px;
+
+
+
+&#x20;   height: 45px;
+
+
+
+&#x20;   border-radius: 12px;
+
+
+
+&#x20;   background: rgba(107,140,255,.15);
+
+
+
+&#x20;   display: flex;
+
+
+
+&#x20;   align-items: center;
+
+
+
+&#x20;   justify-content: center;
+
+
+
+&#x20;   color: var(--cyan);
+
+
+
+&#x20;   font-size: 22px;
+
+
+
+&#x20;   margin-bottom: 30px;
+
+
+
+}
+
+
+
+.feature-card h3 {
+
+
+
+&#x20;   font-size: 19px;
+
+
+
+&#x20;   margin-bottom: 14px;
+
+
+
+}
+
+
+
+.feature-card p {
+
+
+
+&#x20;   font-size: 13px;
+
+
+
+&#x20;   color: var(--muted);
+
+
+
+&#x20;   line-height: 1.8;
+
+
+
+}
+
+
+
+
+
+/\* ===================================
+
+&#x20;  PRODUCT SHOWCASE
+
+=================================== \*/
+
+
+
+.product-section {
+
+
+
+&#x20;   display: grid;
+
+
+
+&#x20;   grid-template-columns: 1fr 1fr;
+
+
+
+&#x20;   align-items: center;
+
+
+
+&#x20;   gap: 90px;
+
+
+
+}
+
+
+
+.product-content span {
+
+
+
+&#x20;   color: var(--cyan);
+
+
+
+&#x20;   font-size: 11px;
+
+
+
+&#x20;   letter-spacing: 3px;
+
+
+
+}
+
+
+
+.product-content h2 {
+
+
+
+&#x20;   font-family: 'Space Grotesk';
+
+
+
+&#x20;   font-size: clamp(38px, 5vw, 60px);
+
+
+
+&#x20;   line-height: 1.1;
+
+
+
+&#x20;   margin: 25px 0;
+
+
+
+}
+
+
+
+.product-content p {
+
+
+
+&#x20;   color: var(--muted);
+
+
+
+&#x20;   font-size: 14px;
+
+
+
+&#x20;   line-height: 1.9;
+
+
+
+}
+
+
+
+.product-points {
+
+
+
+&#x20;   margin-top: 30px;
+
+
+
+}
+
+
+
+.product-points div {
+
+
+
+&#x20;   padding: 13px 0;
+
+
+
+&#x20;   border-bottom: 1px solid var(--border);
+
+
+
+&#x20;   color: #d5dced;
+
+
+
+&#x20;   font-size: 13px;
+
+
+
+}
+
+
+
+.product-points div::before {
+
+
+
+&#x20;   content: "✓";
+
+
+
+&#x20;   color: var(--cyan);
+
+
+
+&#x20;   margin-right: 12px;
+
+
+
+}
+
+
+
+
+
+/\* PRODUCT VISUAL \*/
+
+
+
+.product-visual {
+
+
+
+&#x20;   min-height: 420px;
+
+
+
+&#x20;   background:
+
+
+
+&#x20;       radial-gradient(
+
+&#x20;           circle at center,
+
+&#x20;           #263d78,
+
+&#x20;           #11192b 70%
+
+&#x20;       );
+
+
+
+&#x20;   border: 1px solid var(--border);
+
+
+
+&#x20;   border-radius: 20px;
+
+
+
+&#x20;   position: relative;
+
+
+
+&#x20;   display: flex;
+
+
+
+&#x20;   align-items: center;
+
+
+
+&#x20;   justify-content: center;
+
+
+
+&#x20;   overflow: hidden;
+
+
+
+}
+
+
+
+.visual-circle {
+
+
+
+&#x20;   width: 220px;
+
+
+
+&#x20;   height: 220px;
+
+
+
+&#x20;   border-radius: 50%;
+
+
+
+&#x20;   border: 1px solid rgba(84,223,255,.5);
+
+
+
+&#x20;   display: flex;
+
+
+
+&#x20;   align-items: center;
+
+
+
+&#x20;   justify-content: center;
+
+
+
+&#x20;   box-shadow: 0 0 100px rgba(84,223,255,.2);
+
+
+
+}
+
+
+
+.visual-circle-inner {
+
+
+
+&#x20;   width: 150px;
+
+
+
+&#x20;   height: 150px;
+
+
+
+&#x20;   border-radius: 50%;
+
+
+
+&#x20;   background: linear-gradient(
+
+&#x20;       135deg,
+
+&#x20;       #6b8cff,
+
+&#x20;       #54dfff
+
+&#x20;   );
+
+
+
+&#x20;   box-shadow: 0 0 80px rgba(84,223,255,.5);
+
+
+
+}
+
+
+
+.orbit {
+
+
+
+&#x20;   position: absolute;
+
+
+
+&#x20;   width: 330px;
+
+
+
+&#x20;   height: 330px;
+
+
+
+&#x20;   border: 1px dashed rgba(255,255,255,.2);
+
+
+
+&#x20;   border-radius: 50%;
+
+
+
+}
+
+
+
+.orbit-dot {
+
+
+
+&#x20;   position: absolute;
+
+
+
+&#x20;   top: 0;
+
+
+
+&#x20;   left: 50%;
+
+
+
+&#x20;   width: 15px;
+
+
+
+&#x20;   height: 15px;
+
+
+
+&#x20;   background: var(--cyan);
+
+
+
+&#x20;   border-radius: 50%;
+
+
+
+&#x20;   box-shadow: 0 0 20px var(--cyan);
+
+
+
+}
+
+
+
+
+
+/\* ===================================
+
+&#x20;  CTA
+
+=================================== \*/
+
+
+
+.cta {
+
+
+
+&#x20;   text-align: center;
+
+
+
+&#x20;   background: linear-gradient(
+
+&#x20;       120deg,
+
+&#x20;       #17284b,
+
+&#x20;       #171a38
+
+&#x20;   );
+
+
+
+&#x20;   border: 1px solid rgba(107,140,255,.3);
+
+
+
+&#x20;   border-radius: 20px;
+
+
+
+&#x20;   padding: 90px 25px;
+
+
+
+&#x20;   position: relative;
+
+
+
+&#x20;   overflow: hidden;
+
+
+
+}
+
+
+
+.cta h2 {
+
+
+
+&#x20;   font-family: 'Space Grotesk';
+
+
+
+&#x20;   font-size: clamp(35px, 5vw, 60px);
+
+
+
+&#x20;   letter-spacing: -2px;
+
+
+
+}
+
+
+
+.cta p {
+
+
+
+&#x20;   color: #aebbd4;
+
+
+
+&#x20;   margin: 20px auto 30px;
+
+
+
+&#x20;   max-width: 500px;
+
+
+
+&#x20;   line-height: 1.8;
+
+
+
+&#x20;   font-size: 14px;
+
+
+
+}
+
+
+
+
+
+/\* ===================================
+
+&#x20;  FOOTER
+
+=================================== \*/
+
+
+
+footer {
+
+
+
+&#x20;   padding: 45px 0;
+
+
+
+&#x20;   border-top: 1px solid var(--border);
+
+
+
+&#x20;   margin-top: 120px;
+
+
+
+&#x20;   color: var(--muted);
+
+
+
+&#x20;   font-size: 12px;
+
+
+
+}
+
+
+
+.footer-inner {
+
+
+
+&#x20;   display: flex;
+
+
+
+&#x20;   justify-content: space-between;
+
+
+
+}
+
+
+
+
+
+/\* ===================================
+
+&#x20;  SCROLL ANIMATION INITIAL STATES
+
+=================================== \*/
+
+
+
+.reveal {
+
+
+
+&#x20;   opacity: 0;
+
+
+
+&#x20;   transform: translateY(50px);
+
+
+
+}
+
+
+
+.reveal-left {
+
+
+
+&#x20;   opacity: 0;
+
+
+
+&#x20;   transform: translateX(-60px);
+
+
+
+}
+
+
+
+.reveal-right {
+
+
+
+&#x20;   opacity: 0;
+
+
+
+&#x20;   transform: translateX(60px);
+
+
+
+}
+
+
+
+
+
+/\* ===================================
+
+&#x20;  RESPONSIVE
+
+=================================== \*/
+
+
+
+@media(max-width: 850px) {
+
+
+
+&#x20;   .nav-links {
+
+&#x20;       display: none;
+
+&#x20;   }
+
+
+
+&#x20;   .dashboard-body {
+
+&#x20;       grid-template-columns: 1fr 1fr;
+
+&#x20;   }
+
+
+
+&#x20;   .stat-card:last-of-type {
+
+&#x20;       display: none;
+
+&#x20;   }
+
+
+
+&#x20;   .chart-card {
+
+&#x20;       grid-column: span 2;
+
+&#x20;   }
+
+
+
+&#x20;   .floating-card {
+
+&#x20;       display: none;
+
+&#x20;   }
+
+
+
+&#x20;   .features-grid {
+
+&#x20;       grid-template-columns: 1fr 1fr;
+
+&#x20;   }
+
+
+
+&#x20;   .product-section {
+
+&#x20;       grid-template-columns: 1fr;
+
+&#x20;       gap: 45px;
+
+&#x20;   }
+
+
+
+&#x20;   .brand-list {
+
+&#x20;       gap: 30px;
+
+&#x20;   }
+
+
+
+}
+
+
+
+@media(max-width: 550px) {
+
+
+
+&#x20;   .hero {
+
+&#x20;       min-height: 720px;
+
+&#x20;   }
+
+
+
+&#x20;   .hero h1 {
+
+&#x20;       letter-spacing: -3px;
+
+&#x20;   }
+
+
+
+&#x20;   .dashboard-wrapper {
+
+&#x20;       margin-top: 65px;
+
+&#x20;   }
+
+
+
+&#x20;   .dashboard {
+
+&#x20;       padding: 12px;
+
+&#x20;   }
+
+
+
+&#x20;   .stat-number {
+
+&#x20;       font-size: 21px;
+
+&#x20;   }
+
+
+
+&#x20;   .features-grid {
+
+&#x20;       grid-template-columns: 1fr;
+
+&#x20;   }
+
+
+
+&#x20;   .hero-buttons {
+
+&#x20;       flex-direction: column;
+
+&#x20;   }
+
+
+
+&#x20;   .brand-list {
+
+&#x20;       font-size: 17px;
+
+&#x20;   }
+
+
+
+&#x20;   .footer-inner {
+
+&#x20;       flex-direction: column;
+
+&#x20;       gap: 15px;
+
+&#x20;   }
+
+
+
+}
+
+
+
+
 </head>
+
 
 <body>
 
-<div id="scene"></div>
 
-<div id="ui">
-    <h2>HOUSE MODEL</h2>
-    <p>Single-storey residential layout · 27 × 24 ft</p>
+<div class="background-glow"></div>
 
-    <button id="roofBtn" class="active">Hide Roof / Show Interior</button>
-    <button id="topBtn">Top View</button>
-    <button id="frontBtn">Front View</button>
-    <button id="resetBtn">Reset Camera</button>
+<div class="grid-background"></div>
 
-    <div id="dimensions">
-        <div>Plot: 27 ft × 24 ft</div>
-        <div>Built-up footprint: 648 sq ft</div>
-        <div>Bedrooms: 2</div>
-        <div>Kitchen: 1</div>
-        <div>Toilet: 1</div>
-        <div>Bathroom: 1</div>
+
+<!-- ===================================
+
+&#x20;    NAVIGATION
+
+
+<header class="container">
+
+<nav class="navbar">
+
+    <a href="#" class="logo">
+        NEXORA<span>.</span>
+    </a>
+
+    <div class="nav-links">
+
+        <a href="#features">Features</a>
+
+        <a href="#product">Product</a>
+
+        <a href="#showcase">Showcase</a>
+
+        <a href="#pricing">Pricing</a>
+
     </div>
-</div>
 
-<div id="loading">Loading 3D house model...</div>
+    <div class="nav-actions">
 
-<div id="hint">
-    Drag: Rotate &nbsp; | &nbsp; Scroll: Zoom &nbsp; | &nbsp; Right-click: Pan
-</div>
+        <a href="#" class="login">Log in</a>
 
-<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+        <a href="#pricing" class="nav-button">
+            Get Started ↗
+        </a>
+
+    </div>
+
+</nav>
+
+</header>
+
+
+
+<!-- ===================================
+
+&#x20;    HERO SECTION
+
+
+<section class="hero container">
+
+    <div class="announcement hero-anim">
+
+        <span>✦</span>
+
+        THE FUTURE OF PRODUCTIVITY IS HERE
+
+        <span>→</span>
+
+    </div>
+
+
+    <h1 class="hero-title">
+
+        Build better.<br>
+
+        <span class="gradient-text">
+            Move faster.
+        </span>
+
+    </h1>
+
+
+    <p class="hero-description hero-anim">
+
+        One powerful platform to manage your workflow,
+        organize your team and transform your ideas
+        into extraordinary results.
+
+    </p>
+
+
+    <div class="hero-buttons hero-anim">
+
+        <a href="#pricing" class="primary-button">
+            Start Building →
+        </a>
+
+        <a href="#product" class="secondary-button">
+            Explore Platform
+        </a>
+
+    </div>
+
+
+
+    <!-- DASHBOARD -->
+
+    <div class="dashboard-wrapper">
+
+        <div class="floating-card floating-one">
+
+            Active Projects
+
+            <div class="float-number">
+                24.8K
+            </div>
+
+        </div>
+
+
+        <div class="dashboard">
+
+            <div class="dashboard-top">
+
+                <div class="dashboard-title">
+                    Performance Overview
+                </div>
+
+                <div class="dashboard-status">
+                    ● All systems operational
+                </div>
+
+            </div>
+
+
+            <div class="dashboard-body">
+
+
+                <div class="stat-card">
+
+                    <div class="stat-label">
+                        Total Revenue
+                    </div>
+
+                    <div class="stat-number counter" data-target="84250">
+                        0
+                    </div>
+
+                    <div class="stat-change">
+                        ↑ 18.4%
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-label">
+                        Active Users
+                    </div>
+
+                    <div class="stat-number counter" data-target="12840">
+                        0
+                    </div>
+
+                    <div class="stat-change">
+                        ↑ 12.8%
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-label">
+                        Conversion Rate
+                    </div>
+
+                    <div class="stat-number counter" data-target="94">
+                        0
+                    </div>
+
+                    <div class="stat-change">
+                        ↑ 8.2%
+                    </div>
+
+                </div>
+
+
+                <div class="chart-card">
+
+                    <div class="chart-title">
+                        Growth Analytics
+                    </div>
+
+                    <div class="chart">
+
+                        <div class="bar" data-height="35"></div>
+
+                        <div class="bar" data-height="55"></div>
+
+                        <div class="bar" data-height="42"></div>
+
+                        <div class="bar" data-height="75"></div>
+
+                        <div class="bar" data-height="60"></div>
+
+                        <div class="bar" data-height="90"></div>
+
+                        <div class="bar" data-height="70"></div>
+
+                        <div class="bar" data-height="100"></div>
+
+                        <div class="bar" data-height="85"></div>
+
+                        <div class="bar" data-height="95"></div>
+
+                        <div class="bar" data-height="100"></div>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+        <div class="floating-card floating-two">
+
+            Monthly Growth
+
+            <div class="float-number">
+                +32.6%
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ===================================
+
+&#x20;    TRUST SECTION
+
+
+<section class="trust-section container">
+
+    <p>POWERING THE NEXT GENERATION OF TEAMS</p>
+
+    <div class="brand-list">
+
+        <span>vertex</span>
+
+        <span>◈ orbit</span>
+
+        <span>◉ pulse</span>
+
+        <span>◈ cloudly</span>
+
+        <span>nimbus</span>
+
+    </div>
+
+</section>
+
+
+
+<!-- ===================================
+
+&#x20;    FEATURES
+
+
+<section class="section-padding container" id="features">
+
+
+    <div class="section-heading reveal">
+
+        <span>POWERFUL FEATURES</span>
+
+        <h2>
+            Everything you need.<br>
+
+            <span class="gradient-text">
+                Nothing you don't.
+            </span>
+
+        </h2>
+
+        <p>
+            A complete ecosystem designed to simplify
+            complex workflows and help your team
+            accomplish more.
+        </p>
+
+    </div>
+
+
+
+    <div class="features-grid">
+
+
+        <div class="feature-card reveal">
+
+            <div class="feature-icon">✦</div>
+
+            <h3>Smart Automation</h3>
+
+            <p>
+                Automate repetitive tasks and focus
+                on the work that actually matters.
+            </p>
+
+        </div>
+
+
+        <div class="feature-card reveal">
+
+            <div class="feature-icon">◈</div>
+
+            <h3>Real-time Analytics</h3>
+
+            <p>
+                Understand your performance with
+                intelligent analytics and insights.
+            </p>
+
+        </div>
+
+
+        <div class="feature-card reveal">
+
+            <div class="feature-icon">⌘</div>
+
+            <h3>Team Collaboration</h3>
+
+            <p>
+                Bring your entire team together
+                with seamless collaboration tools.
+            </p>
+
+        </div>
+
+
+        <div class="feature-card reveal">
+
+            <div class="feature-icon">◎</div>
+
+            <h3>Cloud Integration</h3>
+
+            <p>
+                Access your projects from anywhere
+                with secure cloud synchronization.
+            </p>
+
+        </div>
+
+
+        <div class="feature-card reveal">
+
+            <div class="feature-icon">↗</div>
+
+            <h3>Advanced Reporting</h3>
+
+            <p>
+                Turn complex information into
+                actionable business decisions.
+            </p>
+
+        </div>
+
+
+        <div class="feature-card reveal">
+
+            <div class="feature-icon">⬡</div>
+
+            <h3>Enterprise Security</h3>
+
+            <p>
+                Protect your information with
+                advanced security architecture.
+            </p>
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+
+<!-- ===================================
+
+&#x20;    PRODUCT SHOWCASE
+
+
+<section class="section-padding container" id="product">
+
+    <div class="product-section">
+
+
+        <div class="product-content reveal-left">
+
+            <span>BUILT FOR PERFORMANCE</span>
+
+            <h2>
+
+                Your workflow.<br>
+
+                <span class="gradient-text">
+                    Reimagined.
+                </span>
+
+            </h2>
+
+            <p>
+
+                Experience a smarter way to manage
+                your operations. Everything is
+                connected, beautifully organized
+                and designed to help you move faster.
+
+            </p>
+
+
+            <div class="product-points">
+
+                <div>Intelligent workflow management</div>
+
+                <div>Real-time collaboration</div>
+
+                <div>Advanced performance tracking</div>
+
+                <div>Flexible customization</div>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="product-visual reveal-right">
+
+            <div class="orbit">
+
+                <div class="orbit-dot"></div>
+
+            </div>
+
+            <div class="visual-circle">
+
+                <div class="visual-circle-inner"></div>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+
+<!-- ===================================
+
+&#x20;    CTA
+
+
+<section class="section-padding container" id="pricing">
+
+    <div class="cta reveal" id="showcase">
+
+        <h2>
+
+            Ready to build<br>
+
+            <span class="gradient-text">
+                something amazing?
+            </span>
+
+        </h2>
+
+        <p>
+
+            Take your workflow to the next level.
+            Start creating better experiences today.
+
+        </p>
+
+        <a href="#features" class="primary-button">
+
+            Get Started Today →
+
+        </a>
+
+    </div>
+
+</section>
+
+
+
+<!-- ===================================
+
+&#x20;    FOOTER
+
+
+<footer>
+
+    <div class="container footer-inner">
+
+        <div>
+            © 2026 NEXORA. All rights reserved.
+        </div>
+
+        <div>
+            Designed for the future.
+        </div>
+
+    </div>
+
+</footer>
+
+
+
+<!-- ===================================
+
+&#x20;    GSAP ANIMATION ENGINE
+
 
 <script>
-(function () {
 
-try {
 
-if (!window.THREE || !THREE.OrbitControls) {
-    throw new Error("Three.js could not load. Check your internet connection.");
-}
 
-const container = document.getElementById("scene");
+gsap.registerPlugin(ScrollTrigger);
 
-const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x10141c);
 
-const camera = new THREE.PerspectiveCamera(
-    45,
-    window.innerWidth / window.innerHeight,
-    0.1,
-    1000
-);
 
-camera.position.set(35, 29, 39);
 
-const renderer = new THREE.WebGLRenderer({
-    antialias: true
+
+// ------------------------------------
+
+// INITIALIZATION
+
+// ------------------------------------
+
+
+
+gsap.set(".hero-title", {
+
+
+
+&#x20;   opacity: 0,
+
+
+
+&#x20;   y: 80
+
+
+
 });
 
-renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-renderer.shadowMap.enabled = true;
-renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-renderer.outputEncoding = THREE.sRGBEncoding;
 
-container.appendChild(renderer.domElement);
 
-const controls = new THREE.OrbitControls(camera, renderer.domElement);
-controls.enableDamping = true;
-controls.target.set(13.5, 0, -12);
-controls.maxPolarAngle = Math.PI / 2.05;
+gsap.set(".hero-anim", {
 
-/* LIGHTING */
 
-scene.add(new THREE.HemisphereLight(0xffffff, 0x55515a, 1.2));
 
-const sunlight = new THREE.DirectionalLight(0xffffff, 2);
-sunlight.position.set(20, 35, 25);
-sunlight.castShadow = true;
-sunlight.shadow.mapSize.set(2048,2048);
-scene.add(sunlight);
+&#x20;   opacity: 0,
 
-/* MATERIALS */
 
-const materials = {
-    ground: new THREE.MeshStandardMaterial({color:0x303844}),
-    floor: new THREE.MeshStandardMaterial({color:0xd9cbb5}),
-    wall: new THREE.MeshStandardMaterial({color:0xe9e3d9}),
-    outer: new THREE.MeshStandardMaterial({color:0xc7b9a7}),
-    wood: new THREE.MeshStandardMaterial({color:0x79543b}),
-    darkWood: new THREE.MeshStandardMaterial({color:0x4a3023}),
-    glass: new THREE.MeshStandardMaterial({
-        color:0x75b9cf,
-        transparent:true,
-        opacity:0.55
-    }),
-    white: new THREE.MeshStandardMaterial({color:0xf4f1e9}),
-    bed: new THREE.MeshStandardMaterial({color:0x8497a5}),
-    kitchen: new THREE.MeshStandardMaterial({color:0x777f89}),
-    black: new THREE.MeshStandardMaterial({color:0x292d33}),
-    metal: new THREE.MeshStandardMaterial({color:0xb9c1c9,metalness:.7,roughness:.25}),
-    green: new THREE.MeshStandardMaterial({color:0x567b55}),
-    tile: new THREE.MeshStandardMaterial({color:0xb9c8ca})
-};
 
-/* GROUPS */
+&#x20;   y: 35
 
-const house = new THREE.Group();
-scene.add(house);
 
-const roofGroup = new THREE.Group();
-house.add(roofGroup);
 
-const furniture = new THREE.Group();
-house.add(furniture);
-
-const labels = new THREE.Group();
-house.add(labels);
-
-/* BOX FUNCTION */
-
-function box(parent, x, y, z, w, h, d, material) {
-
-    const mesh = new THREE.Mesh(
-        new THREE.BoxGeometry(w,h,d),
-        material
-    );
-
-    mesh.position.set(x+w/2, y+h/2, z+d/2);
-    mesh.castShadow = true;
-    mesh.receiveShadow = true;
-
-    parent.add(mesh);
-    return mesh;
-}
-
-/* FLOOR AND PLOT */
-
-box(house, -1, -0.3, -25, 29, 0.3, 26, materials.ground);
-
-box(house, 0, 0, -24, 27, 0.25, 24, materials.floor);
-
-/* DIMENSIONS:
-   X = 0 to 27
-   Z = 0 to -24
-   FRONT = Z = 0
-*/
-
-const H = 9;
-const T = 0.35;
-
-/* WALL FUNCTION */
-
-function wallX(x1, x2, z, material=materials.wall, height=H) {
-    box(house, x1, 0.25, z-T/2, x2-x1, height, T, material);
-}
-
-function wallZ(x, z1, z2, material=materials.wall, height=H) {
-    box(house, x-T/2, 0.25, z2, T, height, z1-z2, material);
-}
-
-/* OUTER WALLS */
-
-wallX(0,27,0,materials.outer);
-wallX(0,27,-24,materials.outer);
-wallZ(0,0,-24,materials.outer);
-wallZ(27,0,-24,materials.outer);
-
-/* FRONT DOOR OPENING:
-   Living-room entrance is left open.
-*/
-
-/* FRONT WALL WITH MAIN ENTRANCE */
-
-house.remove(house.children[house.children.length-1]);
-
-wallX(0,4.5,0,materials.outer);
-wallX(8,27,0,materials.outer);
-
-/* MAIN INTERNAL PARTITIONS */
-
-/* Living room / Bedroom 2 */
-wallX(0,5,-10);
-wallX(8,12,-10);
-
-/* Living room / Bedroom 1 */
-wallZ(15,0,-4);
-wallZ(15,-7,-10);
-
-/* Bedroom 2 / rear service area */
-wallZ(12,-10,-11);
-wallZ(12,-14,-24);
-
-/* Kitchen / passage */
-wallX(12,21,-18);
-
-/* Kitchen / toilet */
-wallZ(21,-10,-18);
-
-/* Toilet / bathroom */
-wallX(21,27,-17);
-
-/* REAR WINDOWS */
-
-function windowX(x,z,width) {
-    const w = box(house,x,3,z-T/2,width,2,T,materials.glass);
-    return w;
-}
-
-windowX(2,-24,4);
-windowX(17,-24,4);
-
-/* SIDE WINDOWS */
-
-function windowZ(x,z,width) {
-    box(house,x-T/2,3,z-width/2,T,2,width,materials.glass);
-}
-
-windowZ(0,-5,3);
-windowZ(27,-5,3);
-windowZ(0,-18,3);
-
-/* DOORS */
-
-function door(x,z,width,depth=0.15) {
-
-    const d = box(
-        house,
-        x,
-        0.25,
-        z,
-        width,
-        7,
-        depth,
-        materials.wood
-    );
-
-    return d;
-}
-
-/* MAIN DOOR */
-
-door(4.5,0,3);
-
-/* BEDROOM DOORS */
-door(5,-10,3);
-door(15,-4.5,3);
-
-/* BEDROOM 2 DOOR */
-door(12,-11,3,0.15);
-
-/* LABELS */
-
-function makeLabel(text,x,z) {
-
-    const canvas = document.createElement("canvas");
-    canvas.width = 512;
-    canvas.height = 128;
-
-    const ctx = canvas.getContext("2d");
-
-    ctx.fillStyle = "rgba(20,25,35,0.85)";
-    ctx.fillRect(0,0,512,128);
-
-    ctx.font = "bold 43px Arial";
-    ctx.fillStyle = "white";
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-    ctx.fillText(text,256,64);
-
-    const texture = new THREE.CanvasTexture(canvas);
-
-    const sprite = new THREE.Sprite(
-        new THREE.SpriteMaterial({
-            map:texture,
-            transparent:true
-        })
-    );
-
-    sprite.position.set(x,10,z);
-    sprite.scale.set(7,1.75,1);
-
-    labels.add(sprite);
-}
-
-makeLabel("LIVING ROOM",7.5,-5);
-makeLabel("BEDROOM 1",21,-5);
-makeLabel("BEDROOM 2",6,-17);
-makeLabel("KITCHEN",16.5,-14);
-makeLabel("TOILET",24,-13.5);
-makeLabel("BATHROOM",24,-21);
-
-/* BED FUNCTION */
-
-function makeBed(x,z,w=6,d=7) {
-
-    box(furniture,x,0.4,z,w,0.8,d,materials.wood);
-
-    box(furniture,x+0.25,1.2,z+0.25,w-0.5,0.35,d-0.5,materials.bed);
-
-    box(furniture,x+0.5,1.6,z+0.5,w/2-0.5,0.35,1.4,materials.white);
-    box(furniture,x+w/2,1.6,z+0.5,w/2-0.5,0.35,1.4,materials.white);
-}
-
-/* BEDROOM FURNITURE */
-
-makeBed(3,-20,6,7);
-makeBed(18,-6.5,6,7);
-
-/* WARDROBES */
-
-box(furniture,0.5,0.3,-13,2.5,6,4,materials.wood);
-box(furniture,24,0.3,-13,2.5,6,3,materials.wood);
-
-/* LIVING ROOM SOFA */
-
-box(furniture,2,0.4,-3,7,1.5,2,materials.bed);
-box(furniture,2,0.4,-7,2,1.5,4,materials.bed);
-
-/* CENTER TABLE */
-
-box(furniture,8,0.5,-5,4,0.5,2.5,materials.wood);
-
-/* TV UNIT */
-
-box(furniture,10,0.3,-0.8,4,2.5,0.6,materials.darkWood);
-
-/* KITCHEN CABINETS */
-
-box(furniture,12.5,0.3,-18.5,8,3,2,materials.kitchen);
-box(furniture,12.5,3.5,-18.5,8,2,2,materials.wood);
-
-/* KITCHEN COUNTER */
-
-box(furniture,12.5,3.3,-18.5,8,0.35,2,materials.white);
-
-/* SINK */
-
-box(furniture,14,3.5,-18,2,0.12,1,materials.metal);
-
-/* COOKTOP */
-
-box(furniture,18,3.55,-18,2,0.15,1,materials.black);
-
-/* TOILET */
-
-box(furniture,22,0.3,-13,2,1.2,2,materials.white);
-
-const toiletSeat = new THREE.Mesh(
-    new THREE.TorusGeometry(.55,.12,10,32),
-    materials.white
-);
-
-toiletSeat.rotation.x=Math.PI/2;
-toiletSeat.position.set(24,1.1,-13);
-furniture.add(toiletSeat);
-
-/* BATHROOM */
-
-box(furniture,22,0.3,-22,3,0.3,3,materials.tile);
-
-/* SHOWER */
-
-box(furniture,25,0.3,-22,0.15,6,0.15,materials.metal);
-
-/* WASH BASIN */
-
-box(furniture,22,2,-20,2,0.6,1,materials.white);
-
-/* CEILING / ROOF */
-
-box(roofGroup,0,9.5,-24,27,0.35,24,materials.outer);
-
-/* ROOF EDGE */
-
-const roofEdges = [
-    [0,-24,27,.3],
-    [0,0,27,.3],
-    [0,0,.3,24],
-    [27,0,.3,24]
-];
-
-roofEdges.forEach(v => {
-    box(roofGroup,v[0],9.7,v[1],v[2],0.35,v[3],materials.darkWood);
 });
 
-/* EXTERIOR ENTRY STEPS */
 
-box(house,4,0.1,0.5,4,0.25,1,materials.outer);
-box(house,4,0.1,1.5,4,0.25,1,materials.outer);
 
-/* OUTSIDE ROAD / FRONT */
+gsap.set(".dashboard-wrapper", {
 
-box(house,-5,-0.4,2,37,0.15,3,materials.black);
 
-/* CAMERA PRESETS */
 
-function setCamera(x,y,z,targetX=13.5,targetY=0,targetZ=-12) {
+&#x20;   opacity: 0,
 
-    camera.position.set(x,y,z);
-    controls.target.set(targetX,targetY,targetZ);
-    controls.update();
+
+
+&#x20;   y: 100,
+
+
+
+&#x20;   rotateX: 15
+
+
+
+});
+
+
+
+
+
+// ------------------------------------
+
+// HERO INTRO TIMELINE
+
+// ------------------------------------
+
+
+
+const intro = gsap.timeline({
+
+
+
+&#x20;   defaults: {
+
+
+
+&#x20;       ease: "power3.out"
+
+
+
+&#x20;   }
+
+
+
+});
+
+
+
+
+
+intro.to(".navbar", {
+
+
+
+&#x20;   opacity: 1,
+
+
+
+&#x20;   y: 0,
+
+
+
+&#x20;   duration: 1
+
+
+
+});
+
+
+
+
+
+intro.to(".hero-title", {
+
+
+
+&#x20;   opacity: 1,
+
+
+
+&#x20;   y: 0,
+
+
+
+&#x20;   duration: 1.2
+
+
+
+}, "-=0.5");
+
+
+
+
+
+intro.to(".hero-anim", {
+
+
+
+&#x20;   opacity: 1,
+
+
+
+&#x20;   y: 0,
+
+
+
+&#x20;   duration: 0.9,
+
+
+
+&#x20;   stagger: 0.2
+
+
+
+}, "-=0.8");
+
+
+
+
+
+intro.to(".dashboard-wrapper", {
+
+
+
+&#x20;   opacity: 1,
+
+
+
+&#x20;   y: 0,
+
+
+
+&#x20;   rotateX: 0,
+
+
+
+&#x20;   duration: 1.4
+
+
+
+}, "-=0.5");
+
+
+
+
+
+
+
+// ------------------------------------
+
+// FLOATING DASHBOARD
+
+// ------------------------------------
+
+
+
+gsap.to(".floating-one", {
+
+
+
+&#x20;   y: -18,
+
+
+
+&#x20;   duration: 2.5,
+
+
+
+&#x20;   repeat: -1,
+
+
+
+&#x20;   yoyo: true,
+
+
+
+&#x20;   ease: "sine.inOut"
+
+
+
+});
+
+
+
+
+
+gsap.to(".floating-two", {
+
+
+
+&#x20;   y: 18,
+
+
+
+&#x20;   duration: 3,
+
+
+
+&#x20;   repeat: -1,
+
+
+
+&#x20;   yoyo: true,
+
+
+
+&#x20;   ease: "sine.inOut"
+
+
+
+});
+
+
+
+
+
+
+
+// ------------------------------------
+
+// DASHBOARD CHART
+
+// ------------------------------------
+
+
+
+gsap.to(".bar", {
+
+
+
+&#x20;   height: (i, el) => {
+
+
+
+&#x20;       return el.dataset.height + "%";
+
+
+
+&#x20;   },
+
+
+
+&#x20;   duration: 1.5,
+
+
+
+&#x20;   stagger: 0.1,
+
+
+
+&#x20;   ease: "power3.out",
+
+
+
+&#x20;   delay: 1.8
+
+
+
+});
+
+
+
+
+
+
+
+// ------------------------------------
+
+// COUNTERS
+
+// ------------------------------------
+
+
+
+document.querySelectorAll(".counter").forEach(counter => {
+
+
+
+&#x20;   const target = Number(counter.dataset.target);
+
+
+
+&#x20;   const obj = { value: 0 };
+
+
+
+&#x20;   gsap.to(obj, {
+
+
+
+&#x20;       value: target,
+
+
+
+&#x20;       duration: 2,
+
+
+
+&#x20;       delay: 1.8,
+
+
+
+&#x20;       ease: "power2.out",
+
+
+
+&#x20;       onUpdate: () => {
+
+
+
+&#x20;           counter.textContent =
+
+
+
+&#x20;               Math.floor(obj.value).toLocaleString("en-US");
+
+
+
+&#x20;       }
+
+
+
+&#x20;   });
+
+
+
+});
+
+
+
+
+
+
+
+// ------------------------------------
+
+// REVEAL ANIMATIONS
+
+// ------------------------------------
+
+
+
+gsap.utils.toArray(".reveal").forEach(element => {
+
+
+
+&#x20;   gsap.to(element, {
+
+
+
+&#x20;       opacity: 1,
+
+
+
+&#x20;       y: 0,
+
+
+
+&#x20;       duration: 1,
+
+
+
+&#x20;       ease: "power3.out",
+
+
+
+&#x20;       scrollTrigger: {
+
+
+
+&#x20;           trigger: element,
+
+
+
+&#x20;           start: "top 85%",
+
+
+
+&#x20;           toggleActions: "play none none reverse"
+
+
+
+&#x20;       }
+
+
+
+&#x20;   });
+
+
+
+});
+
+
+
+
+
+
+
+gsap.utils.toArray(".reveal-left").forEach(element => {
+
+
+
+&#x20;   gsap.to(element, {
+
+
+
+&#x20;       opacity: 1,
+
+
+
+&#x20;       x: 0,
+
+
+
+&#x20;       duration: 1.2,
+
+
+
+&#x20;       ease: "power3.out",
+
+
+
+&#x20;       scrollTrigger: {
+
+
+
+&#x20;           trigger: element,
+
+
+
+&#x20;           start: "top 80%"
+
+
+
+&#x20;       }
+
+
+
+&#x20;   });
+
+
+
+});
+
+
+
+
+
+
+
+gsap.utils.toArray(".reveal-right").forEach(element => {
+
+
+
+&#x20;   gsap.to(element, {
+
+
+
+&#x20;       opacity: 1,
+
+
+
+&#x20;       x: 0,
+
+
+
+&#x20;       duration: 1.2,
+
+
+
+&#x20;       ease: "power3.out",
+
+
+
+&#x20;       scrollTrigger: {
+
+
+
+&#x20;           trigger: element,
+
+
+
+&#x20;           start: "top 80%"
+
+
+
+&#x20;       }
+
+
+
+&#x20;   });
+
+
+
+});
+
+
+
+
+
+
+
+// ------------------------------------
+
+// FEATURE CARD STAGGER
+
+// ------------------------------------
+
+
+
+gsap.from(".feature-card", {
+
+
+
+&#x20;   y: 70,
+
+
+
+&#x20;   opacity: 0,
+
+
+
+&#x20;   duration: 0.8,
+
+
+
+&#x20;   stagger: 0.15,
+
+
+
+&#x20;   ease: "power3.out",
+
+
+
+&#x20;   scrollTrigger: {
+
+
+
+&#x20;       trigger: ".features-grid",
+
+
+
+&#x20;       start: "top 80%"
+
+
+
+&#x20;   }
+
+
+
+});
+
+
+
+
+
+
+
+// ------------------------------------
+
+// ORBIT ANIMATION
+
+// ------------------------------------
+
+
+
+gsap.to(".orbit", {
+
+
+
+&#x20;   rotation: 360,
+
+
+
+&#x20;   duration: 18,
+
+
+
+&#x20;   repeat: -1,
+
+
+
+&#x20;   ease: "none"
+
+
+
+});
+
+
+
+
+
+
+
+// ------------------------------------
+
+// PRODUCT PARALLAX
+
+// ------------------------------------
+
+
+
+gsap.to(".visual-circle-inner", {
+
+
+
+&#x20;   scale: 1.2,
+
+
+
+&#x20;   repeat: -1,
+
+
+
+&#x20;   yoyo: true,
+
+
+
+&#x20;   duration: 2.5,
+
+
+
+&#x20;   ease: "sine.inOut"
+
+
+
+});
+
+
+
+
+
+
+
+// ------------------------------------
+
+// BUTTON HOVER
+
+// ------------------------------------
+
+
+
+document.querySelectorAll(".primary-button, .nav-button").forEach(button => {
+
+
+
+&#x20;   button.addEventListener("mouseenter", () => {
+
+
+
+&#x20;       gsap.to(button, {
+
+
+
+&#x20;           scale: 1.05,
+
+
+
+&#x20;           duration: 0.25,
+
+
+
+&#x20;           ease: "power2.out"
+
+
+
+&#x20;       });
+
+
+
+&#x20;   });
+
+
+
+
+
+&#x20;   button.addEventListener("mouseleave", () => {
+
+
+
+&#x20;       gsap.to(button, {
+
+
+
+&#x20;           scale: 1,
+
+
+
+&#x20;           duration: 0.25
+
+
+
+&#x20;       });
+
+
+
+&#x20;   });
+
+
+
+});
+
+
+
+
+
+
+
+// ------------------------------------
+
+// REDUCED MOTION SUPPORT
+
+// ------------------------------------
+
+
+
+if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+
+
+
+&#x20;   gsap.globalTimeline.timeScale(3);
+
+
+
 }
 
-/* BUTTONS */
 
-let roofVisible = true;
 
-document.getElementById("roofBtn").addEventListener("click",function() {
-
-    roofVisible = !roofVisible;
-    roofGroup.visible = roofVisible;
-
-    this.textContent = roofVisible
-        ? "Hide Roof / Show Interior"
-        : "Show Roof";
-
-    this.classList.toggle("active",roofVisible);
-});
-
-document.getElementById("topBtn").addEventListener("click",function() {
-    setCamera(13.5,45,-12);
-});
-
-document.getElementById("frontBtn").addEventListener("click",function() {
-    setCamera(13.5,18,32,13.5,2,-12);
-});
-
-document.getElementById("resetBtn").addEventListener("click",function() {
-    setCamera(35,29,39);
-});
-
-/* RESIZE */
-
-window.addEventListener("resize",function() {
-
-    camera.aspect = window.innerWidth/window.innerHeight;
-    camera.updateProjectionMatrix();
-
-    renderer.setSize(window.innerWidth,window.innerHeight);
-});
-
-/* RENDER */
-
-function animate() {
-    requestAnimationFrame(animate);
-    controls.update();
-    renderer.render(scene,camera);
-}
-
-animate();
-
-document.getElementById("loading").classList.add("hidden");
-
-} catch(error) {
-
-    document.getElementById("loading").innerHTML =
-        "<div><h2>3D Model Error</h2><p style='margin-top:12px'>" +
-        error.message +
-        "</p><p style='margin-top:12px'>Check your internet connection and browser console.</p></div>";
-
-    console.error(error);
-}
-
-})();
-</script>
 
 </body>
+
 </html>
