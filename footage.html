@@ -5,27 +5,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>NEXORA — SaaS Experience</title>
-
-<!-- GOOGLE FONTS -->
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-<!-- GSAP -->
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js"></script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollTrigger.min.js"></script>
-
+<title>3D Kitchen Visualization</title>
 
 <style>
-
-/* ===================================
-   GLOBAL
-=================================== */
 
 * {
     margin: 0;
@@ -33,1177 +15,142 @@
     box-sizing: border-box;
 }
 
-:root {
-
-    --background: #080b14;
-
-    --surface: #101522;
-
-    --surface-light: #171e30;
-
-    --border: rgba(255,255,255,0.09);
-
-    --white: #f5f7ff;
-
-    --muted: #929bb0;
-
-    --blue: #6b8cff;
-
-    --cyan: #54dfff;
-
-    --purple: #a17cff;
-
-}
-
-html {
-    scroll-behavior: auto;
-}
-
 body {
-
-    background: var(--background);
-
-    color: var(--white);
-
-    font-family: 'DM Sans', sans-serif;
-
-    overflow-x: hidden;
-
+    overflow: hidden;
+    background: #151719;
+    font-family: Arial, sans-serif;
 }
 
-a {
-    text-decoration: none;
-    color: inherit;
+#kitchen-container {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
 }
 
-button {
-    font-family: inherit;
-    cursor: pointer;
+canvas {
+    display: block;
 }
 
-.container {
+/* TOP BAR */
 
-    width: min(1200px, 90%);
-
-    margin: auto;
-
-}
-
-.section-padding {
-
-    padding: 120px 0;
-
-}
-
-
-/* ===================================
-   BACKGROUND
-=================================== */
-
-.background-glow {
-
-    position: fixed;
-
-    width: 600px;
-    height: 600px;
-
-    border-radius: 50%;
-
-    background: #365bff;
-
-    filter: blur(180px);
-
-    opacity: 0.12;
-
-    pointer-events: none;
-
-    z-index: -1;
-
-    top: -200px;
-    left: 30%;
-
-}
-
-.grid-background {
-
-    position: fixed;
-
-    inset: 0;
-
-    pointer-events: none;
-
-    z-index: -1;
-
-    background-image:
-
-        linear-gradient(
-            rgba(255,255,255,0.025) 1px,
-            transparent 1px
-        ),
-
-        linear-gradient(
-            90deg,
-            rgba(255,255,255,0.025) 1px,
-            transparent 1px
-        );
-
-    background-size: 70px 70px;
-
-    mask-image:
-        linear-gradient(
-            to bottom,
-            black,
-            transparent 85%
-        );
-
-}
-
-
-/* ===================================
-   NAVIGATION
-=================================== */
-
-.navbar {
-
-    height: 85px;
+.topbar {
+    position: absolute;
+    top: 25px;
+    left: 30px;
+    right: 30px;
 
     display: flex;
-
+    justify-content: space-between;
     align-items: center;
 
-    justify-content: space-between;
-
-    border-bottom: 1px solid var(--border);
-
-    position: relative;
-
-    z-index: 100;
-
+    z-index: 10;
+    pointer-events: none;
 }
 
-.logo {
-
-    font-family: 'Space Grotesk', sans-serif;
-
-    font-size: 25px;
-
-    font-weight: 700;
-
-    letter-spacing: -1px;
-
+.brand {
+    color: white;
+    font-size: 13px;
+    letter-spacing: 3px;
+    font-weight: bold;
 }
 
-.logo span {
-
-    color: var(--blue);
-
+.view-label {
+    color: #c6c6c6;
+    font-size: 11px;
+    letter-spacing: 2px;
 }
 
-.nav-links {
+/* CONTROL PANEL */
+
+.controls {
+    position: absolute;
+    bottom: 30px;
+    right: 30px;
 
     display: flex;
+    gap: 10px;
 
-    gap: 35px;
-
+    z-index: 10;
 }
 
-.nav-links a {
+.controls button {
+    padding: 13px 20px;
 
-    color: var(--muted);
+    border: 1px solid rgba(255,255,255,0.2);
 
-    font-size: 13px;
-
-    transition: color .3s;
-
-}
-
-.nav-links a:hover {
+    background: rgba(20,25,30,0.85);
 
     color: white;
 
-}
-
-.nav-actions {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 20px;
-
-}
-
-.login {
-
-    color: var(--muted);
-
-    font-size: 13px;
-
-}
-
-.nav-button {
-
-    background: white;
-
-    color: #080b14;
-
-    padding: 12px 20px;
-
-    border-radius: 7px;
-
-    font-size: 13px;
-
-    font-weight: 700;
-
-    transition: .3s;
-
-}
-
-.nav-button:hover {
-
-    background: var(--cyan);
-
-    transform: translateY(-3px);
-
-}
-
-
-/* ===================================
-   HERO
-=================================== */
-
-.hero {
-
-    min-height: 850px;
-
-    display: flex;
-
-    flex-direction: column;
-
-    align-items: center;
-
-    justify-content: center;
-
-    text-align: center;
-
-    padding: 90px 0 0;
-
-    position: relative;
-
-}
-
-.announcement {
-
-    border: 1px solid rgba(107,140,255,.35);
-
-    background: rgba(107,140,255,.08);
-
-    padding: 9px 17px;
-
-    border-radius: 30px;
-
-    color: #b9c8ff;
+    cursor: pointer;
 
     font-size: 11px;
-
     letter-spacing: 1px;
 
-    margin-bottom: 30px;
-
+    transition: 0.3s;
 }
 
-.announcement span {
-
-    color: var(--cyan);
-
-    margin-right: 8px;
-
+.controls button:hover {
+    background: #ffffff;
+    color: #111;
 }
 
-.hero h1 {
+/* INSTRUCTIONS */
 
-    font-family: 'Space Grotesk', sans-serif;
+.instructions {
+    position: absolute;
+    bottom: 35px;
+    left: 30px;
 
-    font-size: clamp(55px, 8vw, 100px);
+    color: rgba(255,255,255,0.6);
 
-    line-height: 1.04;
+    font-size: 11px;
+    letter-spacing: 1px;
 
-    letter-spacing: -6px;
-
-    max-width: 950px;
-
+    pointer-events: none;
 }
 
-.gradient-text {
+/* LOADING */
 
-    background: linear-gradient(
-        100deg,
-        #70a2ff,
-        #b49aff,
-        #54dfff
-    );
-
-    background-clip: text;
-
-    -webkit-background-clip: text;
-
-    color: transparent;
-
-}
-
-.hero-description {
-
-    max-width: 590px;
-
-    margin-top: 28px;
-
-    color: var(--muted);
-
-    font-size: 16px;
-
-    line-height: 1.8;
-
-}
-
-.hero-buttons {
+.loading {
+    position: absolute;
+    inset: 0;
 
     display: flex;
-
-    gap: 15px;
-
-    margin-top: 35px;
-
-}
-
-.primary-button {
-
-    background: #ffffff;
-
-    color: #090d19;
-
-    padding: 16px 26px;
-
-    border-radius: 7px;
-
-    font-weight: 700;
-
-    font-size: 13px;
-
-    transition: .3s;
-
-}
-
-.primary-button:hover {
-
-    background: var(--cyan);
-
-    transform: translateY(-4px);
-
-    box-shadow: 0 10px 35px rgba(84,223,255,.2);
-
-}
-
-.secondary-button {
-
-    border: 1px solid var(--border);
-
-    padding: 16px 26px;
-
-    border-radius: 7px;
-
-    font-size: 13px;
+    justify-content: center;
+    align-items: center;
 
     color: white;
+    background: #151719;
 
-    transition: .3s;
-
-}
-
-.secondary-button:hover {
-
-    border-color: var(--blue);
-
-    background: rgba(107,140,255,.1);
-
-}
-
-
-/* ===================================
-   HERO DASHBOARD
-=================================== */
-
-.dashboard-wrapper {
-
-    width: min(1000px, 95%);
-
-    margin: 100px auto 0;
-
-    position: relative;
-
-    perspective: 1200px;
-
-}
-
-.dashboard {
-
-    background: #101625;
-
-    border: 1px solid rgba(255,255,255,.13);
-
-    border-radius: 16px;
-
-    padding: 20px;
-
-    box-shadow:
-
-        0 40px 100px rgba(0,0,0,.5),
-
-        0 0 80px rgba(77,110,255,.12);
-
-    transform: rotateX(5deg);
-
-    position: relative;
-
-    overflow: hidden;
-
-}
-
-.dashboard-top {
-
-    display: flex;
-
-    justify-content: space-between;
-
-    align-items: center;
-
-    padding-bottom: 20px;
-
-    border-bottom: 1px solid var(--border);
-
-}
-
-.dashboard-title {
-
-    font-size: 14px;
-
-    font-weight: 700;
-
-}
-
-.dashboard-status {
-
-    color: #70e8bd;
-
-    font-size: 11px;
-
-}
-
-.dashboard-body {
-
-    display: grid;
-
-    grid-template-columns: 1fr 1fr 1fr;
-
-    gap: 15px;
-
-    margin-top: 20px;
-
-}
-
-.stat-card {
-
-    background: #171f30;
-
-    padding: 20px;
-
-    border: 1px solid var(--border);
-
-    border-radius: 9px;
-
-}
-
-.stat-label {
-
-    font-size: 11px;
-
-    color: var(--muted);
-
-}
-
-.stat-number {
-
-    font-family: 'Space Grotesk';
-
-    font-size: 30px;
-
-    margin-top: 12px;
-
-}
-
-.stat-change {
-
-    color: #6be3b2;
-
-    font-size: 11px;
-
-    margin-top: 5px;
-
-}
-
-.chart-card {
-
-    grid-column: span 3;
-
-    height: 190px;
-
-    background: #171f30;
-
-    border-radius: 9px;
-
-    border: 1px solid var(--border);
-
-    padding: 20px;
-
-}
-
-.chart-title {
-
-    font-size: 12px;
-
-    color: var(--muted);
-
-    margin-bottom: 20px;
-
-}
-
-.chart {
-
-    height: 115px;
-
-    display: flex;
-
-    align-items: end;
-
-    gap: 12px;
-
-}
-
-.bar {
-
-    flex: 1;
-
-    border-radius: 4px 4px 0 0;
-
-    background: linear-gradient(
-        to top,
-        #506aff,
-        #54dfff
-    );
-
-    height: 0%;
-
-    opacity: .85;
-
-}
-
-
-/* FLOATING CARDS */
-
-.floating-card {
-
-    position: absolute;
-
-    padding: 17px 22px;
-
-    background: rgba(25,35,57,.95);
-
-    border: 1px solid rgba(255,255,255,.13);
-
-    backdrop-filter: blur(20px);
-
-    border-radius: 10px;
-
-    box-shadow: 0 15px 50px rgba(0,0,0,.3);
-
-    font-size: 12px;
-
-}
-
-.floating-one {
-
-    top: 18%;
-
-    left: -90px;
-
-}
-
-.floating-two {
-
-    bottom: 18%;
-
-    right: -80px;
-
-}
-
-.float-number {
-
-    font-size: 22px;
-
-    font-weight: 700;
-
-    margin-top: 8px;
-
-    color: var(--cyan);
-
-}
-
-
-/* ===================================
-   TRUST SECTION
-=================================== */
-
-.trust-section {
-
-    padding: 110px 0;
-
-    text-align: center;
-
-}
-
-.trust-section p {
-
-    color: var(--muted);
-
-    font-size: 12px;
-
-    letter-spacing: 2px;
-
-    margin-bottom: 40px;
-
-}
-
-.brand-list {
-
-    display: flex;
-
-    justify-content: center;
-
-    flex-wrap: wrap;
-
-    gap: 70px;
-
-    color: #647087;
-
-    font-family: 'Space Grotesk';
-
-    font-size: 23px;
-
-    font-weight: 700;
-
-}
-
-
-/* ===================================
-   SECTION HEADINGS
-=================================== */
-
-.section-heading {
-
-    text-align: center;
-
-    margin-bottom: 65px;
-
-}
-
-.section-heading span {
-
-    color: var(--cyan);
-
-    font-size: 11px;
+    z-index: 20;
 
     letter-spacing: 3px;
-
-}
-
-.section-heading h2 {
-
-    font-family: 'Space Grotesk';
-
-    font-size: clamp(35px, 5vw, 58px);
-
-    margin-top: 20px;
-
-    letter-spacing: -2px;
-
-}
-
-.section-heading p {
-
-    color: var(--muted);
-
-    max-width: 550px;
-
-    margin: 20px auto 0;
-
-    line-height: 1.8;
-
-    font-size: 14px;
-
-}
-
-
-/* ===================================
-   FEATURES
-=================================== */
-
-.features-grid {
-
-    display: grid;
-
-    grid-template-columns: repeat(3, 1fr);
-
-    gap: 18px;
-
-}
-
-.feature-card {
-
-    background: linear-gradient(
-        145deg,
-        #151d30,
-        #0e1422
-    );
-
-    border: 1px solid var(--border);
-
-    border-radius: 13px;
-
-    padding: 32px;
-
-    min-height: 250px;
-
-    transition: .4s;
-
-}
-
-.feature-card:hover {
-
-    transform: translateY(-9px);
-
-    border-color: rgba(84,223,255,.5);
-
-    background: #18243b;
-
-}
-
-.feature-icon {
-
-    width: 45px;
-
-    height: 45px;
-
-    border-radius: 12px;
-
-    background: rgba(107,140,255,.15);
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    color: var(--cyan);
-
-    font-size: 22px;
-
-    margin-bottom: 30px;
-
-}
-
-.feature-card h3 {
-
-    font-size: 19px;
-
-    margin-bottom: 14px;
-
-}
-
-.feature-card p {
-
-    font-size: 13px;
-
-    color: var(--muted);
-
-    line-height: 1.8;
-
-}
-
-
-/* ===================================
-   PRODUCT SHOWCASE
-=================================== */
-
-.product-section {
-
-    display: grid;
-
-    grid-template-columns: 1fr 1fr;
-
-    align-items: center;
-
-    gap: 90px;
-
-}
-
-.product-content span {
-
-    color: var(--cyan);
-
-    font-size: 11px;
-
-    letter-spacing: 3px;
-
-}
-
-.product-content h2 {
-
-    font-family: 'Space Grotesk';
-
-    font-size: clamp(38px, 5vw, 60px);
-
-    line-height: 1.1;
-
-    margin: 25px 0;
-
-}
-
-.product-content p {
-
-    color: var(--muted);
-
-    font-size: 14px;
-
-    line-height: 1.9;
-
-}
-
-.product-points {
-
-    margin-top: 30px;
-
-}
-
-.product-points div {
-
-    padding: 13px 0;
-
-    border-bottom: 1px solid var(--border);
-
-    color: #d5dced;
-
-    font-size: 13px;
-
-}
-
-.product-points div::before {
-
-    content: "✓";
-
-    color: var(--cyan);
-
-    margin-right: 12px;
-
-}
-
-
-/* PRODUCT VISUAL */
-
-.product-visual {
-
-    min-height: 420px;
-
-    background:
-
-        radial-gradient(
-            circle at center,
-            #263d78,
-            #11192b 70%
-        );
-
-    border: 1px solid var(--border);
-
-    border-radius: 20px;
-
-    position: relative;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    overflow: hidden;
-
-}
-
-.visual-circle {
-
-    width: 220px;
-
-    height: 220px;
-
-    border-radius: 50%;
-
-    border: 1px solid rgba(84,223,255,.5);
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    box-shadow: 0 0 100px rgba(84,223,255,.2);
-
-}
-
-.visual-circle-inner {
-
-    width: 150px;
-
-    height: 150px;
-
-    border-radius: 50%;
-
-    background: linear-gradient(
-        135deg,
-        #6b8cff,
-        #54dfff
-    );
-
-    box-shadow: 0 0 80px rgba(84,223,255,.5);
-
-}
-
-.orbit {
-
-    position: absolute;
-
-    width: 330px;
-
-    height: 330px;
-
-    border: 1px dashed rgba(255,255,255,.2);
-
-    border-radius: 50%;
-
-}
-
-.orbit-dot {
-
-    position: absolute;
-
-    top: 0;
-
-    left: 50%;
-
-    width: 15px;
-
-    height: 15px;
-
-    background: var(--cyan);
-
-    border-radius: 50%;
-
-    box-shadow: 0 0 20px var(--cyan);
-
-}
-
-
-/* ===================================
-   CTA
-=================================== */
-
-.cta {
-
-    text-align: center;
-
-    background: linear-gradient(
-        120deg,
-        #17284b,
-        #171a38
-    );
-
-    border: 1px solid rgba(107,140,255,.3);
-
-    border-radius: 20px;
-
-    padding: 90px 25px;
-
-    position: relative;
-
-    overflow: hidden;
-
-}
-
-.cta h2 {
-
-    font-family: 'Space Grotesk';
-
-    font-size: clamp(35px, 5vw, 60px);
-
-    letter-spacing: -2px;
-
-}
-
-.cta p {
-
-    color: #aebbd4;
-
-    margin: 20px auto 30px;
-
-    max-width: 500px;
-
-    line-height: 1.8;
-
-    font-size: 14px;
-
-}
-
-
-/* ===================================
-   FOOTER
-=================================== */
-
-footer {
-
-    padding: 45px 0;
-
-    border-top: 1px solid var(--border);
-
-    margin-top: 120px;
-
-    color: var(--muted);
-
     font-size: 12px;
 
+    transition: opacity 0.5s;
 }
 
-.footer-inner {
-
-    display: flex;
-
-    justify-content: space-between;
-
-}
-
-
-/* ===================================
-   SCROLL ANIMATION INITIAL STATES
-=================================== */
-
-.reveal {
-
+.loading.hidden {
     opacity: 0;
-
-    transform: translateY(50px);
-
+    pointer-events: none;
 }
 
-.reveal-left {
+@media(max-width:600px) {
 
-    opacity: 0;
-
-    transform: translateX(-60px);
-
-}
-
-.reveal-right {
-
-    opacity: 0;
-
-    transform: translateX(60px);
-
-}
-
-
-/* ===================================
-   RESPONSIVE
-=================================== */
-
-@media(max-width: 850px) {
-
-    .nav-links {
-        display: none;
+    .topbar {
+        left: 15px;
+        right: 15px;
     }
 
-    .dashboard-body {
-        grid-template-columns: 1fr 1fr;
+    .controls {
+        right: 15px;
+        bottom: 15px;
     }
 
-    .stat-card:last-of-type {
-        display: none;
-    }
-
-    .chart-card {
-        grid-column: span 2;
-    }
-
-    .floating-card {
-        display: none;
-    }
-
-    .features-grid {
-        grid-template-columns: 1fr 1fr;
-    }
-
-    .product-section {
-        grid-template-columns: 1fr;
-        gap: 45px;
-    }
-
-    .brand-list {
-        gap: 30px;
-    }
-
-}
-
-@media(max-width: 550px) {
-
-    .hero {
-        min-height: 720px;
-    }
-
-    .hero h1 {
-        letter-spacing: -3px;
-    }
-
-    .dashboard-wrapper {
-        margin-top: 65px;
-    }
-
-    .dashboard {
-        padding: 12px;
-    }
-
-    .stat-number {
-        font-size: 21px;
-    }
-
-    .features-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .hero-buttons {
-        flex-direction: column;
-    }
-
-    .brand-list {
-        font-size: 17px;
-    }
-
-    .footer-inner {
-        flex-direction: column;
-        gap: 15px;
+    .instructions {
+        left: 15px;
+        bottom: 75px;
     }
 
 }
@@ -1212,922 +159,872 @@ footer {
 
 </head>
 
-
 <body>
 
+<div id="kitchen-container">
 
-<div class="background-glow"></div>
-
-<div class="grid-background"></div>
-
-
-<!-- ===================================
-     NAVIGATION
-=================================== -->
-
-<header class="container">
-
-<nav class="navbar">
-
-    <a href="#" class="logo">
-        NEXORA<span>.</span>
-    </a>
-
-    <div class="nav-links">
-
-        <a href="#features">Features</a>
-
-        <a href="#product">Product</a>
-
-        <a href="#showcase">Showcase</a>
-
-        <a href="#pricing">Pricing</a>
-
+    <div class="loading" id="loading">
+        BUILDING 3D KITCHEN...
     </div>
 
-    <div class="nav-actions">
+    <div class="topbar">
 
-        <a href="#" class="login">Log in</a>
-
-        <a href="#pricing" class="nav-button">
-            Get Started ↗
-        </a>
-
-    </div>
-
-</nav>
-
-</header>
-
-
-
-<!-- ===================================
-     HERO SECTION
-=================================== -->
-
-<section class="hero container">
-
-    <div class="announcement hero-anim">
-
-        <span>✦</span>
-
-        THE FUTURE OF PRODUCTIVITY IS HERE
-
-        <span>→</span>
-
-    </div>
-
-
-    <h1 class="hero-title">
-
-        Build better.<br>
-
-        <span class="gradient-text">
-            Move faster.
-        </span>
-
-    </h1>
-
-
-    <p class="hero-description hero-anim">
-
-        One powerful platform to manage your workflow,
-        organize your team and transform your ideas
-        into extraordinary results.
-
-    </p>
-
-
-    <div class="hero-buttons hero-anim">
-
-        <a href="#pricing" class="primary-button">
-            Start Building →
-        </a>
-
-        <a href="#product" class="secondary-button">
-            Explore Platform
-        </a>
-
-    </div>
-
-
-
-    <!-- DASHBOARD -->
-
-    <div class="dashboard-wrapper">
-
-        <div class="floating-card floating-one">
-
-            Active Projects
-
-            <div class="float-number">
-                24.8K
-            </div>
-
+        <div class="brand">
+            KITCHEN / 3D STUDIO
         </div>
 
-
-        <div class="dashboard">
-
-            <div class="dashboard-top">
-
-                <div class="dashboard-title">
-                    Performance Overview
-                </div>
-
-                <div class="dashboard-status">
-                    ● All systems operational
-                </div>
-
-            </div>
-
-
-            <div class="dashboard-body">
-
-
-                <div class="stat-card">
-
-                    <div class="stat-label">
-                        Total Revenue
-                    </div>
-
-                    <div class="stat-number counter" data-target="84250">
-                        0
-                    </div>
-
-                    <div class="stat-change">
-                        ↑ 18.4%
-                    </div>
-
-                </div>
-
-
-                <div class="stat-card">
-
-                    <div class="stat-label">
-                        Active Users
-                    </div>
-
-                    <div class="stat-number counter" data-target="12840">
-                        0
-                    </div>
-
-                    <div class="stat-change">
-                        ↑ 12.8%
-                    </div>
-
-                </div>
-
-
-                <div class="stat-card">
-
-                    <div class="stat-label">
-                        Conversion Rate
-                    </div>
-
-                    <div class="stat-number counter" data-target="94">
-                        0
-                    </div>
-
-                    <div class="stat-change">
-                        ↑ 8.2%
-                    </div>
-
-                </div>
-
-
-                <div class="chart-card">
-
-                    <div class="chart-title">
-                        Growth Analytics
-                    </div>
-
-                    <div class="chart">
-
-                        <div class="bar" data-height="35"></div>
-
-                        <div class="bar" data-height="55"></div>
-
-                        <div class="bar" data-height="42"></div>
-
-                        <div class="bar" data-height="75"></div>
-
-                        <div class="bar" data-height="60"></div>
-
-                        <div class="bar" data-height="90"></div>
-
-                        <div class="bar" data-height="70"></div>
-
-                        <div class="bar" data-height="100"></div>
-
-                        <div class="bar" data-height="85"></div>
-
-                        <div class="bar" data-height="95"></div>
-
-                        <div class="bar" data-height="100"></div>
-
-                    </div>
-
-                </div>
-
-
-            </div>
-
-        </div>
-
-
-        <div class="floating-card floating-two">
-
-            Monthly Growth
-
-            <div class="float-number">
-                +32.6%
-            </div>
-
+        <div class="view-label">
+            INTERACTIVE ARCHITECTURAL VIEW
         </div>
 
     </div>
 
-</section>
+    <div class="instructions">
+        DRAG TO ROTATE · SCROLL TO ZOOM · RIGHT CLICK TO PAN
+    </div>
 
+    <div class="controls">
 
+        <button id="reset">
+            RESET VIEW
+        </button>
 
-<!-- ===================================
-     TRUST SECTION
-=================================== -->
-
-<section class="trust-section container">
-
-    <p>POWERING THE NEXT GENERATION OF TEAMS</p>
-
-    <div class="brand-list">
-
-        <span>vertex</span>
-
-        <span>◈ orbit</span>
-
-        <span>◉ pulse</span>
-
-        <span>◈ cloudly</span>
-
-        <span>nimbus</span>
+        <button id="lights">
+            LIGHTS ON
+        </button>
 
     </div>
 
-</section>
+</div>
 
 
+<script type="module">
 
-<!-- ===================================
-     FEATURES
-=================================== -->
+import * as THREE from
+'https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js';
 
-<section class="section-padding container" id="features">
+import { OrbitControls } from
+'https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/controls/OrbitControls.js';
 
 
-    <div class="section-heading reveal">
+// ======================================
+// SCENE
+// ======================================
 
-        <span>POWERFUL FEATURES</span>
+const container = document.getElementById(
+    "kitchen-container"
+);
 
-        <h2>
-            Everything you need.<br>
+const scene = new THREE.Scene();
 
-            <span class="gradient-text">
-                Nothing you don't.
-            </span>
+scene.background = new THREE.Color("#25292b");
 
-        </h2>
 
-        <p>
-            A complete ecosystem designed to simplify
-            complex workflows and help your team
-            accomplish more.
-        </p>
+// ======================================
+// CAMERA
+// ======================================
 
-    </div>
+const camera = new THREE.PerspectiveCamera(
 
+    45,
 
+    window.innerWidth / window.innerHeight,
 
-    <div class="features-grid">
+    0.1,
 
+    1000
 
-        <div class="feature-card reveal">
+);
 
-            <div class="feature-icon">✦</div>
+camera.position.set(9, 7, 10);
 
-            <h3>Smart Automation</h3>
+camera.lookAt(0, 1.2, -0.5);
 
-            <p>
-                Automate repetitive tasks and focus
-                on the work that actually matters.
-            </p>
 
-        </div>
+// ======================================
+// RENDERER
+// ======================================
 
+const renderer = new THREE.WebGLRenderer({
 
-        <div class="feature-card reveal">
-
-            <div class="feature-icon">◈</div>
-
-            <h3>Real-time Analytics</h3>
-
-            <p>
-                Understand your performance with
-                intelligent analytics and insights.
-            </p>
-
-        </div>
-
-
-        <div class="feature-card reveal">
-
-            <div class="feature-icon">⌘</div>
-
-            <h3>Team Collaboration</h3>
-
-            <p>
-                Bring your entire team together
-                with seamless collaboration tools.
-            </p>
-
-        </div>
-
-
-        <div class="feature-card reveal">
-
-            <div class="feature-icon">◎</div>
-
-            <h3>Cloud Integration</h3>
-
-            <p>
-                Access your projects from anywhere
-                with secure cloud synchronization.
-            </p>
-
-        </div>
-
-
-        <div class="feature-card reveal">
-
-            <div class="feature-icon">↗</div>
-
-            <h3>Advanced Reporting</h3>
-
-            <p>
-                Turn complex information into
-                actionable business decisions.
-            </p>
-
-        </div>
-
-
-        <div class="feature-card reveal">
-
-            <div class="feature-icon">⬡</div>
-
-            <h3>Enterprise Security</h3>
-
-            <p>
-                Protect your information with
-                advanced security architecture.
-            </p>
-
-        </div>
-
-
-    </div>
-
-</section>
-
-
-
-<!-- ===================================
-     PRODUCT SHOWCASE
-=================================== -->
-
-<section class="section-padding container" id="product">
-
-    <div class="product-section">
-
-
-        <div class="product-content reveal-left">
-
-            <span>BUILT FOR PERFORMANCE</span>
-
-            <h2>
-
-                Your workflow.<br>
-
-                <span class="gradient-text">
-                    Reimagined.
-                </span>
-
-            </h2>
-
-            <p>
-
-                Experience a smarter way to manage
-                your operations. Everything is
-                connected, beautifully organized
-                and designed to help you move faster.
-
-            </p>
-
-
-            <div class="product-points">
-
-                <div>Intelligent workflow management</div>
-
-                <div>Real-time collaboration</div>
-
-                <div>Advanced performance tracking</div>
-
-                <div>Flexible customization</div>
-
-            </div>
-
-        </div>
-
-
-
-        <div class="product-visual reveal-right">
-
-            <div class="orbit">
-
-                <div class="orbit-dot"></div>
-
-            </div>
-
-            <div class="visual-circle">
-
-                <div class="visual-circle-inner"></div>
-
-            </div>
-
-        </div>
-
-
-    </div>
-
-</section>
-
-
-
-<!-- ===================================
-     CTA
-=================================== -->
-
-<section class="section-padding container" id="pricing">
-
-    <div class="cta reveal" id="showcase">
-
-        <h2>
-
-            Ready to build<br>
-
-            <span class="gradient-text">
-                something amazing?
-            </span>
-
-        </h2>
-
-        <p>
-
-            Take your workflow to the next level.
-            Start creating better experiences today.
-
-        </p>
-
-        <a href="#features" class="primary-button">
-
-            Get Started Today →
-
-        </a>
-
-    </div>
-
-</section>
-
-
-
-<!-- ===================================
-     FOOTER
-=================================== -->
-
-<footer>
-
-    <div class="container footer-inner">
-
-        <div>
-            © 2026 NEXORA. All rights reserved.
-        </div>
-
-        <div>
-            Designed for the future.
-        </div>
-
-    </div>
-
-</footer>
-
-
-
-<!-- ===================================
-     GSAP ANIMATION ENGINE
-=================================== -->
-
-<script>
-
-gsap.registerPlugin(ScrollTrigger);
-
-
-// ------------------------------------
-// INITIALIZATION
-// ------------------------------------
-
-gsap.set(".hero-title", {
-
-    opacity: 0,
-
-    y: 80
+    antialias: true
 
 });
 
-gsap.set(".hero-anim", {
+renderer.setSize(
+    window.innerWidth,
+    window.innerHeight
+);
 
-    opacity: 0,
+renderer.setPixelRatio(
+    Math.min(window.devicePixelRatio, 2)
+);
 
-    y: 35
+renderer.shadowMap.enabled = true;
 
-});
+renderer.shadowMap.type =
+    THREE.PCFSoftShadowMap;
 
-gsap.set(".dashboard-wrapper", {
+renderer.toneMapping =
+    THREE.ACESFilmicToneMapping;
 
-    opacity: 0,
+renderer.toneMappingExposure = 1.2;
 
-    y: 100,
+renderer.outputColorSpace =
+    THREE.SRGBColorSpace;
 
-    rotateX: 15
+container.appendChild(renderer.domElement);
 
-});
 
+// ======================================
+// ORBIT CONTROLS
+// ======================================
 
-// ------------------------------------
-// HERO INTRO TIMELINE
-// ------------------------------------
+const controls = new OrbitControls(
+    camera,
+    renderer.domElement
+);
 
-const intro = gsap.timeline({
+controls.enableDamping = true;
 
-    defaults: {
+controls.dampingFactor = 0.06;
 
-        ease: "power3.out"
+controls.minDistance = 4;
 
-    }
+controls.maxDistance = 22;
 
-});
+controls.maxPolarAngle = Math.PI / 2.02;
 
+controls.target.set(0, 1.2, -0.5);
 
-intro.to(".navbar", {
 
-    opacity: 1,
+// ======================================
+// MATERIALS
+// ======================================
 
-    y: 0,
+const materials = {
 
-    duration: 1
+    wall: new THREE.MeshStandardMaterial({
+        color: "#d9d5cd",
+        roughness: 0.9
+    }),
 
-});
+    floor: new THREE.MeshStandardMaterial({
+        color: "#777a78",
+        roughness: 0.7
+    }),
 
+    cabinet: new THREE.MeshStandardMaterial({
+        color: "#c5b9a4",
+        roughness: 0.55
+    }),
 
-intro.to(".hero-title", {
+    darkCabinet: new THREE.MeshStandardMaterial({
+        color: "#444b4c",
+        roughness: 0.45
+    }),
 
-    opacity: 1,
+    countertop: new THREE.MeshStandardMaterial({
+        color: "#292d30",
+        roughness: 0.2
+    }),
 
-    y: 0,
+    metal: new THREE.MeshStandardMaterial({
+        color: "#aeb6ba",
+        metalness: 0.85,
+        roughness: 0.22
+    }),
 
-    duration: 1.2
+    black: new THREE.MeshStandardMaterial({
+        color: "#16191b",
+        roughness: 0.25
+    }),
 
-}, "-=0.5");
+    glass: new THREE.MeshStandardMaterial({
+        color: "#a8c9d4",
+        metalness: 0.25,
+        roughness: 0.15
+    }),
 
+    wood: new THREE.MeshStandardMaterial({
+        color: "#8b6244",
+        roughness: 0.65
+    })
 
-intro.to(".hero-anim", {
+};
 
-    opacity: 1,
 
-    y: 0,
+// ======================================
+// GEOMETRY HELPER
+// ======================================
 
-    duration: 0.9,
+function box(
+    name,
+    x, y, z,
+    width, height, depth,
+    material,
+    cast = true,
+    receive = true
+) {
 
-    stagger: 0.2
+    const geometry = new THREE.BoxGeometry(
+        width,
+        height,
+        depth
+    );
 
-}, "-=0.8");
+    const mesh = new THREE.Mesh(
+        geometry,
+        material
+    );
 
+    mesh.name = name;
 
-intro.to(".dashboard-wrapper", {
+    mesh.position.set(x, y, z);
 
-    opacity: 1,
+    mesh.castShadow = cast;
 
-    y: 0,
+    mesh.receiveShadow = receive;
 
-    rotateX: 0,
+    scene.add(mesh);
 
-    duration: 1.4
-
-}, "-=0.5");
-
-
-
-// ------------------------------------
-// FLOATING DASHBOARD
-// ------------------------------------
-
-gsap.to(".floating-one", {
-
-    y: -18,
-
-    duration: 2.5,
-
-    repeat: -1,
-
-    yoyo: true,
-
-    ease: "sine.inOut"
-
-});
-
-
-gsap.to(".floating-two", {
-
-    y: 18,
-
-    duration: 3,
-
-    repeat: -1,
-
-    yoyo: true,
-
-    ease: "sine.inOut"
-
-});
-
-
-
-// ------------------------------------
-// DASHBOARD CHART
-// ------------------------------------
-
-gsap.to(".bar", {
-
-    height: (i, el) => {
-
-        return el.dataset.height + "%";
-
-    },
-
-    duration: 1.5,
-
-    stagger: 0.1,
-
-    ease: "power3.out",
-
-    delay: 1.8
-
-});
-
-
-
-// ------------------------------------
-// COUNTERS
-// ------------------------------------
-
-document.querySelectorAll(".counter").forEach(counter => {
-
-    const target = Number(counter.dataset.target);
-
-    const obj = { value: 0 };
-
-    gsap.to(obj, {
-
-        value: target,
-
-        duration: 2,
-
-        delay: 1.8,
-
-        ease: "power2.out",
-
-        onUpdate: () => {
-
-            counter.textContent =
-
-                Math.floor(obj.value).toLocaleString("en-US");
-
-        }
-
-    });
-
-});
-
-
-
-// ------------------------------------
-// REVEAL ANIMATIONS
-// ------------------------------------
-
-gsap.utils.toArray(".reveal").forEach(element => {
-
-    gsap.to(element, {
-
-        opacity: 1,
-
-        y: 0,
-
-        duration: 1,
-
-        ease: "power3.out",
-
-        scrollTrigger: {
-
-            trigger: element,
-
-            start: "top 85%",
-
-            toggleActions: "play none none reverse"
-
-        }
-
-    });
-
-});
-
-
-
-gsap.utils.toArray(".reveal-left").forEach(element => {
-
-    gsap.to(element, {
-
-        opacity: 1,
-
-        x: 0,
-
-        duration: 1.2,
-
-        ease: "power3.out",
-
-        scrollTrigger: {
-
-            trigger: element,
-
-            start: "top 80%"
-
-        }
-
-    });
-
-});
-
-
-
-gsap.utils.toArray(".reveal-right").forEach(element => {
-
-    gsap.to(element, {
-
-        opacity: 1,
-
-        x: 0,
-
-        duration: 1.2,
-
-        ease: "power3.out",
-
-        scrollTrigger: {
-
-            trigger: element,
-
-            start: "top 80%"
-
-        }
-
-    });
-
-});
-
-
-
-// ------------------------------------
-// FEATURE CARD STAGGER
-// ------------------------------------
-
-gsap.from(".feature-card", {
-
-    y: 70,
-
-    opacity: 0,
-
-    duration: 0.8,
-
-    stagger: 0.15,
-
-    ease: "power3.out",
-
-    scrollTrigger: {
-
-        trigger: ".features-grid",
-
-        start: "top 80%"
-
-    }
-
-});
-
-
-
-// ------------------------------------
-// ORBIT ANIMATION
-// ------------------------------------
-
-gsap.to(".orbit", {
-
-    rotation: 360,
-
-    duration: 18,
-
-    repeat: -1,
-
-    ease: "none"
-
-});
-
-
-
-// ------------------------------------
-// PRODUCT PARALLAX
-// ------------------------------------
-
-gsap.to(".visual-circle-inner", {
-
-    scale: 1.2,
-
-    repeat: -1,
-
-    yoyo: true,
-
-    duration: 2.5,
-
-    ease: "sine.inOut"
-
-});
-
-
-
-// ------------------------------------
-// BUTTON HOVER
-// ------------------------------------
-
-document.querySelectorAll(".primary-button, .nav-button").forEach(button => {
-
-    button.addEventListener("mouseenter", () => {
-
-        gsap.to(button, {
-
-            scale: 1.05,
-
-            duration: 0.25,
-
-            ease: "power2.out"
-
-        });
-
-    });
-
-
-    button.addEventListener("mouseleave", () => {
-
-        gsap.to(button, {
-
-            scale: 1,
-
-            duration: 0.25
-
-        });
-
-    });
-
-});
-
-
-
-// ------------------------------------
-// REDUCED MOTION SUPPORT
-// ------------------------------------
-
-if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-
-    gsap.globalTimeline.timeScale(3);
+    return mesh;
 
 }
+
+
+// ======================================
+// LIGHTING
+// ======================================
+
+// Ambient light
+
+const ambient = new THREE.HemisphereLight(
+    0xffffff,
+    0x666666,
+    2
+);
+
+scene.add(ambient);
+
+
+// Main sunlight
+
+const sunlight = new THREE.DirectionalLight(
+    0xffead0,
+    3
+);
+
+sunlight.position.set(5, 10, 6);
+
+sunlight.castShadow = true;
+
+sunlight.shadow.mapSize.set(2048, 2048);
+
+sunlight.shadow.camera.left = -10;
+sunlight.shadow.camera.right = 10;
+sunlight.shadow.camera.top = 10;
+sunlight.shadow.camera.bottom = -10;
+
+scene.add(sunlight);
+
+
+// Kitchen ceiling light
+
+const ceilingLight = new THREE.PointLight(
+    0xffdfb0,
+    35,
+    12
+);
+
+ceilingLight.position.set(0, 3.1, 0);
+
+scene.add(ceilingLight);
+
+
+// ======================================
+// ROOM
+// ======================================
+
+// Floor
+
+box(
+    "Kitchen Floor",
+    0, -0.12, 0,
+    10, 0.2, 8,
+    materials.floor
+);
+
+
+// Back wall
+
+box(
+    "Back Wall",
+    0, 1.65, -4,
+    10, 3.3, 0.2,
+    materials.wall
+);
+
+
+// Left wall
+
+box(
+    "Left Wall",
+    -5, 1.65, 0,
+    0.2, 3.3, 8,
+    materials.wall
+);
+
+
+// Floor tile lines
+
+const tileMaterial = new THREE.LineBasicMaterial({
+
+    color: "#999d9b",
+    transparent: true,
+    opacity: 0.25
+
+});
+
+const tilePoints = [];
+
+for (let x = -5; x <= 5; x += 1) {
+
+    tilePoints.push(
+        new THREE.Vector3(x, -0.015, -4),
+        new THREE.Vector3(x, -0.015, 4)
+    );
+
+}
+
+for (let z = -4; z <= 4; z += 1) {
+
+    tilePoints.push(
+        new THREE.Vector3(-5, -0.015, z),
+        new THREE.Vector3(5, -0.015, z)
+    );
+
+}
+
+const tileGeometry = new THREE.BufferGeometry()
+    .setFromPoints(tilePoints);
+
+const tileLines = new THREE.LineSegments(
+    tileGeometry,
+    tileMaterial
+);
+
+scene.add(tileLines);
+
+
+// ======================================
+// BASE CABINETS
+// ======================================
+
+function createBaseCabinet(x) {
+
+    // Cabinet body
+
+    box(
+        "Base Cabinet",
+        x, 0.43, -3.45,
+        0.95, 0.86, 0.85,
+        materials.cabinet
+    );
+
+    // Door panel
+
+    box(
+        "Cabinet Door",
+        x, 0.44, -3.012,
+        0.86, 0.72, 0.035,
+        materials.darkCabinet
+    );
+
+    // Handle
+
+    box(
+        "Cabinet Handle",
+        x + 0.32, 0.45, -2.982,
+        0.035, 0.18, 0.035,
+        materials.metal
+    );
+
+}
+
+for (let i = 0; i < 8; i++) {
+
+    createBaseCabinet(-3.6 + i * 0.95);
+
+}
+
+
+// ======================================
+// COUNTERTOP
+// ======================================
+
+box(
+    "Granite Countertop",
+    -0.1, 0.92, -3.42,
+    8.5, 0.12, 1.05,
+    materials.countertop
+);
+
+
+// Countertop edge
+
+box(
+    "Countertop Front Edge",
+    -0.1, 0.88, -2.89,
+    8.5, 0.08, 0.035,
+    materials.metal
+);
+
+
+// ======================================
+// WALL CABINETS
+// ======================================
+
+function createWallCabinet(x) {
+
+    box(
+        "Wall Cabinet",
+        x, 2.35, -3.65,
+        0.95, 0.85, 0.55,
+        materials.cabinet
+    );
+
+    box(
+        "Wall Cabinet Door",
+        x, 2.35, -3.36,
+        0.87, 0.76, 0.035,
+        materials.darkCabinet
+    );
+
+    box(
+        "Wall Cabinet Handle",
+        x + 0.32, 2.35, -3.33,
+        0.035, 0.16, 0.035,
+        materials.metal
+    );
+
+}
+
+for (let i = 0; i < 7; i++) {
+
+    createWallCabinet(-3.35 + i * 1.05);
+
+}
+
+
+// ======================================
+// BACKSPLASH
+// ======================================
+
+box(
+    "Kitchen Backsplash",
+    -0.1, 1.42, -3.87,
+    8.4, 0.55, 0.025,
+    materials.glass,
+    false,
+    false
+);
+
+
+// ======================================
+// KITCHEN SINK
+// ======================================
+
+// Basin
+
+box(
+    "Kitchen Sink",
+    -1.6, 0.97, -3.4,
+    0.9, 0.045, 0.55,
+    materials.black
+);
+
+
+// Basin inner surface
+
+box(
+    "Sink Interior",
+    -1.6, 0.99, -3.4,
+    0.75, 0.015, 0.4,
+    materials.metal
+);
+
+
+// Faucet base
+
+const faucetBase = new THREE.Mesh(
+
+    new THREE.CylinderGeometry(
+        0.045, 0.045, 0.12, 24
+    ),
+
+    materials.metal
+
+);
+
+faucetBase.position.set(-1.6, 1.05, -3.02);
+
+scene.add(faucetBase);
+
+
+// Faucet pipe
+
+const faucetCurve = new THREE.CatmullRomCurve3([
+
+    new THREE.Vector3(-1.6, 1.08, -3.02),
+
+    new THREE.Vector3(-1.6, 1.38, -3.02),
+
+    new THREE.Vector3(-1.6, 1.45, -3.12),
+
+    new THREE.Vector3(-1.6, 1.35, -3.22)
+
+]);
+
+const faucet = new THREE.Mesh(
+
+    new THREE.TubeGeometry(
+        faucetCurve,
+        32,
+        0.025,
+        12,
+        false
+    ),
+
+    materials.metal
+
+);
+
+scene.add(faucet);
+
+
+// ======================================
+// COOKTOP
+// ======================================
+
+box(
+    "Induction Cooktop",
+    1.5, 0.99, -3.4,
+    1.3, 0.04, 0.7,
+    materials.black
+);
+
+
+// Cooking zones
+
+for (let x = 1.2; x <= 1.8; x += 0.6) {
+
+    for (let z = -3.58; z <= -3.22; z += 0.36) {
+
+        const burner = new THREE.Mesh(
+
+            new THREE.CylinderGeometry(
+                0.17, 0.17, 0.012, 32
+            ),
+
+            materials.metal
+
+        );
+
+        burner.position.set(x, 1.02, z);
+
+        scene.add(burner);
+
+    }
+
+}
+
+
+// ======================================
+// KITCHEN CHIMNEY
+// ======================================
+
+box(
+    "Chimney Body",
+    1.5, 2.05, -3.7,
+    1.2, 0.65, 0.35,
+    materials.metal
+);
+
+
+box(
+    "Chimney Hood",
+    1.5, 1.65, -3.55,
+    1.6, 0.12, 0.8,
+    materials.metal
+);
+
+
+// ======================================
+// REFRIGERATOR
+// ======================================
+
+box(
+    "Refrigerator Body",
+    4.25, 1.1, -3.2,
+    0.9, 2.2, 0.85,
+    materials.metal
+);
+
+
+// Refrigerator door
+
+box(
+    "Refrigerator Door",
+    4.25, 1.15, -2.75,
+    0.84, 2.0, 0.04,
+    materials.glass
+);
+
+
+// Refrigerator handle
+
+box(
+    "Refrigerator Handle",
+    3.9, 1.25, -2.71,
+    0.035, 0.65, 0.035,
+    materials.black
+);
+
+
+// ======================================
+// KITCHEN ISLAND
+// ======================================
+
+// Island body
+
+box(
+    "Kitchen Island",
+    0, 0.45, -0.2,
+    2.8, 0.9, 1.2,
+    materials.darkCabinet
+);
+
+
+// Island countertop
+
+box(
+    "Island Granite",
+    0, 0.95, -0.2,
+    3.0, 0.12, 1.4,
+    materials.countertop
+);
+
+
+// Island cabinet doors
+
+for (let x = -0.9; x <= 0.9; x += 0.9) {
+
+    box(
+        "Island Cabinet Door",
+        x, 0.45, 0.41,
+        0.82, 0.72, 0.035,
+        materials.cabinet
+    );
+
+    box(
+        "Island Handle",
+        x + 0.3, 0.45, 0.44,
+        0.035, 0.16, 0.035,
+        materials.metal
+    );
+
+}
+
+
+// ======================================
+// PENDANT LIGHTS
+// ======================================
+
+function createPendant(x) {
+
+    // Cable
+
+    box(
+        "Pendant Cable",
+        x, 2.85, -0.2,
+        0.025, 0.45, 0.025,
+        materials.black
+    );
+
+    // Lamp shade
+
+    const shade = new THREE.Mesh(
+
+        new THREE.CylinderGeometry(
+            0.25, 0.4, 0.25, 32
+        ),
+
+        materials.black
+
+    );
+
+    shade.position.set(x, 2.58, -0.2);
+
+    scene.add(shade);
+
+
+    const light = new THREE.PointLight(
+        0xffd9a0,
+        20,
+        4
+    );
+
+    light.position.set(x, 2.4, -0.2);
+
+    scene.add(light);
+
+}
+
+createPendant(-0.8);
+createPendant(0.8);
+
+
+// ======================================
+// DECORATIVE OBJECTS
+// ======================================
+
+// Fruit bowl
+
+const bowl = new THREE.Mesh(
+
+    new THREE.SphereGeometry(
+        0.2, 24, 16, 0, Math.PI * 2, 0, Math.PI / 2
+    ),
+
+    materials.metal
+
+);
+
+bowl.position.set(-0.4, 1.1, 0);
+
+scene.add(bowl);
+
+
+// Fruits
+
+const fruitColors = [
+    "#d94835",
+    "#e9b83c",
+    "#5b9b50"
+];
+
+for (let i = 0; i < 3; i++) {
+
+    const fruit = new THREE.Mesh(
+
+        new THREE.SphereGeometry(0.09, 20, 20),
+
+        new THREE.MeshStandardMaterial({
+            color: fruitColors[i],
+            roughness: 0.4
+        })
+
+    );
+
+    fruit.position.set(
+        -0.5 + i * 0.12,
+        1.2,
+        0
+    );
+
+    scene.add(fruit);
+
+}
+
+
+// ======================================
+// LIGHT CONTROL
+// ======================================
+
+let lightsOn = true;
+
+document.getElementById("lights").onclick = function() {
+
+    lightsOn = !lightsOn;
+
+    ceilingLight.intensity = lightsOn ? 35 : 0;
+
+    this.textContent = lightsOn
+        ? "LIGHTS ON"
+        : "LIGHTS OFF";
+
+};
+
+
+// ======================================
+// RESET CAMERA
+// ======================================
+
+document.getElementById("reset").onclick = function() {
+
+    camera.position.set(9, 7, 10);
+
+    controls.target.set(0, 1.2, -0.5);
+
+    controls.update();
+
+};
+
+
+// ======================================
+// RESPONSIVE
+// ======================================
+
+window.addEventListener("resize", () => {
+
+    camera.aspect =
+        window.innerWidth / window.innerHeight;
+
+    camera.updateProjectionMatrix();
+
+    renderer.setSize(
+        window.innerWidth,
+        window.innerHeight
+    );
+
+});
+
+
+// ======================================
+// RENDER LOOP
+// ======================================
+
+function animate() {
+
+    requestAnimationFrame(animate);
+
+    controls.update();
+
+    renderer.render(scene, camera);
+
+}
+
+animate();
+
+
+// Remove loading screen
+
+window.addEventListener("load", () => {
+
+    document.getElementById("loading")
+        .classList.add("hidden");
+
+});
+
+setTimeout(() => {
+
+    document.getElementById("loading")
+        .classList.add("hidden");
+
+}, 5000);
 
 </script>
 
 </body>
-
 </html>
