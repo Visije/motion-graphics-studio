@@ -1,723 +1,586 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>3D Kitchen Studio</title>
+<title>3D House Model</title>
 
 <style>
-
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-html, body {
-    width: 100%;
-    height: 100%;
+body {
     overflow: hidden;
-    background: #202326;
+    background: #10141c;
     font-family: Arial, sans-serif;
-}
-
-#kitchen-container {
-    width: 100%;
-    height: 100%;
-    position: relative;
-}
-
-canvas {
-    display: block;
-}
-
-.topbar {
-    position: absolute;
-    top: 25px;
-    left: 30px;
-    right: 30px;
-    z-index: 5;
-    display: flex;
-    justify-content: space-between;
-    pointer-events: none;
-}
-
-.brand {
     color: white;
-    font-size: 13px;
-    letter-spacing: 3px;
-    font-weight: bold;
 }
 
-.status {
-    color: #ccc;
-    font-size: 11px;
-    letter-spacing: 2px;
+#scene {
+    position: fixed;
+    inset: 0;
 }
 
-.controls {
-    position: absolute;
-    bottom: 30px;
-    right: 30px;
-    display: flex;
-    gap: 10px;
-    z-index: 5;
+#ui {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 10;
+    width: 270px;
+    padding: 20px;
+    background: rgba(20,25,35,.94);
+    border: 1px solid #343b49;
+    border-radius: 12px;
+}
+
+#ui h2 {
+    font-size: 19px;
+    margin-bottom: 7px;
+}
+
+#ui p {
+    color: #aeb8c8;
+    font-size: 12px;
+    margin-bottom: 16px;
+    line-height: 1.5;
 }
 
 button {
-    padding: 13px 20px;
-    background: rgba(20,25,30,.9);
-    border: 1px solid #555;
+    width: 100%;
+    padding: 11px;
+    margin-top: 8px;
+    border: 1px solid #454f60;
+    border-radius: 7px;
+    background: #252e3c;
     color: white;
     cursor: pointer;
-    font-size: 11px;
-    letter-spacing: 1px;
+    font-size: 13px;
 }
 
 button:hover {
-    background: white;
-    color: #111;
+    background: #39485c;
 }
 
-.instructions {
-    position: absolute;
-    bottom: 38px;
-    left: 30px;
-    color: #bbb;
-    font-size: 11px;
-    letter-spacing: 1px;
-    pointer-events: none;
+button.active {
+    background: #b77c43;
+    border-color: #d49b64;
 }
 
-#message {
-    position: absolute;
+#dimensions {
+    margin-top: 15px;
+    padding-top: 12px;
+    border-top: 1px solid #394353;
+    color: #c4cbd5;
+    font-size: 12px;
+    line-height: 1.8;
+}
+
+#loading {
+    position: fixed;
     inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #202326;
-    color: white;
+    display: grid;
+    place-items: center;
+    background: #10141c;
     z-index: 20;
+    color: white;
     text-align: center;
-    padding: 30px;
-    line-height: 2;
+    padding: 20px;
 }
 
-#message.hidden {
+#loading.hidden {
     display: none;
 }
 
-@media(max-width:600px) {
-    .topbar {
-        left: 15px;
-        right: 15px;
-    }
-
-    .controls {
-        right: 15px;
-        bottom: 15px;
-    }
-
-    .instructions {
-        left: 15px;
-        bottom: 75px;
-    }
+#hint {
+    position: fixed;
+    bottom: 18px;
+    right: 20px;
+    color: #c0c8d5;
+    font-size: 12px;
+    background: rgba(20,25,35,.8);
+    padding: 10px 14px;
+    border-radius: 7px;
 }
 
+@media(max-width:600px) {
+    #ui {
+        width: 210px;
+        top: 10px;
+        left: 10px;
+        padding: 13px;
+    }
+}
 </style>
-
-<!-- Three.js classic scripts -->
-<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
-
 </head>
 
 <body>
 
-<div id="kitchen-container">
+<div id="scene"></div>
 
-    <div id="message">
-        Loading 3D Kitchen...
+<div id="ui">
+    <h2>HOUSE MODEL</h2>
+    <p>Single-storey residential layout · 27 × 24 ft</p>
+
+    <button id="roofBtn" class="active">Hide Roof / Show Interior</button>
+    <button id="topBtn">Top View</button>
+    <button id="frontBtn">Front View</button>
+    <button id="resetBtn">Reset Camera</button>
+
+    <div id="dimensions">
+        <div>Plot: 27 ft × 24 ft</div>
+        <div>Built-up footprint: 648 sq ft</div>
+        <div>Bedrooms: 2</div>
+        <div>Kitchen: 1</div>
+        <div>Toilet: 1</div>
+        <div>Bathroom: 1</div>
     </div>
-
-    <div class="topbar">
-        <div class="brand">KITCHEN / 3D STUDIO</div>
-        <div class="status">INTERACTIVE 3D VIEW</div>
-    </div>
-
-    <div class="instructions">
-        DRAG TO ROTATE · SCROLL TO ZOOM · RIGHT CLICK TO PAN
-    </div>
-
-    <div class="controls">
-        <button id="reset">RESET VIEW</button>
-        <button id="lights">LIGHTS ON</button>
-    </div>
-
 </div>
 
+<div id="loading">Loading 3D house model...</div>
+
+<div id="hint">
+    Drag: Rotate &nbsp; | &nbsp; Scroll: Zoom &nbsp; | &nbsp; Right-click: Pan
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 
 <script>
-
-(function() {
-
-"use strict";
-
-const container = document.getElementById("kitchen-container");
-const message = document.getElementById("message");
-
-function showError(text) {
-    message.classList.remove("hidden");
-    message.innerHTML = text;
-}
+(function () {
 
 try {
 
-    // CHECK LIBRARIES
+if (!window.THREE || !THREE.OrbitControls) {
+    throw new Error("Three.js could not load. Check your internet connection.");
+}
 
-    if (!window.THREE) {
-        throw new Error("Three.js failed to load. Check your internet connection.");
-    }
+const container = document.getElementById("scene");
 
-    if (!THREE.OrbitControls) {
-        throw new Error("OrbitControls failed to load.");
-    }
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x10141c);
 
+const camera = new THREE.PerspectiveCamera(
+    45,
+    window.innerWidth / window.innerHeight,
+    0.1,
+    1000
+);
 
-    // SCENE
+camera.position.set(35, 29, 39);
 
-    const scene = new THREE.Scene();
+const renderer = new THREE.WebGLRenderer({
+    antialias: true
+});
 
-    scene.background = new THREE.Color("#303438");
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.outputEncoding = THREE.sRGBEncoding;
 
+container.appendChild(renderer.domElement);
 
-    // CAMERA
+const controls = new THREE.OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.target.set(13.5, 0, -12);
+controls.maxPolarAngle = Math.PI / 2.05;
 
-    const camera = new THREE.PerspectiveCamera(
-        45,
-        window.innerWidth / window.innerHeight,
-        0.1,
-        1000
+/* LIGHTING */
+
+scene.add(new THREE.HemisphereLight(0xffffff, 0x55515a, 1.2));
+
+const sunlight = new THREE.DirectionalLight(0xffffff, 2);
+sunlight.position.set(20, 35, 25);
+sunlight.castShadow = true;
+sunlight.shadow.mapSize.set(2048,2048);
+scene.add(sunlight);
+
+/* MATERIALS */
+
+const materials = {
+    ground: new THREE.MeshStandardMaterial({color:0x303844}),
+    floor: new THREE.MeshStandardMaterial({color:0xd9cbb5}),
+    wall: new THREE.MeshStandardMaterial({color:0xe9e3d9}),
+    outer: new THREE.MeshStandardMaterial({color:0xc7b9a7}),
+    wood: new THREE.MeshStandardMaterial({color:0x79543b}),
+    darkWood: new THREE.MeshStandardMaterial({color:0x4a3023}),
+    glass: new THREE.MeshStandardMaterial({
+        color:0x75b9cf,
+        transparent:true,
+        opacity:0.55
+    }),
+    white: new THREE.MeshStandardMaterial({color:0xf4f1e9}),
+    bed: new THREE.MeshStandardMaterial({color:0x8497a5}),
+    kitchen: new THREE.MeshStandardMaterial({color:0x777f89}),
+    black: new THREE.MeshStandardMaterial({color:0x292d33}),
+    metal: new THREE.MeshStandardMaterial({color:0xb9c1c9,metalness:.7,roughness:.25}),
+    green: new THREE.MeshStandardMaterial({color:0x567b55}),
+    tile: new THREE.MeshStandardMaterial({color:0xb9c8ca})
+};
+
+/* GROUPS */
+
+const house = new THREE.Group();
+scene.add(house);
+
+const roofGroup = new THREE.Group();
+house.add(roofGroup);
+
+const furniture = new THREE.Group();
+house.add(furniture);
+
+const labels = new THREE.Group();
+house.add(labels);
+
+/* BOX FUNCTION */
+
+function box(parent, x, y, z, w, h, d, material) {
+
+    const mesh = new THREE.Mesh(
+        new THREE.BoxGeometry(w,h,d),
+        material
     );
 
-    camera.position.set(9, 7, 11);
+    mesh.position.set(x+w/2, y+h/2, z+d/2);
+    mesh.castShadow = true;
+    mesh.receiveShadow = true;
 
+    parent.add(mesh);
+    return mesh;
+}
 
-    // RENDERER
+/* FLOOR AND PLOT */
 
-    const renderer = new THREE.WebGLRenderer({
-        antialias: true
-    });
+box(house, -1, -0.3, -25, 29, 0.3, 26, materials.ground);
 
-    renderer.setSize(
-        window.innerWidth,
-        window.innerHeight
+box(house, 0, 0, -24, 27, 0.25, 24, materials.floor);
+
+/* DIMENSIONS:
+   X = 0 to 27
+   Z = 0 to -24
+   FRONT = Z = 0
+*/
+
+const H = 9;
+const T = 0.35;
+
+/* WALL FUNCTION */
+
+function wallX(x1, x2, z, material=materials.wall, height=H) {
+    box(house, x1, 0.25, z-T/2, x2-x1, height, T, material);
+}
+
+function wallZ(x, z1, z2, material=materials.wall, height=H) {
+    box(house, x-T/2, 0.25, z2, T, height, z1-z2, material);
+}
+
+/* OUTER WALLS */
+
+wallX(0,27,0,materials.outer);
+wallX(0,27,-24,materials.outer);
+wallZ(0,0,-24,materials.outer);
+wallZ(27,0,-24,materials.outer);
+
+/* FRONT DOOR OPENING:
+   Living-room entrance is left open.
+*/
+
+/* FRONT WALL WITH MAIN ENTRANCE */
+
+house.remove(house.children[house.children.length-1]);
+
+wallX(0,4.5,0,materials.outer);
+wallX(8,27,0,materials.outer);
+
+/* MAIN INTERNAL PARTITIONS */
+
+/* Living room / Bedroom 2 */
+wallX(0,5,-10);
+wallX(8,12,-10);
+
+/* Living room / Bedroom 1 */
+wallZ(15,0,-4);
+wallZ(15,-7,-10);
+
+/* Bedroom 2 / rear service area */
+wallZ(12,-10,-11);
+wallZ(12,-14,-24);
+
+/* Kitchen / passage */
+wallX(12,21,-18);
+
+/* Kitchen / toilet */
+wallZ(21,-10,-18);
+
+/* Toilet / bathroom */
+wallX(21,27,-17);
+
+/* REAR WINDOWS */
+
+function windowX(x,z,width) {
+    const w = box(house,x,3,z-T/2,width,2,T,materials.glass);
+    return w;
+}
+
+windowX(2,-24,4);
+windowX(17,-24,4);
+
+/* SIDE WINDOWS */
+
+function windowZ(x,z,width) {
+    box(house,x-T/2,3,z-width/2,T,2,width,materials.glass);
+}
+
+windowZ(0,-5,3);
+windowZ(27,-5,3);
+windowZ(0,-18,3);
+
+/* DOORS */
+
+function door(x,z,width,depth=0.15) {
+
+    const d = box(
+        house,
+        x,
+        0.25,
+        z,
+        width,
+        7,
+        depth,
+        materials.wood
     );
 
-    renderer.setPixelRatio(
-        Math.min(window.devicePixelRatio, 2)
+    return d;
+}
+
+/* MAIN DOOR */
+
+door(4.5,0,3);
+
+/* BEDROOM DOORS */
+door(5,-10,3);
+door(15,-4.5,3);
+
+/* BEDROOM 2 DOOR */
+door(12,-11,3,0.15);
+
+/* LABELS */
+
+function makeLabel(text,x,z) {
+
+    const canvas = document.createElement("canvas");
+    canvas.width = 512;
+    canvas.height = 128;
+
+    const ctx = canvas.getContext("2d");
+
+    ctx.fillStyle = "rgba(20,25,35,0.85)";
+    ctx.fillRect(0,0,512,128);
+
+    ctx.font = "bold 43px Arial";
+    ctx.fillStyle = "white";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText(text,256,64);
+
+    const texture = new THREE.CanvasTexture(canvas);
+
+    const sprite = new THREE.Sprite(
+        new THREE.SpriteMaterial({
+            map:texture,
+            transparent:true
+        })
     );
 
-    renderer.shadowMap.enabled = true;
+    sprite.position.set(x,10,z);
+    sprite.scale.set(7,1.75,1);
 
-    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    labels.add(sprite);
+}
 
-    renderer.outputEncoding = THREE.sRGBEncoding;
+makeLabel("LIVING ROOM",7.5,-5);
+makeLabel("BEDROOM 1",21,-5);
+makeLabel("BEDROOM 2",6,-17);
+makeLabel("KITCHEN",16.5,-14);
+makeLabel("TOILET",24,-13.5);
+makeLabel("BATHROOM",24,-21);
 
-    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+/* BED FUNCTION */
 
-    renderer.toneMappingExposure = 1.25;
+function makeBed(x,z,w=6,d=7) {
 
-    container.appendChild(renderer.domElement);
+    box(furniture,x,0.4,z,w,0.8,d,materials.wood);
 
+    box(furniture,x+0.25,1.2,z+0.25,w-0.5,0.35,d-0.5,materials.bed);
 
-    // CONTROLS
+    box(furniture,x+0.5,1.6,z+0.5,w/2-0.5,0.35,1.4,materials.white);
+    box(furniture,x+w/2,1.6,z+0.5,w/2-0.5,0.35,1.4,materials.white);
+}
 
-    const controls = new THREE.OrbitControls(
-        camera,
-        renderer.domElement
-    );
+/* BEDROOM FURNITURE */
 
-    controls.enableDamping = true;
-    controls.dampingFactor = 0.06;
+makeBed(3,-20,6,7);
+makeBed(18,-6.5,6,7);
 
-    controls.minDistance = 4;
-    controls.maxDistance = 20;
+/* WARDROBES */
 
-    controls.maxPolarAngle = Math.PI / 2.02;
+box(furniture,0.5,0.3,-13,2.5,6,4,materials.wood);
+box(furniture,24,0.3,-13,2.5,6,3,materials.wood);
 
-    controls.target.set(0, 1.2, -0.5);
+/* LIVING ROOM SOFA */
 
+box(furniture,2,0.4,-3,7,1.5,2,materials.bed);
+box(furniture,2,0.4,-7,2,1.5,4,materials.bed);
 
-    // MATERIALS
+/* CENTER TABLE */
 
-    function material(color, roughness = 0.6, metalness = 0) {
+box(furniture,8,0.5,-5,4,0.5,2.5,materials.wood);
 
-        return new THREE.MeshStandardMaterial({
-            color,
-            roughness,
-            metalness
-        });
+/* TV UNIT */
 
-    }
+box(furniture,10,0.3,-0.8,4,2.5,0.6,materials.darkWood);
 
-    const wallMat = material("#d9d4ca");
-    const floorMat = material("#777a78", 0.8);
-    const cabinetMat = material("#b9a991");
-    const darkMat = material("#343b3e");
-    const counterMat = material("#292d30", 0.25);
-    const metalMat = material("#b7c0c3", 0.25, 0.8);
-    const blackMat = material("#15191b", 0.2);
-    const glassMat = material("#a4bdc4", 0.2, 0.3);
-    const woodMat = material("#795a40");
+/* KITCHEN CABINETS */
 
+box(furniture,12.5,0.3,-18.5,8,3,2,materials.kitchen);
+box(furniture,12.5,3.5,-18.5,8,2,2,materials.wood);
 
-    // BOX CREATION
+/* KITCHEN COUNTER */
 
-    function box(name, x, y, z, w, h, d, mat) {
+box(furniture,12.5,3.3,-18.5,8,0.35,2,materials.white);
 
-        const mesh = new THREE.Mesh(
-            new THREE.BoxGeometry(w, h, d),
-            mat
-        );
+/* SINK */
 
-        mesh.name = name;
+box(furniture,14,3.5,-18,2,0.12,1,materials.metal);
 
-        mesh.position.set(x, y, z);
+/* COOKTOP */
 
-        mesh.castShadow = true;
-        mesh.receiveShadow = true;
+box(furniture,18,3.55,-18,2,0.15,1,materials.black);
 
-        scene.add(mesh);
+/* TOILET */
 
-        return mesh;
+box(furniture,22,0.3,-13,2,1.2,2,materials.white);
 
-    }
+const toiletSeat = new THREE.Mesh(
+    new THREE.TorusGeometry(.55,.12,10,32),
+    materials.white
+);
 
+toiletSeat.rotation.x=Math.PI/2;
+toiletSeat.position.set(24,1.1,-13);
+furniture.add(toiletSeat);
 
-    // LIGHTING
+/* BATHROOM */
 
-    scene.add(
-        new THREE.HemisphereLight(
-            0xffffff,
-            0x555555,
-            1.5
-        )
-    );
+box(furniture,22,0.3,-22,3,0.3,3,materials.tile);
 
-    const sun = new THREE.DirectionalLight(
-        0xffe5c2,
-        2.5
-    );
+/* SHOWER */
 
-    sun.position.set(5, 10, 7);
-    sun.castShadow = true;
+box(furniture,25,0.3,-22,0.15,6,0.15,materials.metal);
 
-    sun.shadow.mapSize.width = 2048;
-    sun.shadow.mapSize.height = 2048;
+/* WASH BASIN */
 
-    scene.add(sun);
+box(furniture,22,2,-20,2,0.6,1,materials.white);
 
+/* CEILING / ROOF */
 
-    const ceilingLight = new THREE.PointLight(
-        0xffd8a0,
-        2.5,
-        15
-    );
+box(roofGroup,0,9.5,-24,27,0.35,24,materials.outer);
 
-    ceilingLight.position.set(0, 3.1, -0.5);
+/* ROOF EDGE */
 
-    scene.add(ceilingLight);
+const roofEdges = [
+    [0,-24,27,.3],
+    [0,0,27,.3],
+    [0,0,.3,24],
+    [27,0,.3,24]
+];
 
+roofEdges.forEach(v => {
+    box(roofGroup,v[0],9.7,v[1],v[2],0.35,v[3],materials.darkWood);
+});
 
-    // ROOM
+/* EXTERIOR ENTRY STEPS */
 
-    box(
-        "Floor",
-        0, -0.12, 0,
-        10, 0.2, 8,
-        floorMat
-    );
+box(house,4,0.1,0.5,4,0.25,1,materials.outer);
+box(house,4,0.1,1.5,4,0.25,1,materials.outer);
 
-    box(
-        "Back Wall",
-        0, 1.65, -4,
-        10, 3.3, 0.2,
-        wallMat
-    );
+/* OUTSIDE ROAD / FRONT */
 
-    box(
-        "Left Wall",
-        -5, 1.65, 0,
-        0.2, 3.3, 8,
-        wallMat
-    );
+box(house,-5,-0.4,2,37,0.15,3,materials.black);
 
+/* CAMERA PRESETS */
 
-    // FLOOR GRID
+function setCamera(x,y,z,targetX=13.5,targetY=0,targetZ=-12) {
 
-    const grid = new THREE.GridHelper(
-        10,
-        10,
-        0x777777,
-        0x555555
-    );
+    camera.position.set(x,y,z);
+    controls.target.set(targetX,targetY,targetZ);
+    controls.update();
+}
 
-    grid.position.y = -0.012;
+/* BUTTONS */
 
-    scene.add(grid);
+let roofVisible = true;
 
+document.getElementById("roofBtn").addEventListener("click",function() {
 
-    // BASE CABINETS
+    roofVisible = !roofVisible;
+    roofGroup.visible = roofVisible;
 
-    for (let i = 0; i < 8; i++) {
+    this.textContent = roofVisible
+        ? "Hide Roof / Show Interior"
+        : "Show Roof";
 
-        const x = -3.6 + i * 0.95;
+    this.classList.toggle("active",roofVisible);
+});
 
-        box(
-            "Base Cabinet",
-            x, 0.43, -3.45,
-            0.95, 0.86, 0.85,
-            cabinetMat
-        );
+document.getElementById("topBtn").addEventListener("click",function() {
+    setCamera(13.5,45,-12);
+});
 
-        box(
-            "Cabinet Front",
-            x, 0.44, -3.01,
-            0.86, 0.72, 0.035,
-            darkMat
-        );
+document.getElementById("frontBtn").addEventListener("click",function() {
+    setCamera(13.5,18,32,13.5,2,-12);
+});
 
-        box(
-            "Cabinet Handle",
-            x + 0.32, 0.44, -2.98,
-            0.035, 0.18, 0.035,
-            metalMat
-        );
+document.getElementById("resetBtn").addEventListener("click",function() {
+    setCamera(35,29,39);
+});
 
-    }
+/* RESIZE */
 
+window.addEventListener("resize",function() {
 
-    // COUNTERTOP
+    camera.aspect = window.innerWidth/window.innerHeight;
+    camera.updateProjectionMatrix();
 
-    box(
-        "Granite Countertop",
-        -0.1, 0.92, -3.42,
-        8.5, 0.12, 1.05,
-        counterMat
-    );
+    renderer.setSize(window.innerWidth,window.innerHeight);
+});
 
+/* RENDER */
 
-    // WALL CABINETS
+function animate() {
+    requestAnimationFrame(animate);
+    controls.update();
+    renderer.render(scene,camera);
+}
 
-    for (let i = 0; i < 7; i++) {
+animate();
 
-        const x = -3.35 + i * 1.05;
-
-        box(
-            "Wall Cabinet",
-            x, 2.35, -3.65,
-            0.95, 0.85, 0.55,
-            cabinetMat
-        );
-
-        box(
-            "Wall Cabinet Front",
-            x, 2.35, -3.36,
-            0.87, 0.76, 0.035,
-            darkMat
-        );
-
-        box(
-            "Wall Cabinet Handle",
-            x + 0.32, 2.35, -3.33,
-            0.035, 0.16, 0.035,
-            metalMat
-        );
-
-    }
-
-
-    // BACKSPLASH
-
-    box(
-        "Backsplash",
-        -0.1, 1.42, -3.87,
-        8.4, 0.55, 0.025,
-        glassMat
-    );
-
-
-    // SINK
-
-    box(
-        "Sink",
-        -1.6, 0.98, -3.4,
-        0.9, 0.04, 0.55,
-        blackMat
-    );
-
-    box(
-        "Sink Basin",
-        -1.6, 1.005, -3.4,
-        0.72, 0.015, 0.38,
-        metalMat
-    );
-
-    // Faucet
-
-    const faucet = new THREE.Mesh(
-        new THREE.TorusGeometry(0.15, 0.025, 12, 32, Math.PI),
-        metalMat
-    );
-
-    faucet.rotation.z = Math.PI;
-    faucet.position.set(-1.6, 1.25, -3.15);
-
-    scene.add(faucet);
-
-
-    // COOKTOP
-
-    box(
-        "Cooktop",
-        1.5, 0.99, -3.4,
-        1.3, 0.04, 0.7,
-        blackMat
-    );
-
-    for (let x of [1.2, 1.8]) {
-
-        for (let z of [-3.58, -3.22]) {
-
-            const burner = new THREE.Mesh(
-                new THREE.CylinderGeometry(
-                    0.16, 0.16, 0.015, 32
-                ),
-                metalMat
-            );
-
-            burner.position.set(x, 1.02, z);
-
-            scene.add(burner);
-
-        }
-
-    }
-
-
-    // CHIMNEY
-
-    box(
-        "Chimney",
-        1.5, 2.05, -3.7,
-        1.2, 0.65, 0.35,
-        metalMat
-    );
-
-    box(
-        "Chimney Hood",
-        1.5, 1.65, -3.55,
-        1.6, 0.12, 0.8,
-        metalMat
-    );
-
-
-    // REFRIGERATOR
-
-    box(
-        "Refrigerator",
-        4.25, 1.1, -3.2,
-        0.9, 2.2, 0.85,
-        metalMat
-    );
-
-    box(
-        "Fridge Door",
-        4.25, 1.15, -2.75,
-        0.84, 2.0, 0.04,
-        glassMat
-    );
-
-    box(
-        "Fridge Handle",
-        3.9, 1.25, -2.71,
-        0.035, 0.65, 0.035,
-        blackMat
-    );
-
-
-    // KITCHEN ISLAND
-
-    box(
-        "Island Body",
-        0, 0.45, -0.2,
-        2.8, 0.9, 1.2,
-        darkMat
-    );
-
-    box(
-        "Island Counter",
-        0, 0.95, -0.2,
-        3, 0.12, 1.4,
-        counterMat
-    );
-
-    for (let x of [-0.9, 0, 0.9]) {
-
-        box(
-            "Island Door",
-            x, 0.45, 0.41,
-            0.82, 0.72, 0.035,
-            cabinetMat
-        );
-
-        box(
-            "Island Handle",
-            x + 0.3, 0.45, 0.44,
-            0.035, 0.16, 0.035,
-            metalMat
-        );
-
-    }
-
-
-    // PENDANT LIGHTS
-
-    for (let x of [-0.8, 0.8]) {
-
-        box(
-            "Pendant Wire",
-            x, 2.85, -0.2,
-            0.025, 0.45, 0.025,
-            blackMat
-        );
-
-        const shade = new THREE.Mesh(
-            new THREE.CylinderGeometry(
-                0.25, 0.4, 0.25, 32
-            ),
-            blackMat
-        );
-
-        shade.position.set(x, 2.58, -0.2);
-
-        scene.add(shade);
-
-    }
-
-
-    // DECORATION
-
-    const fruitColors = [
-        "#d94835",
-        "#e9b83c",
-        "#5b9b50"
-    ];
-
-    fruitColors.forEach((color, i) => {
-
-        const fruit = new THREE.Mesh(
-            new THREE.SphereGeometry(0.09, 20, 20),
-            material(color, 0.4)
-        );
-
-        fruit.position.set(
-            -0.5 + i * 0.12,
-            1.2,
-            0
-        );
-
-        scene.add(fruit);
-
-    });
-
-
-    // CAMERA RESET
-
-    document.getElementById("reset").onclick = () => {
-
-        camera.position.set(9, 7, 11);
-
-        controls.target.set(0, 1.2, -0.5);
-
-        controls.update();
-
-    };
-
-
-    // LIGHT CONTROL
-
-    let lightsOn = true;
-
-    document.getElementById("lights").onclick = function() {
-
-        lightsOn = !lightsOn;
-
-        ceilingLight.visible = lightsOn;
-
-        sun.intensity = lightsOn ? 2.5 : 0.5;
-
-        this.textContent = lightsOn
-            ? "LIGHTS ON"
-            : "LIGHTS OFF";
-
-    };
-
-
-    // RESPONSIVE
-
-    window.addEventListener("resize", () => {
-
-        camera.aspect =
-            window.innerWidth / window.innerHeight;
-
-        camera.updateProjectionMatrix();
-
-        renderer.setSize(
-            window.innerWidth,
-            window.innerHeight
-        );
-
-    });
-
-
-    // RENDER
-
-    function animate() {
-
-        requestAnimationFrame(animate);
-
-        controls.update();
-
-        renderer.render(scene, camera);
-
-    }
-
-    animate();
-
-
-    // SUCCESS
-
-    message.classList.add("hidden");
-
-    console.log("3D Kitchen initialized successfully.");
+document.getElementById("loading").classList.add("hidden");
 
 } catch(error) {
 
-    console.error(error);
-
-    showError(
-        "3D KITCHEN FAILED TO LOAD<br><br>" +
+    document.getElementById("loading").innerHTML =
+        "<div><h2>3D Model Error</h2><p style='margin-top:12px'>" +
         error.message +
-        "<br><br>Check your internet connection and browser WebGL support."
-    );
+        "</p><p style='margin-top:12px'>Check your internet connection and browser console.</p></div>";
 
+    console.error(error);
 }
 
 })();
-
 </script>
 
 </body>
